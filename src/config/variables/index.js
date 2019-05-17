@@ -1,0 +1,5 @@
+const PRIVATE_KEY = '0123456789ABCDEF'
+const AES_KEY = 'd3f4ult'
+const AES_IV = '7061737323313233'
+
+export { PRIVATE_KEY, AES_IV, AES_KEY }

@@ -1,0 +1,84 @@
+div.layoutCustom {
+  width : 100vw;
+  height: 100vh;
+
+  .header {
+    background-color: #F6F5F5;
+    z-index         : 1;
+    border-bottom   : 2px solid #1abc9c;
+    position: fixed;
+    width: 100%;
+
+    div.topHeader {
+      height                 : 64px;
+      display                : -webkit-flex;
+      display                : flex;
+      -webkit-flex-direction : row;
+      flex-direction         : row;
+      -webkit-justify-content: space-between;
+      justify-content        : space-between;
+      -webkit-align-items    : center;
+      align-items            : center;
+
+      img {
+        height: 70%;
+      }
+    }
+  }
+
+  .sider {
+    -webkit-user-select: none;
+    -moz-user-select   : none;
+    -ms-user-select    : none;
+    user-select        : none;
+    z-index            : 0;
+    height             : calc(100vh - 64px);
+    box-shadow         : 5px 0 20px -10px rgba(0, 0, 0, 0.5);
+    overflow: auto;
+
+    .ant-layout-sider-children {
+      .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+        background-color: #1abc9c !important;
+        color           : #FFF !important;
+      }
+  
+      .ant-menu-inline .ant-menu-item:hover,
+      .ant-menu-inline .ant-menu-submenu-title:hover {
+        background-color: rgba(26, 188, 156, 0.5) !important;
+        color           : #FFF !important;
+      }
+  
+      .ant-menu-submenu-title {
+        border-right: 3px solid #1abc9c !important;
+      }
+    }
+
+    .ant-layout-sider-trigger {
+      background: #8c8c8c;
+
+      .anticon {
+        font-size: 18px;
+        transition: .3s;
+        vertical-align: middle;
+      }
+    }
+
+    .ant-layout-sider-trigger:hover {
+      background: #595959;
+      
+      .anticon {
+        color: #ffffff;
+        font-size: 20px;
+      } 
+    }
+  }
+
+  .content {
+    background-color: #FFF;
+  }
+
+  .scrollbar {
+    width : 100%;
+    height: calc(100vw - 64px);
+  }
+}
