@@ -113,7 +113,6 @@ class ManufacturerManagement extends React.Component {
 
   componentDidMount() {
     this.props.manufacturerStore.fetchAll()
-      .then(result => this.setState({ rowData: result.data }))
   }
 
   render() {

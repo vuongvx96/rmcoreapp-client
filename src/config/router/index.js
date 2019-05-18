@@ -31,7 +31,17 @@ const listRoutesAuthen = [
     displayName: 'Quản lý hãng sản xuất',
     path: '/manufacturer-management',
     component: 'manufacturerManagement'
-  }
+	},
+	{
+		displayName: 'Quản lý khoa',
+		path: '/department-management',
+		component: 'departmentManagement'
+	},
+	{
+		displayName: 'Quản lý chuyên ngành',
+		path: '/major-management',
+		component: 'majorManagement'
+	}
 ]
 
 export { routesNotAuthen, routesAuthen, listRoutesAuthen }
