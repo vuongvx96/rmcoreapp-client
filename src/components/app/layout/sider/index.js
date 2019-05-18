@@ -41,7 +41,7 @@ class Sider extends React.Component {
           style={{ height: '100%' }}
         >
           {
-            functions.filter(lv1 => _.isNull(lv1.parentId))
+            [...functions].filter(lv1 => _.isNull(lv1.parentId))
               .map(v1 => (
                 functions.some(child => _.isEqual(child.parentId, v1.id)) ?
                   <Menu.SubMenu key={v1.id} title={<span><Icon type={v1.iconAntd} /><span>{v1.name}</span></span>}>
