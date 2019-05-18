@@ -1,9 +1,11 @@
-import  authStore  from './authen'
-import  commonStore  from './common'
-import  functionStore  from './function'
-import  userStore  from './user'
-import  teacherStore  from './teacher'
-import  manufacturerStore  from './manufacturer'
+import authStore from './authen'
+import commonStore from './common'
+import functionStore from './function'
+import userStore from './user'
+import teacherStore from './teacher'
+import manufacturerStore from './manufacturer'
+import departmentStore from './department'
+import majorStore from './major'
 
 const stores = {
   authStore,
@@ -11,7 +13,9 @@ const stores = {
   functionStore,
   userStore,
   teacherStore,
-  manufacturerStore
+  manufacturerStore,
+  departmentStore,
+  majorStore
 }
 
 export { stores }
