@@ -1,4 +1,4 @@
-import { observable, action, get, runInAction, toJS, computed } from 'mobx'
+import { observable, action, computed, toJS, runInAction } from 'mobx'
 import http from '../../axios'
 
 class DepartmentStore {
@@ -63,6 +63,15 @@ class DepartmentStore {
         } catch (err) {
             return err
         }
+    }
+
+    @computed get objectMap() {
+        var list = Object.values(toJS(this.entities))
+        var obj = {}
+		list.forEach(item => {
+			obj[item.departmentId] = item.departmentName
+        })
+		return obj
     }
 }
 

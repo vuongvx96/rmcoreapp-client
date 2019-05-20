@@ -31,7 +31,7 @@ class DepartmentManagement extends React.Component {
                 }
             },
             { headerName: 'Mã khoa', field: 'departmentId', sortable: true },
-            { headerName: 'Tên khoa', field: 'departmentName', sortable: true }
+            { headerName: 'Tên khoa', field: 'departmentName', sortable: true, width: 500 }
         ]
 
         this.gridOptions = {

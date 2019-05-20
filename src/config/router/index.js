@@ -41,6 +41,11 @@ const listRoutesAuthen = [
 		displayName: 'Quản lý chuyên ngành',
 		path: '/major-management',
 		component: 'majorManagement'
+	},
+	{
+		displayName: 'Quản lý phòng',
+		path: '/room-management',
+		component: 'roomManagement'
 	}
 ]
 

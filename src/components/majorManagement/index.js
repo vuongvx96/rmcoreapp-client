@@ -21,7 +21,7 @@ class MajorManagement extends React.Component{
             }
         }
 
-        const { departmentStore } = this.props
+        this.departmentMapping = this.props.departmentStore.objectMap
 
         this.columnDefs = [
             {
@@ -41,7 +41,16 @@ class MajorManagement extends React.Component{
         ]
 
         this.gridOptions = {
-            rowHeight: 34
+            rowHeight: 34,
+            localeText: {
+                page: 'Trang',
+                to: 'đến',
+                of: 'tổng số',
+                previous: 'Trước',
+                next: 'Kế tiếp',
+                last: 'Cuối',
+                first: 'Đầu'
+            }
         }
         this.getInfo = this.getInfo.bind(this)
         this.createMajor = this.createMajor.bind(this)
@@ -118,7 +127,6 @@ class MajorManagement extends React.Component{
     }
 
     componentDidMount() {
-        this.props.departmentStore.fetchAll()
         this.props.majorStore.fetchAll()
     }
 
@@ -151,6 +159,8 @@ class MajorManagement extends React.Component{
                         animateRows={true}
                         onGridReady={this.onGridReady}
                         gridOptions={this.gridOptions}
+                        pagination={true}
+                        paginationAutoPageSize={true}
                         frameworkComponents={{
                             editButton: ModifyButtonGrid
                         }}

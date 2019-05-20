@@ -23,7 +23,7 @@ class ScheduleManagement extends React.Component {
 			<div className='flex-container'>
 				<div className='left-items'>
 					<span>Năm:</span>
-					<Select defaultValue={getYear()} style={{ width: 100 }} onChange={this.handleYearChange}>
+					<Select defaultValue={getYear()} style={{ width: 85 }} onChange={this.handleYearChange}>
 						{
 							_.range(getYear() - 3, getYear() + 10).map(
 								i => (
@@ -32,7 +32,7 @@ class ScheduleManagement extends React.Component {
 						}
 					</Select>
 					<span>Chọn tuần:</span>
-					<Select style={{ width: 300 }} defaultValue={new Date().getWeek()}>
+					<Select style={{ width: 270 }} defaultValue={new Date().getWeek()}>
 						{
 							[...weeks].map(([key, value]) => (
 								<Select.Option key={key} value={key}>{`${key} (${value[0]} - ${value[1]})`}</Select.Option>

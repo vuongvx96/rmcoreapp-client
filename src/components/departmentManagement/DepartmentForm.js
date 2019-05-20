@@ -35,8 +35,8 @@ class DepartmentForm extends React.Component {
         }
         return (
             <Form {...formItemLayout} >
-                <Form.Item label='Mã khoa'>
-                    {getFieldDecorator('departmentId', {
+                <Form.Item label='Mã phòng'>
+                    {getFieldDecorator('roomId', {
                         rules: [
                             {
                                 required: true,
@@ -44,16 +44,16 @@ class DepartmentForm extends React.Component {
                             },
                         ],
                         initialValue: departmentId
-                    })(<Input disabled={!isCreate} placeholder='Nhập mã khoa' type='text' onChange={({ target }) => {
-                        this.props.getInfo('departmentId', target.value)
+                    })(<Input disabled={!isCreate} placeholder='Nhập mã phòng' type='text' onChange={({ target }) => {
+                        this.props.getInfo('roomId', target.value)
                     }} />)}
                 </Form.Item>
-                <Form.Item label='Tên khoa'>
-                    {getFieldDecorator('departmentName', {
+                <Form.Item label='Sức chứa'>
+                    {getFieldDecorator('capacity', {
                         rules: [
                             {
                                 required: true,
-                                message: 'Vui lòng nhập tên khoa',
+                                message: 'Vui lòng nhập sức chứa',
                             },
                         ],
                         initialValue: departmentName

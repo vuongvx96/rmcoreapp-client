@@ -28,8 +28,11 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "postbuild": "npm run copy-to-wwwroot",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean-server": "rimraf ../RMCoreApp/RMCoreApp.WebAPI/wwwroot",
+    "copy-to-wwwroot": "npm run clean-server && ncp ./build ../RMCoreApp/RMCoreApp.WebAPI/wwwroot"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,7 +50,9 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "lodash": "^4.17.11",
+    "ncp": "^2.0.0",
     "react-app-rewired": "^2.1.2",
+    "rimraf": "^2.6.3",
     "uuid": "^3.3.2"
   }
 }
