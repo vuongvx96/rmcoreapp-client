@@ -1,9 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
 import { inject, observer } from 'mobx-react'
-import { Select } from 'antd'
+import { Card, Select, Button, Divider, Row, Col } from 'antd'
 
-@inject('weekStore')
+import './index.less'
+
+@inject('weekStore', 'roomStore')
 @observer
 class ScheduleManagement extends React.Component {
 	constructor(props) {
@@ -17,30 +19,111 @@ class ScheduleManagement extends React.Component {
 		this.props.weekStore.onChangeYear(value)
 	}
 
+	handleWeekChange = value => {
+		this.props.weekStore.onChangeWeek(value)
+	}
+
+	componentDidMount() {
+		this.props.roomStore.fetchAll()
+		this.props.weekStore.onChangeWeek(new Date().getWeek())
+	}
+
 	render() {
-		const { weeks } = this.props.weekStore
+		const { weeks, daysOfWeek } = this.props.weekStore
+		const rooms = this.props.roomStore.entities
 		return (
-			<div className='flex-container'>
-				<div className='left-items'>
-					<span>Năm:</span>
-					<Select defaultValue={getYear()} style={{ width: 85 }} onChange={this.handleYearChange}>
-						{
-							_.range(getYear() - 3, getYear() + 10).map(
-								i => (
-									<Select.Option key={i} value={i}>{i}</Select.Option>
+			<>
+				<div className='flex-container'>
+					<div className='left-items'>
+						<span>Năm</span>
+						<Select defaultValue={getYear()} style={{ width: 85 }} onChange={this.handleYearChange}>
+							{
+								_.range(getYear() - 3, getYear() + 10).map(
+									i => (
+										<Select.Option key={i} value={i}>{i}</Select.Option>
+									))
+							}
+						</Select>
+						<span>Chọn tuần</span>
+						<Select style={{ width: 270 }} defaultValue={new Date().getWeek()} onChange={this.handleWeekChange}>
+							{
+								[...weeks].map(([key, value]) => (
+									<Select.Option key={key} value={key}>{`${key} (${value[0]} - ${value[1]})`}</Select.Option>
 								))
-						}
-					</Select>
-					<span>Chọn tuần:</span>
-					<Select style={{ width: 270 }} defaultValue={new Date().getWeek()}>
-						{
-							[...weeks].map(([key, value]) => (
-								<Select.Option key={key} value={key}>{`${key} (${value[0]} - ${value[1]})`}</Select.Option>
-							))
-						}
-					</Select>
+							}
+						</Select>
+						<span>Phòng máy</span>
+						<Select style={{ width: 100 }} defaultValue='G8-101'>
+							{
+								[...rooms].map(([key, value]) => (
+									<Select.Option key={key} value={key}>{key}</Select.Option>
+								))
+							}
+						</Select>
+						<Divider type='vertical' style={{ border: '1px solid #828282', height: '1.9em', margin: '0px 15px 0px 7px' }} />
+						<Button icon='search'>Xem</Button>
+						<Button>Tuần trước</Button>
+						<Button>Tuần sau</Button>
+					</div>
 				</div>
-			</div>
+				<div className='table-schedule'>
+					<Row className='title'>
+						<Col span={2}><span>Giờ</span></Col>
+						<Col span={3}><span>Thứ 2 - {daysOfWeek[0]}</span></Col>
+						<Col span={3}><span>Thứ 3 - {daysOfWeek[1]}</span></Col>
+						<Col span={3}><span>Thứ 4 - {daysOfWeek[2]}</span></Col>
+						<Col span={3}><span>Thứ 5 - {daysOfWeek[3]}</span></Col>
+						<Col span={3}><span>Thứ 6 - {daysOfWeek[4]}</span></Col>
+						<Col span={3}><span>Thứ 7 - {daysOfWeek[5]}</span></Col>
+						<Col span={4}><span>Chủ nhật - {daysOfWeek[6]}</span></Col>
+					</Row>
+					<Row type='flex' align='middle' className='data'>
+						<Col span={2}><span>Sáng</span></Col>
+						<Col span={3}>
+							<Card title='Tin học cơ sở và thực hành'>
+								<div>GV: Thành</div>
+								<div>Lớp: 57TH1</div>
+							</Card>
+						</Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={4}><Card title='Tin học cơ sở'></Card></Col>
+					</Row>
+					<Row type='flex' align='middle' className='data'>
+						<Col span={2}><span>Chiều</span></Col>
+						<Col span={3}>
+							<Card title='Tin học cơ sở'>
+								<div>GV: Thành</div>
+								<div>Lớp: 57TH1</div>
+							</Card>
+						</Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={4}><Card title='Tin học cơ sở'></Card></Col>
+					</Row>
+					<Row type='flex' align='middle' className='data'>
+						<Col span={2}><span>Tối</span></Col>
+						<Col span={3}>
+							<Card title='Tin học cơ sở'>
+								<div>GV: Thành</div>
+								<div>Lớp: 57TH1</div>
+							</Card>
+						</Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={3}><Card title='Tin học cơ sở'></Card></Col>
+						<Col span={4}><Card title='Tin học cơ sở'></Card></Col>
+					</Row>
+				</div>
+			</>
 		)
 	}
 }

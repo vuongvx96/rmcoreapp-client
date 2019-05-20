@@ -33,14 +33,14 @@ class RoomManagement extends React.Component {
                     onRemove: this.removeRoom.bind(this)
                 }
             },
-            { headerName: 'Mã phòng', field: 'roomId', width: 110, sortable: true },
-            { headerName: 'Sức chứa', field: 'capacity', width: 100, sortable: true },
+            { headerName: 'Mã phòng', field: 'roomId', width: 120, sortable: true },
+            { headerName: 'Sức chứa', field: 'capacity', width: 110, sortable: true },
             { headerName: 'Vị trí', field: 'location', width: 100, sortable: true },
             { headerName: 'IP chính', field: 'validIP', width: 120, sortable: true },
             { headerName: 'SL máy tính', field: 'amountComp', colId: 'c1', hide: true },
             { headerName: 'SL máy chiếu', field: 'amountProj', colId: 'c2', hide: true },
             { headerName: 'Ghi chú', field: 'note', colId: 'note', hide: true },
-            { headerName: 'Trang thiết bị', field: 'detail', width: 510 }
+            { headerName: 'Trang thiết bị', field: 'detail', width: 490 }
         ]
 
         this.gridOptions = {
@@ -155,7 +155,7 @@ class RoomManagement extends React.Component {
                     <AgGridReact
                         columnDefs={this.columnDefs}
                         rowData={entities}
-                        animateRows={true}
+                        // animateRows={true}
                         onGridReady={this.onGridReady}
                         gridOptions={this.gridOptions}
                         frameworkComponents={{
