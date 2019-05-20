@@ -8,6 +8,8 @@ import weekStore from './week'
 import departmentStore from './department'
 import majorStore from './major'
 import roomStore from './room'
+import classStore from './class'
+import subjectStore from './subject'
 
 const stores = {
   authStore,
@@ -19,7 +21,9 @@ const stores = {
   weekStore,
   departmentStore,
   majorStore,
-  roomStore
+  roomStore,
+  classStore,
+  subjectStore
 }
 
 export { stores }

@@ -46,6 +46,16 @@ const listRoutesAuthen = [
 		displayName: 'Quản lý phòng',
 		path: '/room-management',
 		component: 'roomManagement'
+	},
+	{
+		displayName: 'Quản lý lớp học',
+		path: '/class-management',
+		component: 'classManagement'
+	},
+	{
+		displayName: 'Quản lý môn học',
+		path: '/subject-management',
+		component: 'subjectManagement'
 	}
 ]
 
