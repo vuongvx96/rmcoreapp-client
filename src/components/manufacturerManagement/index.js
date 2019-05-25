@@ -71,7 +71,7 @@ class ManufacturerManagement extends React.Component {
   async updateManufacturer() {
     let { manufacturer } = this.state
     const result = await this.props.manufacturerStore.update(manufacturer)
-    if (result.status === 204) {
+    if (result.status === 200) {
       showNotification('Cập nhật hãng sản xuất thành công', 'success')
       this.refetchData()
     } else {
@@ -84,7 +84,7 @@ class ManufacturerManagement extends React.Component {
       'Bạn có muốn xóa hãng sản xuất',
       async () => {
         const result = await this.props.manufacturerStore.delete(manufacturer.manufacturerId)
-        if (result.status === 204) {
+        if (result.status === 200) {
           showNotification('Xóa hãng sản xuất thành công', 'success')
           this.refetchData()
         } else {

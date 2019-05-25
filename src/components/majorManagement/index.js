@@ -35,9 +35,8 @@ class MajorManagement extends React.Component{
             },
             { headerName: 'Mã chuyên ngành', field: 'majorId', sortable: true },
             { headerName: 'Tên chuyên ngành', field: 'majorName', sortable: true },
-            {
-                headerName: 'Mã khoa', field: 'departmentId', sortable: true
-            }
+            { headerName: 'Mã khoa', field: 'departmentId', sortable: true, hide: true },
+            { headerName: 'Khoa', field: 'department.departmentName', sortable: true }
         ]
 
         this.gridOptions = {
@@ -86,7 +85,7 @@ class MajorManagement extends React.Component{
     async updateMajor() {
         let { major } = this.state
         const result = await this.props.majorStore.update(major)
-        if (result.status === 204) {
+        if (result.status === 200) {
             showNotification('Cập nhật chuyên ngành thành công', 'success')
             this.refetchData()
         } else {
@@ -99,7 +98,7 @@ class MajorManagement extends React.Component{
             'Bạn có muốn xóa chuyên ngành không?',
             async () => {
                 const result = await this.props.majorStore.delete(major.majorId)
-                if (result.status === 204) {
+                if (result.status === 200) {
                     showNotification('Xóa chuyên ngành thành công', 'success')
                     this.refetchData()
                 } else {

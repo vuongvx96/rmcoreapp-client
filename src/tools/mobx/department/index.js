@@ -29,7 +29,7 @@ class DepartmentStore {
     try {
       const response = await http.post('/departments', entity)
       runInAction('entity created', () => {
-        this.entities.set(entity.departmentId, entity)
+        this.entities.set(entity.departmentId, response.data)
         this.loading = false
       })
       return response
@@ -43,7 +43,7 @@ class DepartmentStore {
     try {
       const response = await http.put('/departments', entity)
       runInAction('entity updated', () => {
-        this.entities.set(entity.departmentId, entity)
+        this.entities.set(entity.departmentId, response.data)
         this.loading = false
       })
       return response

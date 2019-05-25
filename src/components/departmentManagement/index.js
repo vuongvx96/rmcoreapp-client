@@ -71,7 +71,7 @@ class DepartmentManagement extends React.Component {
   async updateDepartment() {
     let { department } = this.state
     const result = await this.props.departmentStore.update(department)
-    if (result.status === 204) {
+    if (result.status === 200) {
       showNotification('Cập nhật khoa thành công', 'success')
       this.refetchData()
     } else {
@@ -84,7 +84,7 @@ class DepartmentManagement extends React.Component {
       'Bạn có muốn xóa khoa không?',
       async () => {
         const result = await this.props.departmentStore.delete(department.departmentId)
-        if (result.status === 204) {
+        if (result.status === 200) {
           showNotification('Xóa khoa thành công', 'success')
           this.refetchData()
         } else {

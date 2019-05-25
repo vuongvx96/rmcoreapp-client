@@ -29,7 +29,7 @@ class ManufacturerStore {
     try {
       const response = await http.post('/manufacturers', entity)
       runInAction('entity created', () => {
-        this.entities.set(entity.manufacturerId, entity)
+        this.entities.set(entity.manufacturerId, response.data)
         this.loading = false
       })
       return response
@@ -43,7 +43,7 @@ class ManufacturerStore {
     try {
       const response = await http.put('/manufacturers', entity)
       runInAction('entity updated', () => {
-        this.entities.set(entity.manufacturerId, entity)
+        this.entities.set(entity.manufacturerId, response.data)
         this.loading = false
       })
       return response

@@ -39,8 +39,8 @@ class RoomManagement extends React.Component {
             { headerName: 'IP chính', field: 'validIP', width: 120, sortable: true },
             { headerName: 'SL máy tính', field: 'amountComp', colId: 'c1', hide: true },
             { headerName: 'SL máy chiếu', field: 'amountProj', colId: 'c2', hide: true },
-            { headerName: 'Ghi chú', field: 'note', colId: 'note', hide: true },
-            { headerName: 'Trang thiết bị', field: 'detail', width: 490 }
+            { headerName: 'Ghi chú', field: 'note' , hide: true },
+            { headerName: 'Trang thiết bị', field: 'shortDescription', width: 490 }
         ]
 
         this.gridOptions = {
@@ -68,6 +68,8 @@ class RoomManagement extends React.Component {
 
     async createRoom() {
         let { room } = this.state
+        room.computers = []
+        room.equipments = []
         const result = await this.props.roomStore.create(room)
         if (result.status === 201) {
             showNotification('Thêm phòng thành công', 'success')
@@ -80,7 +82,7 @@ class RoomManagement extends React.Component {
     async updateRoom() {
         let { room } = this.state
         const result = await this.props.roomStore.update(room)
-        if (result.status === 204) {
+        if (result.status === 200) {
             showNotification('Cập nhật phòng thành công', 'success')
             this.refetchData()
         } else {
@@ -93,7 +95,7 @@ class RoomManagement extends React.Component {
             'Bạn có muốn xóa phòng không?',
             async () => {
                 const result = await this.props.roomStore.delete(room.roomId)
-                if (result.status === 204) {
+                if (result.status === 200) {
                     showNotification('Xóa phòng thành công', 'success')
                     this.refetchData()
                 } else {

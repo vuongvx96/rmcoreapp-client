@@ -54,12 +54,12 @@ class ClassForm extends React.Component {
             this.props.getInfo('classId', target.value)
           }} />)}
         </Form.Item>
-        <Form.Item label='Tên chuyên ngành'>
+        <Form.Item label='Chuyên ngành'>
           {getFieldDecorator('majorId', {
             rules: [
               {
                 required: true,
-                message: 'Vui lòng nhập mã chuyên ngành',
+                message: 'Vui lòng chọn chuyên ngành',
               },
             ],
             initialValue: majorId
