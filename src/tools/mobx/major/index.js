@@ -28,8 +28,9 @@ class MajorStore {
     this.startAsync()
     try {
       const response = await http.post('/majors', entity)
+      console.log(response)
       runInAction('entity created', () => {
-        this.entities.set(entity.majorId, entity)
+        this.entities.set(entity.majorId, response.data)
         this.loading = false
       })
       return response
@@ -43,7 +44,7 @@ class MajorStore {
     try {
       const response = await http.put('/majors', entity)
       runInAction('entity updated', () => {
-        this.entities.set(entity.majorId, entity)
+        this.entities.set(entity.majorId, response.data)
         this.loading = false
       })
       return response

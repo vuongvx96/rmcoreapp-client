@@ -35,7 +35,8 @@ class ManufacturerManagement extends React.Component {
       { headerName: 'Thông tin liên hệ', field: 'manufacturerContact' }
     ]
     this.gridOptions = {
-      rowHeight: 34
+      rowHeight: 34,
+      localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
     this.getInfo = this.getInfo.bind(this)
     this.createManufacturer = this.createManufacturer.bind(this)
@@ -71,7 +72,7 @@ class ManufacturerManagement extends React.Component {
   async updateManufacturer() {
     let { manufacturer } = this.state
     const result = await this.props.manufacturerStore.update(manufacturer)
-    if (result.status === 204) {
+    if (result.status === 200) {
       showNotification('Cập nhật hãng sản xuất thành công', 'success')
       this.refetchData()
     } else {
@@ -84,7 +85,7 @@ class ManufacturerManagement extends React.Component {
       'Bạn có muốn xóa hãng sản xuất',
       async () => {
         const result = await this.props.manufacturerStore.delete(manufacturer.manufacturerId)
-        if (result.status === 204) {
+        if (result.status === 200) {
           showNotification('Xóa hãng sản xuất thành công', 'success')
           this.refetchData()
         } else {

@@ -48,3 +48,23 @@ body {
         }
     }
 }
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .left-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .right-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}

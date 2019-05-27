@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const host = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : window.location.origin
+
 const http = axios.create ({
-  baseURL: 'https://localhost:44344/api',
+  baseURL: `${host}/api`,
   headers: { 'Content-Type': 'application/json', },
 })
 

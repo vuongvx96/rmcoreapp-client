@@ -33,18 +33,19 @@ class RoomManagement extends React.Component {
                     onRemove: this.removeRoom.bind(this)
                 }
             },
-            { headerName: 'Mã phòng', field: 'roomId', width: 110, sortable: true },
-            { headerName: 'Sức chứa', field: 'capacity', width: 100, sortable: true },
+            { headerName: 'Mã phòng', field: 'roomId', width: 120, sortable: true },
+            { headerName: 'Sức chứa', field: 'capacity', width: 110, sortable: true },
             { headerName: 'Vị trí', field: 'location', width: 100, sortable: true },
             { headerName: 'IP chính', field: 'validIP', width: 120, sortable: true },
             { headerName: 'SL máy tính', field: 'amountComp', colId: 'c1', hide: true },
             { headerName: 'SL máy chiếu', field: 'amountProj', colId: 'c2', hide: true },
-            { headerName: 'Ghi chú', field: 'note', colId: 'note', hide: true },
-            { headerName: 'Trang thiết bị', field: 'detail', width: 510 }
+            { headerName: 'Ghi chú', field: 'note' , hide: true },
+            { headerName: 'Trang thiết bị', field: 'shortDescription', width: 490 }
         ]
 
         this.gridOptions = {
-            rowHeight: 34
+            rowHeight: 34,
+            localeText: { noRowsToShow: 'Không có dữ liệu' }
         }
         this.getInfo = this.getInfo.bind(this)
         this.createRoom = this.createRoom.bind(this)
@@ -68,6 +69,8 @@ class RoomManagement extends React.Component {
 
     async createRoom() {
         let { room } = this.state
+        room.computers = []
+        room.equipments = []
         const result = await this.props.roomStore.create(room)
         if (result.status === 201) {
             showNotification('Thêm phòng thành công', 'success')
@@ -80,7 +83,7 @@ class RoomManagement extends React.Component {
     async updateRoom() {
         let { room } = this.state
         const result = await this.props.roomStore.update(room)
-        if (result.status === 204) {
+        if (result.status === 200) {
             showNotification('Cập nhật phòng thành công', 'success')
             this.refetchData()
         } else {
@@ -93,7 +96,7 @@ class RoomManagement extends React.Component {
             'Bạn có muốn xóa phòng không?',
             async () => {
                 const result = await this.props.roomStore.delete(room.roomId)
-                if (result.status === 204) {
+                if (result.status === 200) {
                     showNotification('Xóa phòng thành công', 'success')
                     this.refetchData()
                 } else {
@@ -155,7 +158,6 @@ class RoomManagement extends React.Component {
                     <AgGridReact
                         columnDefs={this.columnDefs}
                         rowData={entities}
-                        animateRows={true}
                         onGridReady={this.onGridReady}
                         gridOptions={this.gridOptions}
                         frameworkComponents={{

@@ -38,7 +38,8 @@ class SubjectManagement extends React.Component{
     ]
 
     this.gridOptions = {
-      rowHeight: 34
+      rowHeight: 34,
+      localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
     this.getInfo = this.getInfo.bind(this)
     this.createSubject = this.createSubject.bind(this)
@@ -74,7 +75,7 @@ class SubjectManagement extends React.Component{
   async updateSubject() {
     let { subject } = this.state
     const result = await this.props.subjectStore.update(subject)
-    if (result.status === 204) {
+    if (result.status === 200) {
       showNotification('Cập nhật môn thành công', 'success')
       this.refetchData()
     } else {
@@ -87,7 +88,7 @@ class SubjectManagement extends React.Component{
       'Bạn có muốn xóa môn không?',
       async () => {
         const result = await this.props.subjectStore.delete(subject.subjectId)
-        if (result.status === 204) {
+        if (result.status === 200) {
           showNotification('Xóa môn thành công', 'success')
           this.refetchData()
         } else {

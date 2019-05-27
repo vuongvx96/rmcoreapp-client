@@ -10,7 +10,6 @@ import { showConfirm } from '../util/confirm'
 
 @inject('classStore', 'majorStore')
 @observer
-
 class ClassManagement extends React.Component {
   constructor(props) {
     super(props)
@@ -20,8 +19,6 @@ class ClassManagement extends React.Component {
         majorId: null
       }
     }
-
-    this.majorMapping = this.props.majorStore.objectMap
 
     this.columnDefs = [
       {
@@ -34,7 +31,8 @@ class ClassManagement extends React.Component {
         }
       },
       { headerName: 'Mã lớp', field: 'classId', sortable: true },
-      { headerName: 'Mã chuyên ngành', field: 'majorId', sortable: true }
+      { headerName: 'Mã chuyên ngành', field: 'majorId', hide: true },
+      { headerName: 'Chuyên ngành', field: 'major.majorName', sortable: true },
     ]
 
     this.gridOptions = {
@@ -46,7 +44,8 @@ class ClassManagement extends React.Component {
         previous: 'Trước',
         next: 'Kế tiếp',
         last: 'Cuối',
-        first: 'Đầu'
+        first: 'Đầu',
+        noRowsToShow: 'Không có dữ liệu'
       }
     }
     this.getInfo = this.getInfo.bind(this)
@@ -83,7 +82,7 @@ class ClassManagement extends React.Component {
   async updateClass() {
     let { Class } = this.state
     const result = await this.props.classStore.update(Class)
-    if (result.status === 204) {
+    if (result.status === 200) {
       showNotification('Cập nhật lớp thành công', 'success')
       this.refetchData()
     } else {
@@ -96,7 +95,7 @@ class ClassManagement extends React.Component {
       'Bạn có muốn xóa lớp không?',
       async () => {
         const result = await this.props.classStore.delete(Class.classId)
-        if (result.status === 204) {
+        if (result.status === 200) {
           showNotification('Xóa lớp thành công', 'success')
           this.refetchData()
         } else {

@@ -31,7 +31,7 @@ class RoomStore {
 			runInAction('entity created', () => {
 				entity.computers = []
 				entity.equipments = []
-				this.entities.set(entity.roomId, entity)
+				this.entities.set(entity.roomId, response.data)
 				this.loading = false
 			})
 			return response
@@ -45,7 +45,7 @@ class RoomStore {
 		try {
 			const response = await http.put('/rooms', entity)
 			runInAction('entity updated', () => {
-				this.entities.set(entity.roomId, entity)
+				this.entities.set(entity.roomId, response.data)
 				this.loading = false
 			})
 			return response
@@ -69,10 +69,15 @@ class RoomStore {
 
 	@computed get listRooms() {
 		var list = Object.values(toJS(this.entities))
-		list.forEach(item => {
-			item.detail = `${item.computers.length} máy tính, ${item.equipments.length} máy chiếu, ${item.note}`
-		})
 		return list
+	}
+
+	@computed get listRoomIds() {
+		let keys = []
+		for (const k of this.entities.keys()) {
+			keys.push(k)
+		}
+		return keys
 	}
 }
 

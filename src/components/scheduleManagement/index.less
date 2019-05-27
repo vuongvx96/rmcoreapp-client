@@ -1,13 +1,26 @@
 .flex-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
 
     .left-items {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
+
+        span {
+            margin-right: 5px;
+        }
+
+        .ant-select {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .ant-btn {
+            margin-right: 5px;
+        }
     }
 
     .right-items {
@@ -15,5 +28,66 @@
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
+    }
+}
+
+.table-schedule {
+    margin-top: 10px;
+
+    .title {
+        border: 1px solid #bfbfbf;
+        font-weight: bold;
+        color:  #0050b3;
+        text-align: center;
+        background: #e8e8e8;
+
+        .ant-col:not(:first-child) {
+            border-left: 1px solid #bfbfbf;
+        }
+    }
+
+    .data {
+        border-left: 1px solid #bfbfbf;
+        border-right: 1px solid #bfbfbf;
+        border-bottom: 1px solid #bfbfbf;
+
+        .ant-col {
+            .ant-card {
+                min-height: 135px;
+                border: none;
+
+                .ant-card-head {
+                    padding: 0 5px;
+                    min-height: unset;
+                    border-bottom: none;
+
+                    .ant-card-head-wrapper {
+                        border-bottom: 1px solid #08979c;
+
+                        .ant-card-head-title {
+                            font-size: 12px;
+                            font-weight: bold;
+                            padding: 2px 0;
+                            white-space: pre-wrap;
+                        }
+                    }
+                }
+
+                .ant-card-body {
+                    padding: 5px;
+                    font-size: 13px;
+                }
+            }
+        }
+
+        .ant-col:first-child {
+            text-align: center;
+            font-weight: bold;
+            color: #f5222d;
+        }
+
+        .ant-col:not(:first-child) {
+            border-left: 1px solid #bfbfbf;
+        }
     }
 }
