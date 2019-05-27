@@ -26,4 +26,11 @@ function getStatus(value) {
   </div>
 }
 
-export { dateFormatter, getStatus, statusStyle }
+function getGender(value) {
+  return <div>
+    {
+      <span>{value ? 'Nam' : 'Nữ'}</span>
+    }
+  </div>
+}
+export { dateFormatter, getStatus, statusStyle, getGender }
