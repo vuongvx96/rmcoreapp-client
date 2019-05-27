@@ -1,4 +1,4 @@
-import { observable, action, runInAction } from 'mobx'
+import { observable, action, runInAction, toJS } from 'mobx'
 import http from '../../axios'
 
 class ComputerStore{
@@ -56,13 +56,12 @@ class ComputerStore{
   }
 
   @action create = async (entity) => {
-    this.startAsync()
     try {
       const response = await http.post('/computers', entity)
       runInAction('entity created', () => {
         this.computers.set(entity.computerId, response.data)
         this.rowCount += 1
-        this.loading = false
+        if (response.data.status) this.activeCount += 1
       })
       return response
     } catch (err) {
@@ -71,12 +70,10 @@ class ComputerStore{
   }
 
   @action update = async (entity) => {
-    this.startAsync()
     try {
       const response = await http.put('/computers', entity)
       runInAction('entity updated', () => {
         this.computers.set(entity.computerId, response.data)
-        this.loading = false
       })
       return response
     } catch (err) {
@@ -88,14 +85,21 @@ class ComputerStore{
     try {
       const response = await http.delete(`/computers/${id}`)
       runInAction('entity deleted', () => {
+        var old = toJS(this.computers.get(id))
+        if (old.status) this.activeCount -= 1
         this.computers.delete(id)
         this.rowCount -= 1
-        this.loading = false
       })
       return response
     } catch (err) {
       return err
     }
+  }
+
+  @action updateActiveCount(status) {
+    if(status)
+      this.activeCount += 1
+    else this.activeCount -=1 
   }
 }
 

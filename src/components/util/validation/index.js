@@ -24,5 +24,12 @@ function inputCodeRule(message = 'định dạng mã không hợp lệ!') {
   }
 }
 
+function inputPhoneNumberVN(message = 'số điện thoại không hợp lệ!') {
+  return {
+    pattern: /^0(1\d{9}|9\d{8})$/,
+    message: message
+  }
+}
 
-export { requiredRule, emailRule, ipRule, inputCodeRule }
+
+export { requiredRule, emailRule, ipRule, inputCodeRule, inputPhoneNumberVN }

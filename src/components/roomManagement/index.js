@@ -158,7 +158,6 @@ class RoomManagement extends React.Component {
                     <AgGridReact
                         columnDefs={this.columnDefs}
                         rowData={entities}
-                        // animateRows={true}
                         onGridReady={this.onGridReady}
                         gridOptions={this.gridOptions}
                         frameworkComponents={{

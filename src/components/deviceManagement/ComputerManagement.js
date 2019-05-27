@@ -75,7 +75,7 @@ class ComputerManagement extends React.Component {
 
   openEditForm(computer) {
     this.setState({ computer })
-    this.refTemplate.openDiaglog()
+    this.refTemplate.openDialog()
   }
 
   async createComputer() {
@@ -91,6 +91,7 @@ class ComputerManagement extends React.Component {
 
   async updateComputer() {
     let { computer } = this.state
+    delete computer.manufacturer
     const result = await this.props.computerStore.update(computer)
     if (result.status === 200) {
       showNotification('Cập nhật máy tính thành công', 'success')

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Form, Input, Select, Switch } from 'antd'
+import { Form, Input, Select, Switch, Icon } from 'antd'
 import { observer, inject } from 'mobx-react'
 import { inputCodeRule } from '../util/validation'
 
-@inject('commonStore', 'manufacturerStore', 'roomStore')
+@inject('commonStore', 'manufacturerStore', 'roomStore', 'computerStore')
 @observer
 class ComputerForm extends React.Component {
   constructor(props) {
@@ -23,6 +23,8 @@ class ComputerForm extends React.Component {
 
   componentDidMount() {
     this.props.getRef(this)
+    this.props.manufacturerStore.fetchAll()
+    this.props.roomStore.fetchAll()
   }
 
   render() {
@@ -56,7 +58,7 @@ class ComputerForm extends React.Component {
               inputCodeRule('Định dạng mã không hợp lệ!')
             ],
             initialValue: computerId
-          })(<Input disable={!isCreate} placeholder='Nhập mã phòng' type='text' onChange={({ target }) => {
+          })(<Input disabled={!isCreate} placeholder='Nhập mã phòng' type='text' onChange={({ target }) => {
             this.props.getInfo('computerId', target.value)
           }} />)}
         </Form.Item>
@@ -75,8 +77,16 @@ class ComputerForm extends React.Component {
         </Form.Item>
         <Form.Item label='Hãng sản xuất' hasFeedback>
           {getFieldDecorator('manufacturerId', {
+            rules: [
+              {
+                required: true,
+                message: 'Vui lòng chọn hãng sản xuất',
+              }
+            ],
             initialValue: manufacturerId
-          })(<Select>
+          })(<Select onChange={(value) => {
+            this.props.getInfo('manufacturerId', value)
+          }}>
             {listManufacturers.map(item => (
               <Select.Option key={item.k} value={item.k}>{item.v}</Select.Option>
             ))}
@@ -84,8 +94,16 @@ class ComputerForm extends React.Component {
         </Form.Item>
         <Form.Item label='Phòng' hasFeedback>
           {getFieldDecorator('roomId', {
+            rules: [
+              {
+                required: true,
+                message: 'Vui lòng chọn phòng',
+              }
+            ],
             initialValue: roomId
-          })(<Select>
+          })(<Select onChange={(value) => {
+            this.props.getInfo('roomId', value)
+          }}>
             {listRoomIds.map(item => (
               <Select.Option key={item} value={item}>{item}</Select.Option>
             ))}
@@ -105,7 +123,7 @@ class ComputerForm extends React.Component {
           }} />)}
         </Form.Item>
         <Form.Item label='Cấu hình'>
-          {getFieldDecorator('serial', {
+          {getFieldDecorator('description', {
             initialValue: description
           })(<Input.TextArea rows={4} placeholder='Nhập cấu hình' type='text' onChange={({ target }) => {
             this.props.getInfo('description', target.value)
@@ -113,10 +131,15 @@ class ComputerForm extends React.Component {
         </Form.Item>
         <Form.Item label='Trạng thái'>
           {getFieldDecorator('status', {
+            valuePropName: 'checked',
             initialValue: status
-          })(<Switch onChange={(checked) => {
-            this.props.getInfo('status', checked)
-          }}/>)}
+          })(<Switch
+            checkedChildren={<Icon type='check' />}
+            unCheckedChildren={<Icon type='cross' />}
+            onChange={(checked) => {
+              this.props.getInfo('status', checked)
+              this.props.computerStore.updateActiveCount(checked)
+            }} />)}
         </Form.Item>
       </Form>
     )
