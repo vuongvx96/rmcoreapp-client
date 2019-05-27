@@ -71,6 +71,14 @@ class RoomStore {
 		var list = Object.values(toJS(this.entities))
 		return list
 	}
+
+	@computed get listRoomIds() {
+		let keys = []
+		for (const k of this.entities.keys()) {
+			keys.push(k)
+		}
+		return keys
+	}
 }
 
 export default new RoomStore()

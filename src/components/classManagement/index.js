@@ -10,7 +10,6 @@ import { showConfirm } from '../util/confirm'
 
 @inject('classStore', 'majorStore')
 @observer
-
 class ClassManagement extends React.Component {
   constructor(props) {
     super(props)
@@ -20,8 +19,6 @@ class ClassManagement extends React.Component {
         majorId: null
       }
     }
-
-    this.majorMapping = this.props.majorStore.objectMap
 
     this.columnDefs = [
       {
@@ -47,7 +44,8 @@ class ClassManagement extends React.Component {
         previous: 'Trước',
         next: 'Kế tiếp',
         last: 'Cuối',
-        first: 'Đầu'
+        first: 'Đầu',
+        noRowsToShow: 'Không có dữ liệu'
       }
     }
     this.getInfo = this.getInfo.bind(this)

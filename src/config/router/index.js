@@ -56,6 +56,11 @@ const listRoutesAuthen = [
 		displayName: 'Quản lý môn học',
 		path: '/subject-management',
 		component: 'subjectManagement'
+	},
+	{
+		displayName: 'Quản lý thiết bị',
+		path: '/device-management',
+		component: 'deviceManagement'
 	}
 ]
 

@@ -1,4 +1,4 @@
-import { observable, action, runInAction } from 'mobx'
+import { observable, action, runInAction, computed } from 'mobx'
 import http from '../../axios'
 
 class ManufacturerStore {
@@ -64,7 +64,14 @@ class ManufacturerStore {
       return err
     }
   }
-  
+
+  @computed get listManufacturers() {
+    let list = []
+		for (const [k,v] of this.entities.entries()) {
+			list.push({k,v})
+		}
+		return list
+  }
 }
 
 export default new ManufacturerStore()

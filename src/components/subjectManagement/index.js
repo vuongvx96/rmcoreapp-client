@@ -38,7 +38,8 @@ class SubjectManagement extends React.Component{
     ]
 
     this.gridOptions = {
-      rowHeight: 34
+      rowHeight: 34,
+      localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
     this.getInfo = this.getInfo.bind(this)
     this.createSubject = this.createSubject.bind(this)

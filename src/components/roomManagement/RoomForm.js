@@ -25,7 +25,7 @@ class RoomForm extends React.Component {
     }
 
     render() {
-        let { roomId, capacity, location, validIP, note  } = this.props
+        let { roomId, capacity, location, validIP, note } = this.props
         let { getFieldDecorator } = this.props.form
         let { isCreate } = this.props.commonStore
         const formItemLayout = {
@@ -66,8 +66,8 @@ class RoomForm extends React.Component {
                             },
                         ],
                         initialValue: capacity
-                    })(<IntInput placeholder='Nhập sức chứa' type='text' onChange={( value ) => {
-                         this.props.getInfo('capacity', value)
+                    })(<IntInput placeholder='Nhập sức chứa' type='text' onChange={(value) => {
+                        this.props.getInfo('capacity', value)
                     }} />)}
                 </Form.Item>
                 <Form.Item label='Vị trí' hasFeedback>

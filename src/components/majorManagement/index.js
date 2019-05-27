@@ -48,7 +48,8 @@ class MajorManagement extends React.Component{
                 previous: 'Trước',
                 next: 'Kế tiếp',
                 last: 'Cuối',
-                first: 'Đầu'
+                first: 'Đầu',
+                noRowsToShow: 'Không có dữ liệu'
             }
         }
         this.getInfo = this.getInfo.bind(this)

@@ -44,7 +44,8 @@ class RoomManagement extends React.Component {
         ]
 
         this.gridOptions = {
-            rowHeight: 34
+            rowHeight: 34,
+            localeText: { noRowsToShow: 'Không có dữ liệu' }
         }
         this.getInfo = this.getInfo.bind(this)
         this.createRoom = this.createRoom.bind(this)

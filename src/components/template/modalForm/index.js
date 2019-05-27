@@ -26,78 +26,89 @@ class ModalForm extends React.Component {
 		}
 	}
 
-	componentDidMount () {
-    if (this.props.getRef) {
-      this.props.getRef(this)
-    }
-  }
+	componentDidMount() {
+		if (this.props.getRef) {
+			this.props.getRef(this)
+		}
+	}
 
 	render() {
-		let { title, buttonName, handleCreate, handleUpdate, clearState, disableButtonSave, info, formFields, modalWidth } = this.props
+		let { title, buttonName, handleCreate, handleUpdate, clearState, disableButtonSave, info, formFields, modalWidth, leftItems } = this.props
 		let { open } = this.state
 		let { isCreate } = this.props.commonStore
 		return (
 			<>
-			<div style={{ padding: '0 10px 10px 10px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
-				<Button name='btnCreate' type='primary'
-					onClick={() => {
-						clearState()
-						this.props.commonStore.onCreate()
-						if (this.form) {
+				<div className='flex-container' style={{ paddingBottom: 10 , width: '100%' }}>
+					{
+						leftItems ?
+							<div className='left-items'>
+								{leftItems}
+							</div>
+							: <></>
+					}
+					<div className='right-items'>
+						<Button name='btnCreate' type='primary'
+							onClick={() => {
+								clearState()
+								this.props.commonStore.onCreate()
+								if (this.form) {
+									this.form.props.form.resetFields()
+								}
+								this.openDialog()
+							}}
+						>
+							{buttonName}
+						</Button>
+					</div>
+				</div>
+				<Modal
+					title={title}
+					open={open}
+					width={modalWidth}
+					footer={[
+						<Button name='btnCancel' key='cancel' type={'default'} className='btnCancel' onClick={() => {
 							this.form.props.form.resetFields()
-						}
-						this.openDialog()
-					}}
-				>
-					{buttonName}
-				</Button>
-			</div>
-			<Modal
-				title={title}
-				open={open}
-				width={modalWidth}
-				footer={[
-					<Button name='btnCancel' key='cancel' type={'default'} className='btnCancel' onClick={() => {
-						this.form.props.form.resetFields()
-						this.closeDialog()
-					}}>
-						Thoát
+							this.closeDialog()
+						}}>
+							Thoát
 					</Button>,
-					<Button name='btnSave' disabled={disableButtonSave} key='save' type={'primary'} className='btnSave' onClick={() => {
-						this.closeDialog(() => {
-							this.form.props.form.resetFields()
-							if (this.props.children) {
-								if (isCreate)
-									handleCreate()
-								else
-									handleUpdate()
-							} else {
-								if (isCreate)
-									handleCreate(this.form.state.info)
-								else
-									handleUpdate(this.form.state.info)
-							}
-						})
-					}}>
-						Lưu
+						<Button name='btnSave' disabled={disableButtonSave} key='save' type={'primary'} className='btnSave' onClick={() => {
+							this.closeDialog(() => {
+								this.form.props.form.resetFields()
+								if (this.props.children) {
+									if (isCreate)
+										handleCreate()
+									else
+										handleUpdate()
+								} else {
+									if (isCreate)
+										handleCreate(this.form.state.info)
+									else
+										handleUpdate(this.form.state.info)
+								}
+							})
+						}}>
+							Lưu
 					</Button>
-				]}
-			>
-			 <div style={{ paddingTop: 20 }}>
-            {
-              this.props.children
-                ? React.cloneElement(this.props.children, { getRef: (ref) => {
-                  this.form = ref 
-                }})
-                : <Form getRef={ref => {
-                  this.form = ref
-                }} fields={formFields} info={info} />
-            }
-          </div>
-        </Modal>
-				</>
-				)
-			}
+					]}
+				>
+					<div style={{ paddingTop: 20 }}>
+						{
+							this.props.children
+								? React.cloneElement(this.props.children, {
+									getRef: (ref) => {
+										this.form = ref
+									}
+								})
+								: <Form getRef={ref => {
+									this.form = ref
+								}} fields={formFields} info={info} />
+						}
+					</div>
+				</Modal>
+			</>
+		)
+	}
 }
 
 export default ModalForm
