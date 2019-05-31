@@ -3,7 +3,7 @@ import { Icon } from 'antd'
 import moment from 'moment'
 
 function dateFormatter(str) {
-  if (str == false) return str
+  if (!str) return str
   let date = moment(str)
   return date.format('DD/MM/YYYY')
 }
@@ -27,10 +27,6 @@ function getStatus(value) {
 }
 
 function getGender(value) {
-  return <div>
-    {
-      <span>{value ? 'Nam' : 'Nữ'}</span>
-    }
-  </div>
+  return value ? 'Nam' : 'Nữ'
 }
 export { dateFormatter, getStatus, statusStyle, getGender }

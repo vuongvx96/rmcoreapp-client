@@ -1,10 +1,14 @@
-import { observable, action, runInAction } from 'mobx'
+import { observable, action, runInAction, computed, toJS } from 'mobx'
 import http from '../../axios'
 
 class TeacherStore {
 
-  @observable entities = new Map()
+  @observable teachers = new Map()
   @observable loading = false
+
+  @observable currentPage = 1
+  @observable pageSize = 10
+  @observable rowCount = 10
 
   startAsync = () => {
     this.loading = true
@@ -15,11 +19,37 @@ class TeacherStore {
     try {
       const response = await http.get('/teachers')
       runInAction('fetch all entities', () => {
-        this.entities = new Map(response.data.map(i => [i.teacherId, i]))
+        this.teachers = new Map(response.data.map(i => [i.teacherId, i]))
         this.loading = false
       })
       return response
     } catch (err) {
+      return err
+    }
+  }
+
+  @action fetchAllPaging = async (page, pageSize, departmentId, keyword) => {
+    this.startAsync()
+    try {
+      const response = await http.get('/teachers/getallpaging', {
+        params: {
+          page: page,
+          pageSize: pageSize,
+          departmentId: departmentId,
+          keyword: keyword
+        }
+      })
+      runInAction('fetch all entities paging', () => {
+        this.teachers = new Map(response.data.results.map(i => [i.teacherId, i]))
+        this.currentPage = response.data.currentPage
+        this.pageSize = response.data.pageSize
+        this.rowCount = response.data.rowCount
+        this.loading = false
+      })
+
+      return response
+    } catch (err) {
+      this.loading = false
       return err
     }
   }
@@ -29,7 +59,10 @@ class TeacherStore {
     try {
       const response = await http.post('/teachers', entity)
       runInAction('entity created', () => {
-        this.entities.set(entity.teacherId, response.data)
+        if (response.status === 201) {
+          this.rowCount+=1
+        }
+        this.teachers.set(entity.teacherId, response.data)
         this.loading = false
       })
       return response
@@ -43,10 +76,9 @@ class TeacherStore {
     try {
       const response = await http.put('/teachers', entity)
       runInAction('entity updated', () => {
-        this.entities.set(entity.teacherId, response.data)
+        this.teachers.set(entity.teacherId, response.data)
         this.loading = false
       })
-      console.log(response)
       return response
     } catch (err) {
       return err
@@ -57,7 +89,10 @@ class TeacherStore {
     try {
       const response = await http.delete(`/teachers/${id}`)
       runInAction('entity deleted', () => {
-        this.entities.delete(id)
+        if (response.status === 200) {
+          this.rowCount-=1
+        }
+        this.teachers.delete(id)
         this.loading = false
       })
       return response

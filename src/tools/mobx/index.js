@@ -1,7 +1,7 @@
 import authStore from './authen'
 import commonStore from './common'
 import functionStore from './function'
-import userStore from './user'
+import accountStore from './account'
 import teacherStore from './teacher'
 import manufacturerStore from './manufacturer'
 import weekStore from './week'
@@ -11,12 +11,14 @@ import roomStore from './room'
 import classStore from './class'
 import subjectStore from './subject'
 import computerStore from './computer'
+import equipmentStore from './equipment'
+import userStore from './system/user'
 
 const stores = {
   authStore,
   commonStore,
   functionStore,
-  userStore,
+  accountStore,
   teacherStore,
   manufacturerStore,
   weekStore,
@@ -25,7 +27,9 @@ const stores = {
   roomStore,
   classStore,
   subjectStore,
-  computerStore
+  computerStore,
+  equipmentStore,
+  userStore
 }
 
 export { stores }

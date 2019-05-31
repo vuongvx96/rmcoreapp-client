@@ -1,34 +1,31 @@
 import React from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { Pagination, Spin, Divider, Select, Input, Button } from 'antd'
+import { Spin, Divider, Select, Input, Button } from 'antd'
 import { inject, observer } from 'mobx-react'
 
-import ComputerForm from './ComputerForm'
+import EquipmentForm from './EquipmentForm'
 import ModalForm from '../template/modalForm'
 import ModifyButtonGrid from '../ui/ModifyButtonGrid'
 import { showNotification } from '../util/notification'
 import { showConfirm } from '../util/confirm'
 import { dateFormatter, statusStyle, getStatus } from '../util/formatter'
 
-@inject('computerStore', 'roomStore')
+@inject('equipmentStore', 'roomStore')
 @observer
-class ComputerManagement extends React.Component {
+class EquipmentManagement extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      computer: {
-        computerId: null,
-        computerName: null,
+      equipment: {
+        equipmentId: null,
+        equipmentName: null,
         manufacturerId: null,
-        description: null,
         roomId: null,
         serial: null,
         status: true
       },
-      page: 1,
-      pageSize: 10,
-      keyword: null,
-      roomId: null
+      roomId: null,
+      keyword: null
     }
 
     this.columnDefs = [
@@ -38,16 +35,15 @@ class ComputerManagement extends React.Component {
           canEdit: true,
           canRemove: true,
           onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeComputer.bind(this)
+          onRemove: this.removeEquipment.bind(this)
         }
       },
-      { headerName: 'Mã máy', field: 'computerId', sortable: true, width: 90 },
-      { headerName: 'Tên máy', field: 'computerName', sortable: true, width: 120 },
+      { headerName: 'Mã thiết bị', field: 'equipmentId', sortable: true, width: 110 },
+      { headerName: 'Tên thiết bị', field: 'equipmentName', sortable: true, width: 220 },
       { headerName: 'Mã hãng sản xuất', field: 'manufacturerId', hide: true },
       { headerName: 'Hãng', field: 'manufacturer.manufacturerName', sortable: true, width: 100 },
       { headerName: 'Phòng', field: 'roomId', sortable: true, width: 80 },
       { headerName: 'Serial', field: 'serial', sortable: true, width: 100 },
-      { headerName: 'Cấu hình', field: 'description', sortable: true },
       { headerName: 'Ngày tạo', field: 'createdDate', sortable: true, width: 120, valueFormatter: (params) => dateFormatter(params.value) },
       { headerName: 'Ngày cập nhật', field: 'modifiedDate', sortable: true, width: 120, valueFormatter: (params) => dateFormatter(params.value) },
       { headerName: 'Trạng thái', field: 'status', sortable: true, width: 80, cellStyle: statusStyle, cellRendererFramework: (params) => getStatus(params.value) }
@@ -59,8 +55,8 @@ class ComputerManagement extends React.Component {
     }
 
     this.getInfo = this.getInfo.bind(this)
-    this.createComputer = this.createComputer.bind(this)
-    this.updateComputer = this.updateComputer.bind(this)
+    this.createEquipment = this.createEquipment.bind(this)
+    this.updateEquipment = this.updateEquipment.bind(this)
     this.clearState = this.clearState.bind(this)
   }
 
@@ -70,47 +66,47 @@ class ComputerManagement extends React.Component {
   }
 
   refetchData() {
-    this.gridApi.setRowData(this.props.computerStore.computers)
+    this.gridApi.setRowData(this.props.equipmentStore.equipments)
   }
 
-  openEditForm(computer) {
-    this.setState({ computer })
+  openEditForm(equipment) {
+    this.setState({ equipment })
     this.refTemplate.openDialog()
   }
 
-  async createComputer() {
-    let { computer } = this.state
-    const result = await this.props.computerStore.create(computer)
+  async createEquipment() {
+    let { equipment } = this.state
+    const result = await this.props.equipmentStore.create(equipment)
     if (result.status === 201) {
-      showNotification('Thêm máy tính thành công', 'success')
+      showNotification('Thêm thiết bị thành công', 'success')
       this.refetchData()
     } else {
-      showNotification('Thêm máy tính sản xuất thất bại', 'error')
+      showNotification('Thêm thiết bị sản xuất thất bại', 'error')
     }
   }
 
-  async updateComputer() {
-    let { computer } = this.state
-    delete computer.manufacturer
-    const result = await this.props.computerStore.update(computer)
+  async updateEquipment() {
+    let { equipment } = this.state
+    delete equipment.manufacturer
+    const result = await this.props.equipmentStore.update(equipment)
     if (result.status === 200) {
-      showNotification('Cập nhật máy tính thành công', 'success')
+      showNotification('Cập nhật thiết bị thành công', 'success')
       this.refetchData()
     } else {
-      showNotification('Cập nhật máy tính thất bại', 'error')
+      showNotification('Cập nhật thiết bị thất bại', 'error')
     }
   }
 
-  removeComputer(computer) {
+  removeEquipment(equipment) {
     showConfirm(
-      'Bạn có muốn xóa máy tính',
+      'Bạn có muốn xóa thiết bị',
       async () => {
-        const result = await this.props.computerStore.delete(computer.computerId)
+        const result = await this.props.equipmentStore.delete(equipment.equipmentId)
         if (result.status === 200) {
-          showNotification('Xóa máy tính thành công', 'success')
+          showNotification('Xóa thiết bị thành công', 'success')
           this.refetchData()
         } else {
-          showNotification('Xóa máy tính thất bại', 'error')
+          showNotification('Xóa thiết bị thất bại', 'error')
         }
       }
     )
@@ -118,18 +114,17 @@ class ComputerManagement extends React.Component {
 
   getInfo(field, value) {
     this.setState((prevState) => {
-      prevState.computer[field] = value
+      prevState.equipment[field] = value
       return prevState
     })
   }
 
   clearState() {
     this.setState({
-      computer: {
-        computerId: null,
-        computerName: null,
+      equipment: {
+        equipmentId: null,
+        equipmentName: null,
         manufacturerId: null,
-        description: null,
         roomId: null,
         serial: null,
         status: true
@@ -137,26 +132,14 @@ class ComputerManagement extends React.Component {
     })
   }
 
-  handleChangePage = async (page, pageSize) => {
-    this.setState({ page, pageSize })
-    await this.props.computerStore.fetchAllPaging(page, pageSize, this.state.roomId, this.state.keyword)
-    this.refetchData()
-  }
-
-  handleChangePageSize = async (current, size) => {
-    this.setState({ pageSize: size })
-    await this.props.computerStore.fetchAllPaging(current, size, this.state.roomId, this.state.keyword)
-    this.refetchData()
-  }
-
   componentDidMount() {
-    this.props.computerStore.fetchAllPaging(1, 10, this.state.roomId, this.state.keyword)
+    this.props.equipmentStore.fetchAll(this.state.roomId, this.state.keyword)
     this.props.roomStore.fetchAll()
   }
 
   render() {
-    const { pageSize, rowCount, activeCount, loading, computers } = this.props.computerStore
-    let { computerId, computerName, manufacturerId, description, roomId, serial, status } = this.state.computer
+    const { equipments, total, activeCount, loading } = this.props.equipmentStore
+    let { equipmentId, equipmentName, manufacturerId, roomId, serial, status } = this.state.equipment
     const { listRoomIds } = this.props.roomStore
     return (
       <Spin spinning={loading} tip='Đang load dữ liệu...'>
@@ -164,11 +147,11 @@ class ComputerManagement extends React.Component {
           title='Máy tính'
           buttonName='Thêm mới'
           modalWidth={600}
-          handleCreate={this.createComputer}
-          handleUpdate={this.updateComputer}
+          handleCreate={this.createEquipment}
+          handleUpdate={this.updateEquipment}
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
-          disableButtonSave={!computerId || !computerName || !serial}
+          disableButtonSave={!equipmentId || !equipmentName || !serial}
           leftItems={
             <>
               <Select
@@ -188,17 +171,16 @@ class ComputerManagement extends React.Component {
                 this.setState({ keyword: target.value.trim() })
               }} />
               <Button shape='round' icon='search' onClick={async () => {
-                await this.props.computerStore.fetchAllPaging(1, this.state.pageSize, this.state.roomId, this.state.keyword)
+                await this.props.equipmentStore.fetchAll(this.state.roomId, this.state.keyword)
                 this.refetchData()
               }} />
             </>
           }
         >
-          <ComputerForm
-            computerId={computerId}
-            computerName={computerName}
+          <EquipmentForm
+            equipmentId={equipmentId}
+            equipmentName={equipmentName}
             manufacturerId={manufacturerId}
-            description={description}
             roomId={roomId}
             serial={serial}
             status={status}
@@ -208,7 +190,7 @@ class ComputerManagement extends React.Component {
         <div style={{ height: 'calc(100vh - 220px)' }} className='ag-theme-balham'>
           <AgGridReact
             columnDefs={this.columnDefs}
-            rowData={computers}
+            rowData={equipments}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}
             frameworkComponents={{
@@ -218,18 +200,9 @@ class ComputerManagement extends React.Component {
         </div>
         <div className='flex-container' style={{ padding: '10px 0' }}>
           <div className='left-items'>
-            <span style={{ color: '#092b00' }}>Tổng số: {rowCount}</span>
+            <span style={{ color: '#092b00' }}>Tổng số: {total}</span>
             <Divider type="vertical" />
-            <span style={{ color: '#092b00' }}>Số máy hoạt động: {activeCount}</span>
-          </div>
-          <div className='right-items'>
-            <Pagination
-              pageSize={pageSize}
-              total={rowCount}
-              onChange={this.handleChangePage}
-              onShowSizeChange={this.handleChangePageSize}
-              showSizeChanger
-            />
+            <span style={{ color: '#092b00' }}>Hoạt động: {activeCount}</span>
           </div>
         </div>
       </Spin>
@@ -237,4 +210,4 @@ class ComputerManagement extends React.Component {
   }
 }
 
-export default ComputerManagement
+export default EquipmentManagement

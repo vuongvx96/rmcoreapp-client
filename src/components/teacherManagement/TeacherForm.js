@@ -2,6 +2,8 @@ import React from 'react'
 import { Form, Input, Select, Radio } from 'antd'
 import { observer, inject } from 'mobx-react'
 
+import { requiredRule, emailRule, inputCodeRule, inputPhoneNumberVN } from '../util/validation'
+
 const Option = Select.Option
 const RadioGroup = Radio.Group;
 
@@ -51,10 +53,8 @@ class TeacherForm extends React.Component {
         <Form.Item label='Mã giảng viên'>
           {getFieldDecorator('teacherId', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập mã',
-              },
+              inputCodeRule('Định dạng mã không hợp lệ!'),
+              requiredRule('Vui lòng nhập mã')
             ],
             initialValue: teacherId
           })(<Input disabled={!isCreate} placeholder='Nhập mã giảng viên' type='text' onChange={({ target }) => {
@@ -107,10 +107,8 @@ class TeacherForm extends React.Component {
         <Form.Item label='Số điện thoại'>
           {getFieldDecorator('phone', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập số điện thoại',
-              },
+              requiredRule('Vui lòng nhập số điện thoại'),
+              inputPhoneNumberVN('Số điện thoại không hợp lệ')
             ],
             initialValue: phone
           })(<Input placeholder='Nhập số điện thoại' type='text' onChange={({ target }) => {
@@ -120,10 +118,8 @@ class TeacherForm extends React.Component {
         <Form.Item label='Email'>
           {getFieldDecorator('email', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập email',
-              },
+              requiredRule('Vui lòng nhập email'),
+              emailRule('Email không hợp lệ')
             ],
             initialValue: email
           })(<Input placeholder='Nhập email' type='text' onChange={({ target }) => {
@@ -139,7 +135,10 @@ class TeacherForm extends React.Component {
               },
             ],
             initialValue: departmentId
-          })(<Select onChange={(value) => {
+          })(<Select
+            allowClear
+            showSearch
+            onChange={(value) => {
             this.props.getInfo('departmentId', value)
           }}>
             {

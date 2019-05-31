@@ -65,13 +65,6 @@ class ManufacturerStore {
     }
   }
 
-  @computed get listManufacturers() {
-    let list = []
-		for (const [k,v] of this.entities.entries()) {
-			list.push({k, v: v.manufacturerName})
-    }
-		return list
-  }
 }
 
 export default new ManufacturerStore()

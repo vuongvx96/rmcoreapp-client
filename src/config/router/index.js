@@ -61,6 +61,11 @@ const listRoutesAuthen = [
 		displayName: 'Quản lý thiết bị',
 		path: '/device-management',
 		component: 'deviceManagement'
+	},
+	{
+		displayName: 'Quản lý user',
+		path: '/user-management',
+		component: 'userManagement'
 	}
 ]
 

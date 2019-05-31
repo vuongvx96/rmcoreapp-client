@@ -2,6 +2,7 @@ import React from 'react'
 import { Tabs, Icon } from 'antd'
 
 import ComputerManagement from './ComputerManagement'
+import EquipmentManagement from './EquipmentManagement'
 import './index.less'
 
 class DeviceManagement extends React.Component {
@@ -24,7 +25,7 @@ class DeviceManagement extends React.Component {
           key='2'
           tab={<span><Icon type='video-camera' />Các thiết bị khác</span>}
         >
-          Tab2
+          <EquipmentManagement />
         </Tabs.TabPane>
       </Tabs>
     )
