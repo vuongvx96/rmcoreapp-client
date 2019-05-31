@@ -1,13 +1,15 @@
 import React from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { inject, observer } from 'mobx-react'
+import { toJS } from 'mobx'
+import { Pagination, Select, Input, Button } from 'antd'
 
 import TeacherForm from './TeacherForm'
 import ModalForm from '../template/modalForm'
 import ModifyButtonGrid from '../ui/ModifyButtonGrid'
 import { showNotification } from '../util/notification'
 import { showConfirm } from '../util/confirm'
-import { statusStyle, getGender } from '../util/formatter'
+import { getGender } from '../util/formatter'
 
 @inject('teacherStore', 'departmentStore')
 @observer
@@ -25,7 +27,11 @@ class TeacherManagement extends React.Component {
         email: null,
         address: null,
         departmentId: null
-      }
+      },
+      page: 1,
+      pageSize: 10,
+      keyword: null,
+      departmentId: null
     }
 
     this.departmentMapping = this.props.departmentStore.objectMap
@@ -40,13 +46,13 @@ class TeacherManagement extends React.Component {
           onRemove: this.removeTeacher.bind(this)
         }
       },
-      { headerName: 'Mã giảng viên', field: 'teacherId', sortable: true },
-      { headerName: 'Họ', field: 'lastName', sortable: true },
-      { headerName: 'Tên', field: 'firstName', sortable: true },
+      { headerName: 'Mã GV', field: 'teacherId', sortable: true, width: 100 },
+      { headerName: 'Họ', field: 'lastName', sortable: true, width: 150 },
+      { headerName: 'Tên', field: 'firstName', sortable: true, width: 70 },
       { headerName: 'Giới tính', field: 'gender', sortable: true, width: 80, cellRendererFramework: (params) => getGender(params.value) },
-      { headerName: 'Điện thoại', field: 'phone', sortable: true },
-      { headerName: 'Email', field: 'email', sortable: true },
-      { headerName: 'Địa chỉ', field: 'address', sortable: true },
+      { headerName: 'Điện thoại', field: 'phone', sortable: true, width: 100 },
+      { headerName: 'Email', field: 'email', sortable: true, width: 200 },
+      { headerName: 'Địa chỉ', field: 'address', sortable: true, width: 250 },
       { headerName: 'Mã khoa', field: 'departmentId', sortable: true, hide: true },
       { headerName: 'Khoa', field: 'department.departmentName', sortable: true }
     ]
@@ -76,7 +82,7 @@ class TeacherManagement extends React.Component {
   }
 
   refetchData() {
-    this.gridApi.setRowData(this.props.teacherStore.entities)
+    this.gridApi.setRowData(this.props.teacherStore.teachers)
   }
 
   openEditForm(teacher) {
@@ -143,13 +149,28 @@ class TeacherManagement extends React.Component {
     })
   }
 
+  handleChangePage = async (page, pageSize) => {
+    this.setState({ page, pageSize })
+    await this.props.teacherStore.fetchAllPaging(page, pageSize, this.state.departmentId, this.state.keyword)
+    this.refetchData()
+  }
+
+  handleChangePageSize = async (current, size) => {
+    this.setState({ pageSize: size })
+    await this.props.teacherStore.fetchAllPaging(current, size, this.state.departmentId, this.state.keyword)
+    this.refetchData()
+  }
+
   componentDidMount() {
-    this.props.teacherStore.fetchAll()
+    this.props.teacherStore.fetchAllPaging(1, 10, this.state.departmentId, this.state.keyword)
+    this.props.departmentStore.fetchAll()
   }
 
   render() {
     let { teacherId, firstName, lastName, gender, phone, email, address, departmentId } = this.state.teacher
-    let { entities } = this.props.teacherStore
+    let { pageSize, rowCount, teachers } = this.props.teacherStore
+    let { listDepartments } = this.props.departmentStore
+    console.log(toJS(teachers))
     return (
       <>
         <ModalForm
@@ -161,6 +182,31 @@ class TeacherManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!teacherId || !firstName || !lastName}
+          leftItems={
+            <>
+              <Select
+                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                showSearch
+                allowClear
+                placeholder='Khoa'
+                style={{ width: 300, color: 'rgba(0,0,0,.65)', marginRight: 5 }}
+                onChange={(value) => this.setState({ departmentId: value })}
+              >
+                {
+                  listDepartments.map(item => (
+                    <Select.Option key={item.departmentId} value={item.departmentId}>{item.departmentName}</Select.Option>
+                  ))
+                }
+              </Select>
+              <Input placeholder='Từ khóa (mã, tên, ...)' allowClear style={{ width: 300, marginRight: 10 }} onChange={({ target }) => {
+                this.setState({ keyword: target.value.trim() })
+              }} />
+              <Button shape='round' icon='search' onClick={async () => {
+                await this.props.teacherStore.fetchAllPaging(1, this.state.pageSize, this.state.departmentId, this.state.keyword)
+                this.refetchData()
+              }} />
+            </>
+          }
         >
           <TeacherForm
             teacherId={teacherId}
@@ -174,19 +220,31 @@ class TeacherManagement extends React.Component {
             getInfo={this.getInfo}
           />
         </ModalForm>
-        <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
+        <div style={{ height: 'calc(100vh - 220px)' }} className='ag-theme-balham'>
           <AgGridReact
             columnDefs={this.columnDefs}
-            rowData={entities}
+            rowData={teachers}
             animateRows={true}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}
-            pagination={true}
-            paginationAutoPageSize={true}
             frameworkComponents={{
               editButton: ModifyButtonGrid
             }}
           />
+        </div>
+        <div className='flex-container' style={{ padding: '10px 0' }}>
+          <div className='left-items'>
+            <span style={{ color: '#092b00' }}>Tổng số: {rowCount}</span>
+          </div>
+          <div className='right-items'>
+            <Pagination
+              pageSize={pageSize}
+              total={rowCount}
+              onChange={this.handleChangePage}
+              onShowSizeChange={this.handleChangePageSize}
+              showSizeChanger
+            />
+          </div>
         </div>
       </>
     )

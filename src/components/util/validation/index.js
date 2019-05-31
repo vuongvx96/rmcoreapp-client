@@ -2,12 +2,11 @@ function requiredRule(message = 'trường này là bắt buộc!', value) {
   return { required: true, message }
 }
 
-function emailRule(message = 'địa chỉ email không đúng!', value) {
-  if (value) {
-    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    return re.test(String(value).toLocaleLowerCase())
+function emailRule(message = 'địa chỉ email không đúng!') {
+  return {
+    pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+    message: message
   }
-  return { required: true, message }
 }
 
 function ipRule(message = 'địa chỉ ip không hợp lệ!' ) {
@@ -26,7 +25,7 @@ function inputCodeRule(message = 'định dạng mã không hợp lệ!') {
 
 function inputPhoneNumberVN(message = 'số điện thoại không hợp lệ!') {
   return {
-    pattern: /^0(1\d{9}|9\d{8})$/,
+    pattern: /^(0|\+?84)(\d{9})$/,
     message: message
   }
 }
