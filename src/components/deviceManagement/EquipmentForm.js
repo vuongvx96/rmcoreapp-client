@@ -1,19 +1,18 @@
 import React from 'react'
 import { Form, Input, Select, Switch, Icon } from 'antd'
 import { observer, inject } from 'mobx-react'
-import { inputCodeRule } from '../util/validation'
+import { requiredRule, inputCodeRule } from '../util/validation'
 
-@inject('commonStore', 'manufacturerStore', 'roomStore', 'computerStore')
+@inject('commonStore', 'manufacturerStore', 'roomStore', 'equipmentStore')
 @observer
-class ComputerForm extends React.Component {
+class EquipmentForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      computer: {
-        computerId: null,
-        computerName: null,
+      equipment: {
+        equipmentId: null,
+        equipmentName: null,
         manufacturerId: null,
-        description: null,
         roomId: null,
         serial: null,
         status: true
@@ -28,7 +27,7 @@ class ComputerForm extends React.Component {
   }
 
   render() {
-    let { computerId, computerName, manufacturerId, description, roomId, serial, status } = this.props
+    let { equipmentId, equipmentName, manufacturerId, roomId, serial, status } = this.props
     let { getFieldDecorator } = this.props.form
     let { isCreate } = this.props.commonStore
     let { listManufacturers } = this.props.manufacturerStore
@@ -46,42 +45,33 @@ class ComputerForm extends React.Component {
     return (
       <Form {...formItemLayout} >
         <Form.Item label='Mã máy' hasFeedback>
-          {getFieldDecorator('computerId', {
+          {getFieldDecorator('equipmentId', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập mã',
-              },
+              requiredRule('Vui lòng nhập mã'),
               {
                 max: 6, message: 'Mã tối đa chỉ 6 ký tự!'
               },
               inputCodeRule('Định dạng mã không hợp lệ!')
             ],
-            initialValue: computerId
-          })(<Input disabled={!isCreate} placeholder='Nhập mã máy' type='text' onChange={({ target }) => {
-            this.props.getInfo('computerId', target.value)
+            initialValue: equipmentId
+          })(<Input disabled={!isCreate} placeholder='Nhập mã thiết bị' type='text' onChange={({ target }) => {
+            this.props.getInfo('equipmentId', target.value)
           }} />)}
         </Form.Item>
-        <Form.Item label='Tên máy' hasFeedback>
-          {getFieldDecorator('computerName', {
+        <Form.Item label='Tên thiết bị' hasFeedback>
+          {getFieldDecorator('equipmentName', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập tên máy',
-              }
+              requiredRule('Vui lòng nhập tên thiết bị')
             ],
-            initialValue: computerName
-          })(<Input placeholder='Nhập tên máy' type='text' onChange={({ target }) => {
-            this.props.getInfo('computerName', target.value)
+            initialValue: equipmentName
+          })(<Input placeholder='Nhập tên thiết bị' type='text' onChange={({ target }) => {
+            this.props.getInfo('equipmentName', target.value)
           }} />)}
         </Form.Item>
         <Form.Item label='Hãng sản xuất' hasFeedback>
           {getFieldDecorator('manufacturerId', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng chọn hãng sản xuất',
-              }
+              requiredRule('Vui lòng chọn hãng sản xuất')
             ],
             initialValue: manufacturerId
           })(<Select onChange={(value) => {
@@ -95,10 +85,7 @@ class ComputerForm extends React.Component {
         <Form.Item label='Phòng' hasFeedback>
           {getFieldDecorator('roomId', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng chọn phòng',
-              }
+              requiredRule('Vui lòng chọn phòng')
             ],
             initialValue: roomId
           })(<Select onChange={(value) => {
@@ -109,24 +96,14 @@ class ComputerForm extends React.Component {
             ))}
           </Select>)}
         </Form.Item>
-        <Form.Item label='Số Serial/ServiceTag' hasFeedback>
+        <Form.Item label='Số Serial' hasFeedback>
           {getFieldDecorator('serial', {
             rules: [
-              {
-                required: true,
-                message: 'Trường này là bắt buộc',
-              }
+              requiredRule('Vui lòng nhập mã serial')
             ],
             initialValue: serial
           })(<Input placeholder='Nhập số serial' type='text' onChange={({ target }) => {
             this.props.getInfo('serial', target.value)
-          }} />)}
-        </Form.Item>
-        <Form.Item label='Cấu hình'>
-          {getFieldDecorator('description', {
-            initialValue: description
-          })(<Input.TextArea rows={4} placeholder='Nhập cấu hình' type='text' onChange={({ target }) => {
-            this.props.getInfo('description', target.value)
           }} />)}
         </Form.Item>
         <Form.Item label='Trạng thái'>
@@ -138,7 +115,7 @@ class ComputerForm extends React.Component {
             unCheckedChildren={<Icon type='cross' />}
             onChange={(checked) => {
               this.props.getInfo('status', checked)
-              this.props.computerStore.updateActiveCount(checked)
+              this.props.equipmentStore.updateActiveCount(checked)
             }} />)}
         </Form.Item>
       </Form>
@@ -146,4 +123,4 @@ class ComputerForm extends React.Component {
   }
 }
 
-export default Form.create({ name: 'computer' })(ComputerForm)
+export default Form.create({ name: 'equipment' })(EquipmentForm)

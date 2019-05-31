@@ -7,23 +7,22 @@ import './index.less'
 
 
 @withRouter
-@inject('userStore')
+@inject('accountStore')
 @observer
 class Login extends Component {
 
   componentWillUnmount() {
-    console.log(this.props.userStore)
-    this.props.userStore.reset()
+    this.props.accountStore.reset()
   }
 
-  handleUsernameChange = e => this.props.userStore.setUsername(e.target.value)
-  handlePasswordChange = e => this.props.userStore.setPassword(e.target.value)
+  handleUsernameChange = e => this.props.accountStore.setUsername(e.target.value)
+  handlePasswordChange = e => this.props.accountStore.setPassword(e.target.value)
   handleSubmitForm = async (e) => {
     e.preventDefault()
-    let data = await this.props.userStore.login()
+    let data = await this.props.accountStore.login()
     if (data.token) {
       localStorage.setItem('access_token', data.token)
-      localStorage.setItem('username', this.props.userStore.values.username)
+      localStorage.setItem('username', this.props.accountStore.values.username)
       localStorage.setItem('refresh_token', data.refreshToken)
       toast.success('Đăng nhập thành công.')
       window.location.assign('/')
@@ -33,7 +32,7 @@ class Login extends Component {
   }
 
   render() {
-    const { values, inProgress } = this.props.userStore
+    const { values, inProgress } = this.props.accountStore
     const { getFieldDecorator } = this.props.form
     return (
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row', paddingTop: 100 }}>
