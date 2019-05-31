@@ -59,7 +59,7 @@ class ComputerStore{
     try {
       const response = await http.post('/computers', entity)
       runInAction('entity created', () => {
-        this.computers.set(entity.computerId, response.data)
+        this.computers.set(response.data.computerId, response.data)
         this.rowCount += 1
         if (response.data.status) this.activeCount += 1
       })
@@ -73,7 +73,7 @@ class ComputerStore{
     try {
       const response = await http.put('/computers', entity)
       runInAction('entity updated', () => {
-        this.computers.set(entity.computerId, response.data)
+        this.computers.set(response.data.computerId, response.data)
       })
       return response
     } catch (err) {

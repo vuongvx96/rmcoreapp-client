@@ -42,8 +42,8 @@ class AccountStore {
     this.inProgress = true
     try {
       let payload = {
-        UserName: this.values.username,
-        Password: this.values.password
+        username: this.values.username,
+        password: this.values.password
       }
       let { data } = await http.post('/accounts/login', payload)
       return data

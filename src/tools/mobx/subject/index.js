@@ -29,7 +29,7 @@ class SubjectStore{
     try {
       const response = await http.post('/subjects', entity)
       runInAction('entity created', () => {
-        this.entities.set(entity.subjectId, response.data)
+        this.entities.set(response.data.subjectId, response.data)
         this.loading = false
       })
       return response
@@ -43,7 +43,7 @@ class SubjectStore{
     try {
       const response = await http.put('/subjects', entity)
       runInAction('entity updated', () => {
-        this.entities.set(entity.subjectId, response.data)
+        this.entities.set(response.data.subjectId, response.data)
         this.loading = false
       })
       return response

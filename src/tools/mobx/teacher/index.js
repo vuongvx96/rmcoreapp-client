@@ -62,7 +62,7 @@ class TeacherStore {
         if (response.status === 201) {
           this.rowCount+=1
         }
-        this.teachers.set(entity.teacherId, response.data)
+        this.teachers.set(response.data.teacherId, response.data)
         this.loading = false
       })
       return response
@@ -76,7 +76,7 @@ class TeacherStore {
     try {
       const response = await http.put('/teachers', entity)
       runInAction('entity updated', () => {
-        this.teachers.set(entity.teacherId, response.data)
+        this.teachers.set(response.data.teacherId, response.data)
         this.loading = false
       })
       return response

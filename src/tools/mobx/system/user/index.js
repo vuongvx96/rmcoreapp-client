@@ -41,7 +41,7 @@ class UserStore {
     try {
       const response = await http.post('/users', entity)
       runInAction('entity created', () => {
-        this.users.set(entity.id, response.data)
+        this.users.set(response.data.id, response.data)
         this.rowCount += 1
       })
       return response
