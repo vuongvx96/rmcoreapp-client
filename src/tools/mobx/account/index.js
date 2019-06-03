@@ -45,8 +45,8 @@ class AccountStore {
         username: this.values.username,
         password: this.values.password
       }
-      let { data } = await http.post('/accounts/login', payload)
-      return data
+      let result = await http.post('/accounts/login', payload)
+      return result
     } catch (err) {
       this.inProgress = false
       return err

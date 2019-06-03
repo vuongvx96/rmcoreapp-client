@@ -13,6 +13,7 @@ import subjectStore from './subject'
 import computerStore from './computer'
 import equipmentStore from './equipment'
 import userStore from './system/user'
+import roleStore from './system/role'
 
 const stores = {
   authStore,
@@ -29,7 +30,8 @@ const stores = {
   subjectStore,
   computerStore,
   equipmentStore,
-  userStore
+  userStore,
+  roleStore
 }
 
 export { stores }

@@ -3,11 +3,26 @@ import { inject, observer } from 'mobx-react'
 import { AgGridReact } from 'ag-grid-react'
 import { Button } from 'antd'
 
+import UserForm from './UserForm'
 import ModalForm from '../template/modalForm'
 import ModifyButtonGrid from '../ui/ModifyButtonGrid'
 import { showNotification } from '../util/notification'
 import { showConfirm } from '../util/confirm'
-import { getGender } from '../util/formatter'
+import { dateFormatter, dateTimeFormatter, getGender } from '../util/formatter'
+
+const EnableButton = (params) => {
+  const style = {
+    margin: '5px 0px',
+    padding: '0px 10px',
+    width: 88,
+    height: 24,
+    fontSize: 10,
+    color: params.value ? '#52c41a' : '#f5222d'
+  }
+  return <Button icon={params.value ? 'check' : 'lock'} style={style} onClick={() => params.onClick(params.data.id)}>
+    {params.value ? 'Hoạt động' : 'Khóa'}
+  </Button>
+}
 
 @inject('userStore')
 @observer
@@ -23,7 +38,6 @@ class UserManagement extends React.Component {
         email: null,
         officerId: null,
         roles: [],
-        address: null,
         status: true
       }
     }
@@ -39,17 +53,28 @@ class UserManagement extends React.Component {
       },
       { headerName: 'Tên đầy đủ', field: 'fullName', width: 120, sortable: true },
       { headerName: 'Tên đăng nhập', field: 'userName', width: 120, sortable: true },
-      { headerName: 'Giới tính', field: 'gender', sortable: true, valueFormatter: (params) => getGender(params.value) },
-      { headerName: 'Điện thoại', field: 'phoneNumber', sortable: true },
-      { headerName: 'Email', field: 'email', sortable: true },
-      { headerName: 'Mã CB', field: 'officerId', sortable: true },
-      { headerName: 'Ngày tạo', field: 'registrationDate', sortable: true },
-      { headerName: 'Đăng nhập cuối', field: 'lastLoginTime', sortable: true },
-      { headerName: 'Trạng thái', field: 'status', sortable: true },
-      { headerName: 'Roles', field: 'roles', sortable: true }
+      { headerName: 'Giới tính', field: 'gender', width: 95, sortable: true, valueFormatter: (params) => getGender(params.value) },
+      { headerName: 'Điện thoại', field: 'phoneNumber', width: 105, sortable: true },
+      { headerName: 'Email', field: 'email', width: 140, sortable: true },
+      { headerName: 'Mã cán bộ', field: 'officerId', width: 110, sortable: true },
+      { headerName: 'Roles', field: 'roles', width: 150, sortable: true, valueFormatter: (params) => params.value.join(', ') },
+      { headerName: 'Ngày tạo', field: 'registrationDate', width: 100, sortable: true, valueFormatter: (params) => dateFormatter(params.value) },
+      { headerName: 'Lần đăng nhập cuối', field: 'lastLoginTime', width: 155, sortable: true, valueFormatter: (params) => dateTimeFormatter(params.value) },
+      {
+        cellRenderer: 'enableButton',
+        cellRendererParams: {
+          onClick: this.changeStatus.bind(this)
+        },
+        headerName: 'Trạng thái',
+        field: 'status',
+        width: 115,
+        sortable: true
+      }
     ]
+    this.getInfo = this.getInfo.bind(this)
     this.saveUser = this.saveUser.bind(this)
     this.removeUser = this.removeUser.bind(this)
+    this.clearState = this.clearState.bind(this)
   }
 
   onGridReady = params => {
@@ -58,7 +83,7 @@ class UserManagement extends React.Component {
   }
 
   refetchData() {
-    this.gridApi.setRowData(this.props.userStore.users)
+    this.gridApi.setRowData(this.props.userStore.listUsers)
   }
 
   openEditForm(user) {
@@ -92,6 +117,10 @@ class UserManagement extends React.Component {
     )
   }
 
+  async changeStatus(id) {
+    await this.props.userStore.changeStatus(id)
+  }
+
   getInfo(field, value) {
     this.setState((prevState) => {
       prevState.user[field] = value
@@ -109,7 +138,6 @@ class UserManagement extends React.Component {
         email: null,
         officerId: null,
         roles: [],
-        address: null,
         status: true
       }
     })
@@ -120,8 +148,8 @@ class UserManagement extends React.Component {
   }
 
   render() {
-    let { fullName, userName, gender, phoneNumber, email, officerId, roles, address, status } = this.state.user
-    let { users, loading } = this.props.userStore
+    let { fullName, userName, gender, phoneNumber, email, officerId, roles, status } = this.state.user
+    let { listUsers } = this.props.userStore
     return (
       <>
         <ModalForm
@@ -132,17 +160,29 @@ class UserManagement extends React.Component {
           handleUpdate={this.saveUser}
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
-          disableButtonSave={!userName || !email || phoneNumber}
+          disableButtonSave={!userName || !email || !phoneNumber}
         >
+          <UserForm
+            fullName={fullName}
+            userName={userName}
+            gender={gender}
+            phoneNumber={phoneNumber}
+            email={email}
+            officerId={officerId}
+            roles={roles}
+            status={status}
+            getInfo={this.getInfo}
+          />
         </ModalForm>
         <div style={{ height: 'calc(100vh - 220px)' }} className='ag-theme-balham'>
           <AgGridReact
             columnDefs={this.columnDefs}
-            rowData={users}
+            rowData={listUsers}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}
             frameworkComponents={{
-              editButton: ModifyButtonGrid
+              editButton: ModifyButtonGrid,
+              enableButton: EnableButton
             }}
           />
         </div>

@@ -19,15 +19,18 @@ class Login extends Component {
   handlePasswordChange = e => this.props.accountStore.setPassword(e.target.value)
   handleSubmitForm = async (e) => {
     e.preventDefault()
-    let data = await this.props.accountStore.login()
-    if (data.token) {
-      localStorage.setItem('access_token', data.token)
+    let result = await this.props.accountStore.login()
+    if (result.status === 200 && result.data.token) {
+      localStorage.setItem('access_token', result.data.token)
       localStorage.setItem('username', this.props.accountStore.values.username)
-      localStorage.setItem('refresh_token', data.refreshToken)
+      localStorage.setItem('refresh_token', result.data.refreshToken)
       toast.success('Đăng nhập thành công.')
       window.location.assign('/')
     } else {
-      toast.warn('Tên đăng nhập hoặc mật khẩu không đúng')
+      if (result.response.status === 403)
+        toast.warn('Tài khoản đã bị khóa!')
+      else
+        toast.warn('Tên đăng nhập hoặc mật khẩu không đúng!')
     }
   }
 
