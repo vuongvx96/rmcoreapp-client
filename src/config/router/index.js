@@ -66,6 +66,11 @@ const listRoutesAuthen = [
 		displayName: 'Quản lý user',
 		path: '/user-management',
 		component: 'userManagement'
+	},
+	{
+		displayName: 'Quản lý khoas hojc',
+		path: '/course-management',
+		component: 'groupPracticeManagement'
 	}
 ]
 

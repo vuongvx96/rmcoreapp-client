@@ -101,6 +101,10 @@ class TeacherStore {
     }
   }
 
+  @computed get listTeachers() {
+    var list = Object.values(toJS(this.teachers))
+    return list
+  }
 }
 
 export default new TeacherStore()

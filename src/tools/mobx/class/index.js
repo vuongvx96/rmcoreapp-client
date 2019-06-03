@@ -1,4 +1,4 @@
-import { observable, action, runInAction } from 'mobx'
+import { observable, action, runInAction, computed, toJS } from 'mobx'
 import http from '../../axios'
 
 class ClassStore {
@@ -63,6 +63,12 @@ class ClassStore {
       return err
     }
   }
+
+  @computed get listClasses() {
+    var list = Object.values(toJS(this.entities))
+    return list
+  }
+
 }
 
 export default new ClassStore()

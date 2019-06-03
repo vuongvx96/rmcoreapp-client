@@ -1,7 +1,6 @@
 import React from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { inject, observer } from 'mobx-react'
-import { toJS } from 'mobx'
 import { Pagination, Select, Input, Button } from 'antd'
 
 import TeacherForm from './TeacherForm'
@@ -49,7 +48,7 @@ class TeacherManagement extends React.Component {
       { headerName: 'Mã GV', field: 'teacherId', sortable: true, width: 100 },
       { headerName: 'Họ', field: 'lastName', sortable: true, width: 150 },
       { headerName: 'Tên', field: 'firstName', sortable: true, width: 70 },
-      { headerName: 'Giới tính', field: 'gender', sortable: true, width: 80, cellRendererFramework: (params) => getGender(params.value) },
+      { headerName: 'Giới tính', field: 'gender', sortable: true, width: 80, valueFormatter: (params) => getGender(params.value) },
       { headerName: 'Điện thoại', field: 'phone', sortable: true, width: 100 },
       { headerName: 'Email', field: 'email', sortable: true, width: 200 },
       { headerName: 'Địa chỉ', field: 'address', sortable: true, width: 250 },
@@ -170,7 +169,6 @@ class TeacherManagement extends React.Component {
     let { teacherId, firstName, lastName, gender, phone, email, address, departmentId } = this.state.teacher
     let { pageSize, rowCount, teachers } = this.props.teacherStore
     let { listDepartments } = this.props.departmentStore
-    console.log(toJS(teachers))
     return (
       <>
         <ModalForm

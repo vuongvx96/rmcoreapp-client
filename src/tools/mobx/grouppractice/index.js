@@ -1,21 +1,20 @@
-import { observable, action, runInAction, computed, toJS } from 'mobx'
+import { observable, action, runInAction } from 'mobx'
 import http from '../../axios'
 
-class SubjectStore{
-
-  @observable entities = new Map()
+class GroupPracticeStore{
+  @observable groupPractices = new Map()
   @observable loading = false
 
   startAsync = () => {
     this.loading = true
   }
-  
+
   @action fetchAll = async () => {
     this.startAsync()
     try {
-      const response = await http.get('/subjects')
+      const response = await http.get('/courses')
       runInAction('fetch all entities', () => {
-        this.entities = new Map(response.data.map(i => [i.subjectId, i]))
+        this.groupPractices = new Map(response.data.map(i => [i.groupId, i]))
         this.loading = false
       })
       return response
@@ -27,9 +26,12 @@ class SubjectStore{
   @action create = async (entity) => {
     this.startAsync()
     try {
-      const response = await http.post('/subjects', entity)
+      const response = await http.post('/courses', entity)
       runInAction('entity created', () => {
-        this.entities.set(entity.subjectId, response.data)
+        // if (response.status === 201) {
+        //   this.rowCount += 1
+        // }
+        this.groupPractices.set(entity.groupId, response.data)
         this.loading = false
       })
       return response
@@ -41,9 +43,9 @@ class SubjectStore{
   @action update = async (entity) => {
     this.startAsync()
     try {
-      const response = await http.put('/subjects', entity)
+      const response = await http.put('/courses', entity)
       runInAction('entity updated', () => {
-        this.entities.set(entity.subjectId, response.data)
+        this.groupPractices.set(entity.groupId, response.data)
         this.loading = false
       })
       return response
@@ -54,9 +56,12 @@ class SubjectStore{
 
   @action delete = async (id) => {
     try {
-      const response = await http.delete(`/subjects/${id}`)
+      const response = await http.delete(`/courses/${id}`)
       runInAction('entity deleted', () => {
-        this.entities.delete(id)
+        if (response.status === 200) {
+          // this.rowCount -= 1
+          this.groupPractices.delete(id)
+        }
         this.loading = false
       })
       return response
@@ -64,11 +69,6 @@ class SubjectStore{
       return err
     }
   }
-
-  @computed get listSubjects() {
-    var list = Object.values(toJS(this.entities))
-    return list
-  }
 }
 
-export default new SubjectStore()
+export default new GroupPracticeStore()
