@@ -13,7 +13,11 @@ import subjectStore from './subject'
 import computerStore from './computer'
 import equipmentStore from './equipment'
 import userStore from './system/user'
+<<<<<<< HEAD
 import roleStore from './system/role'
+=======
+import groupPracticeStore from './grouppractice'
+>>>>>>> origin/An
 
 const stores = {
   authStore,
@@ -31,7 +35,11 @@ const stores = {
   computerStore,
   equipmentStore,
   userStore,
+<<<<<<< HEAD
   roleStore
+=======
+  groupPracticeStore
+>>>>>>> origin/An
 }
 
 export { stores }

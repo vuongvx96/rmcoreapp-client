@@ -1,7 +1,6 @@
 import React from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { inject, observer } from 'mobx-react'
-import { toJS } from 'mobx'
 import { Pagination, Select, Input, Button } from 'antd'
 
 import TeacherForm from './TeacherForm'
@@ -170,7 +169,6 @@ class TeacherManagement extends React.Component {
     let { teacherId, firstName, lastName, gender, phone, email, address, departmentId } = this.state.teacher
     let { pageSize, rowCount, teachers } = this.props.teacherStore
     let { listDepartments } = this.props.departmentStore
-    console.log(toJS(teachers))
     return (
       <>
         <ModalForm
