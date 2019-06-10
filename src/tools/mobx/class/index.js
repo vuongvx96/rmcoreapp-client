@@ -28,7 +28,7 @@ class ClassStore {
     try {
       const response = await http.post('/classes', entity)
       runInAction('entity created', () => {
-        this.entities.set(entity.classId, response.data)
+        this.entities.set(response.data.classId, response.data)
         this.loading = false
       })
       return response
@@ -42,7 +42,7 @@ class ClassStore {
     try {
       const response = await http.put('/classes', entity)
       runInAction('entity updated', () => {
-        this.entities.set(entity.classId, response.data)
+        this.entities.set(response.data.classId, response.data)
         this.loading = false
       })
       return response

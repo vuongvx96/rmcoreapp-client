@@ -31,7 +31,7 @@ class RoomStore {
 			runInAction('entity created', () => {
 				entity.computers = []
 				entity.equipments = []
-				this.entities.set(entity.roomId, response.data)
+				this.entities.set(response.data.roomId, response.data)
 				this.loading = false
 			})
 			return response
@@ -45,7 +45,7 @@ class RoomStore {
 		try {
 			const response = await http.put('/rooms', entity)
 			runInAction('entity updated', () => {
-				this.entities.set(entity.roomId, response.data)
+				this.entities.set(response.data.roomId, response.data)
 				this.loading = false
 			})
 			return response

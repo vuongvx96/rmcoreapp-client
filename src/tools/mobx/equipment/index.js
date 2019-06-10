@@ -32,7 +32,7 @@ class EquipmentStore{
     try {
       const response = await http.post('/equipments', entity)
       runInAction('entity created', () => {
-        this.equipments.set(entity.equipmentId, response.data)
+        this.equipments.set(response.data.equipmentId, response.data)
       })
       return response
     } catch (err) {
@@ -44,7 +44,7 @@ class EquipmentStore{
     try {
       const response = await http.put('/equipments', entity)
       runInAction('entity updated', () => {
-        this.equipments.set(entity.equipmentId, response.data)
+        this.equipments.set(response.data.equipmentId, response.data)
       })
       return response
     } catch (err) {

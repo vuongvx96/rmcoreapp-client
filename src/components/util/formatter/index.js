@@ -8,6 +8,12 @@ function dateFormatter(str) {
   return date.format('DD/MM/YYYY')
 }
 
+function dateTimeFormatter(str) {
+  if (!str) return str
+  let date = moment(str)
+  return date.format('HH:mm:ss DD/MM/YYYY')
+}
+
 const statusStyle = {
   display: 'flex',
   justifyContent: 'center',
@@ -29,4 +35,4 @@ function getStatus(value) {
 function getGender(value) {
   return value ? 'Nam' : 'Nữ'
 }
-export { dateFormatter, getStatus, statusStyle, getGender }
+export { dateFormatter, dateTimeFormatter, getStatus, statusStyle, getGender }

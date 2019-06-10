@@ -1,4 +1,4 @@
-import { observable, action, runInAction, computed } from 'mobx'
+import { observable, action, runInAction, computed, toJS } from 'mobx'
 import http from '../../axios'
 
 class ManufacturerStore {
@@ -14,7 +14,7 @@ class ManufacturerStore {
     this.startAsync()
     try {
       const response = await http.get('/manufacturers')
-      runInAction('entity created', () => {
+      runInAction('fetch all entities', () => {
         this.entities = new Map(response.data.map(i => [i.manufacturerId, i]))
         this.loading = false
       })
@@ -29,7 +29,7 @@ class ManufacturerStore {
     try {
       const response = await http.post('/manufacturers', entity)
       runInAction('entity created', () => {
-        this.entities.set(entity.manufacturerId, response.data)
+        this.entities.set(response.data.manufacturerId, response.data)
         this.loading = false
       })
       return response
@@ -43,7 +43,7 @@ class ManufacturerStore {
     try {
       const response = await http.put('/manufacturers', entity)
       runInAction('entity updated', () => {
-        this.entities.set(entity.manufacturerId, response.data)
+        this.entities.set(response.data.manufacturerId, response.data)
         this.loading = false
       })
       return response
@@ -63,6 +63,10 @@ class ManufacturerStore {
     } catch (err) {
       return err
     }
+  }
+
+  @computed get listManufacturers() {
+    return Object.values(toJS(this.entities))
   }
 
 }
