@@ -35,8 +35,8 @@ class ComputerManagement extends React.Component {
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('DEVICE').update,
+          canRemove: this.props.permission.hasPermission('DEVICE').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeComputer.bind(this)
         }
@@ -169,6 +169,7 @@ class ComputerManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!computerId || !computerName || !serial}
+          canCreate={this.props.permission.hasPermission('DEVICE').create}
           leftItems={
             <>
               <Select

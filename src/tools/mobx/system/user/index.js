@@ -42,7 +42,7 @@ class UserStore {
       const response = await http.post('/users', entity)
       runInAction('entity created', () => {
         this.users.set(response.data.id, response.data)
-        this.rowCount += 1
+        this.rowCount += entity.id ? 0 : 1
       })
       return response
     } catch (err) {
@@ -56,7 +56,7 @@ class UserStore {
       runInAction('entity deleted', () => {
         if (response.status === 200) {
           this.users.delete(id)
-          this.rowCount = -1
+          this.rowCount -= 1
         }
       })
       return response

@@ -39,8 +39,8 @@ class TeacherManagement extends React.Component {
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('TEACHER').update,
+          canRemove: this.props.permission.hasPermission('TEACHER').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeTeacher.bind(this)
         }
@@ -180,6 +180,7 @@ class TeacherManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!teacherId || !firstName || !lastName}
+          canCreate={this.props.permission.hasPermission('TEACHER').create}
           leftItems={
             <>
               <Select

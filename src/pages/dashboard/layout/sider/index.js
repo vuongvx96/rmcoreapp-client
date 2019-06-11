@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import _ from 'lodash'
 
-@inject('functionStore')
+@inject('accountStore')
 @observer
 class Sider extends React.Component {
   constructor(props) {
@@ -16,7 +16,8 @@ class Sider extends React.Component {
   }
 
   componentDidMount() {
-    this.props.functionStore.loadFunctions()
+    this.props.accountStore.loadFunctions()
+    this.props.accountStore.loadPermissions()
   }
 
   onCollapse = (collapsed) => {
@@ -24,7 +25,7 @@ class Sider extends React.Component {
   }
 
   render() {
-    const { functions } = this.props.functionStore
+    const { functions } = this.props.accountStore
     return (
       <Layout.Sider
         collapsible

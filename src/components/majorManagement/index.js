@@ -27,8 +27,8 @@ class MajorManagement extends React.Component{
             {
                 cellRenderer: 'editButton',
                 cellRendererParams: {
-                    canEdit: true,
-                    canRemove: true,
+                    canEdit: this.props.permission.hasPermission('MAJOR').update,
+                    canRemove: this.props.permission.hasPermission('MAJOR').delete,
                     onEdit: this.openEditForm.bind(this),
                     onRemove: this.removeMajor.bind(this)
                 }
@@ -144,6 +144,7 @@ class MajorManagement extends React.Component{
                     clearState={this.clearState}
                     getRef={ref => { this.refTemplate = ref }}
                     disableButtonSave={!majorId || !majorName}
+                    canCreate={this.props.permission.hasPermission('MAJOR').create}
                 >
                     <MajorForm
                         majorId={majorId}

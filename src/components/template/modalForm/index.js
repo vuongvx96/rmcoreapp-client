@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react'
 import { Button } from 'antd'
 import Modal from '../../ui/Modal'
 import Form from '../form'
+import './index.less'
 
 @inject('commonStore')
 @observer
@@ -33,12 +34,12 @@ class ModalForm extends React.Component {
 	}
 
 	render() {
-		let { title, buttonName, handleCreate, handleUpdate, clearState, disableButtonSave, info, formFields, modalWidth, leftItems } = this.props
+		let { title, buttonName, handleCreate, handleUpdate, clearState, disableButtonSave, info, formFields, modalWidth, leftItems, canCreate } = this.props
 		let { open } = this.state
 		let { isCreate } = this.props.commonStore
 		return (
 			<>
-				<div className='flex-container' style={{ paddingBottom: 10 , width: '100%' }}>
+				<div className='flex-container' style={{ paddingBottom: 10, width: '100%' }}>
 					{
 						leftItems ?
 							<div className='left-items'>
@@ -47,18 +48,18 @@ class ModalForm extends React.Component {
 							: <></>
 					}
 					<div className='right-items'>
-						<Button name='btnCreate' type='primary'
-							onClick={() => {
-								clearState()
-								this.props.commonStore.onCreate()
-								if (this.form) {
-									this.form.props.form.resetFields()
-								}
-								this.openDialog()
-							}}
-						>
-							{buttonName}
-						</Button>
+							<Button disabled={!canCreate} name='btnCreate' type='primary'
+								onClick={() => {
+									clearState()
+									this.props.commonStore.onCreate()
+									if (this.form) {
+										this.form.props.form.resetFields()
+									}
+									this.openDialog()
+								}}
+							>
+								{buttonName}
+							</Button>
 					</div>
 				</div>
 				<Modal

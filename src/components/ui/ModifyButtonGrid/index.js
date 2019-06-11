@@ -10,28 +10,16 @@ export default class ModifyButtonGrid extends React.Component {
   onEdit() {
     this.props.onEdit(this.props.data)
   }
-  onRemove() { 
+  onRemove() {
     this.props.onRemove(this.props.data)
-  }
-  renderEditButton() {
-    if (this.props.canEdit)
-      return <Button name='btnEdit' style={{ margin: '5px 10px', padding: '0px 10px', height: 24, fontSize: 10 }} onClick={this.onEdit}><Icon type='edit' />Edit</Button>
-    return <></>
-  }
-  renderDeleteButton() {
-    if (this.props.canRemove)
-      return <Button name='btnDelete' style={{ margin: '5px 10px', padding: '0px 10px', height: 24, fontSize: 10 }} type='danger' onClick={this.onRemove}><Icon type='delete' />Delete</Button>
-    return <></>
   }
 
   render() {
-    if (this.props.canEdit || this.props.canRemove) {
-      return (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {this.renderEditButton()}
-          {this.renderDeleteButton()}
-        </div>
-      )
-    } else return null
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Button disabled={!this.props.canEdit} name='btnEdit' style={{ margin: '5px 10px', padding: '0px 10px', height: 24, fontSize: 10 }} onClick={this.onEdit}><Icon type='edit' />Edit</Button>
+        <Button disabled={!this.props.canRemove} name='btnDelete' style={{ margin: '5px 10px', padding: '0px 10px', height: 24, fontSize: 10 }} type='danger' onClick={this.onRemove}><Icon type='delete' />Delete</Button>
+      </div>
+    )
   }
 }

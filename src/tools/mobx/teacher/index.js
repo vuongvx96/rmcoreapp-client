@@ -1,4 +1,4 @@
-import { observable, action, runInAction, computed, toJS } from 'mobx'
+import { observable, action, runInAction, computed, toJS, get } from 'mobx'
 import http from '../../axios'
 
 class TeacherStore {
@@ -104,6 +104,10 @@ class TeacherStore {
   @computed get listTeachers() {
     var list = Object.values(toJS(this.teachers))
     return list
+  }
+
+  @get getById(id) {
+    return toJS(this.teachers.get(id))
   }
 }
 

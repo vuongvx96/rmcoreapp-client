@@ -25,7 +25,7 @@ class Login extends Component {
       localStorage.setItem('username', this.props.accountStore.values.username)
       localStorage.setItem('refresh_token', result.data.refreshToken)
       toast.success('Đăng nhập thành công.')
-      window.location.assign('/')
+      window.location.assign('/dashboard')
     } else {
       if (result.response.status === 403)
         toast.warn('Tài khoản đã bị khóa!')

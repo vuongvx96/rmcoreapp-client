@@ -24,8 +24,8 @@ class ClassManagement extends React.Component {
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('CLASS').update,
+          canRemove: this.props.permission.hasPermission('CLASS').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeClass.bind(this)
         }
@@ -139,6 +139,7 @@ class ClassManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!classId}
+          canCreate={this.props.permission.hasPermission('CLASS').create}
         >
           <ClassForm
             classId={classId}

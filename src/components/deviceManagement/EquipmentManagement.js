@@ -32,8 +32,8 @@ class EquipmentManagement extends React.Component {
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('DEVICE').update,
+          canRemove: this.props.permission.hasPermission('DEVICE').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeEquipment.bind(this)
         }
@@ -152,6 +152,7 @@ class EquipmentManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!equipmentId || !equipmentName || !serial}
+          canCreate={this.props.permission.hasPermission('DEVICE').create}
           leftItems={
             <>
               <Select

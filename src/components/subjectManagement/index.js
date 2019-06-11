@@ -26,8 +26,8 @@ class SubjectManagement extends React.Component{
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('SUBJECT').update,
+          canRemove: this.props.permission.hasPermission('SUBJECT').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeSubject.bind(this)
         }
@@ -133,6 +133,7 @@ class SubjectManagement extends React.Component{
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!subjectId || !subjectName}
+          canCreate={this.props.permission.hasPermission('SUBJECT').create}
         >
           <SubjectForm
             subjectId={subjectId}

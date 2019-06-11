@@ -68,7 +68,6 @@ class ManufacturerStore {
   @computed get listManufacturers() {
     return Object.values(toJS(this.entities))
   }
-
 }
 
 export default new ManufacturerStore()

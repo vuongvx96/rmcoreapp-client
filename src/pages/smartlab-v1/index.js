@@ -27,7 +27,7 @@ class SmartLabV1 extends Component {
                   exact={route.exact}
                   path={route.path}
                   render={() => {
-                    const Comp = WrapLazy(import(`../../components/${route.component}`), 800)
+                    const Comp = WrapLazy(import(`../${route.component}`), 800)
                     return !isLogin ? <Comp route={route} /> : <Redirect to={routesAuthen[0].path} />
                   }}
                 />
@@ -38,11 +38,12 @@ class SmartLabV1 extends Component {
                   exact={route.exact}
                   path={route.path}
                   render={() => {
-                    const Comp = LoadableComponent(import(`../../components/${route.component}`))
+                    const Comp = LoadableComponent(import(`../${route.component}`))
                     return isLogin ? <Comp route={route} /> : <Redirect to={routesNotAuthen[0].path} />
                   }}
                 />
               ))}
+              <Route component={WrapLazy(import(`../404`), 250)} />
             </Switch>
             <ToastContainer
               position='bottom-left'

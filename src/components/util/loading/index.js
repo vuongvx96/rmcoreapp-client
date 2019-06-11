@@ -38,4 +38,5 @@ const WrapLazy = (importComponent, delay) => lazy(() => new Promise(resolve => {
   setTimeout(() => resolve(importComponent), delay)
 }))
 
+
 export { Loading, LoadingOnSite, WrapLazy }

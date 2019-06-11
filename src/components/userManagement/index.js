@@ -1,7 +1,7 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react'
 import { AgGridReact } from 'ag-grid-react'
-import { Button } from 'antd'
+import { Input, Button, Pagination } from 'antd'
 
 import UserForm from './UserForm'
 import ModalForm from '../template/modalForm'
@@ -39,14 +39,21 @@ class UserManagement extends React.Component {
         officerId: null,
         roles: [],
         status: true
-      }
+      },
+      page: 1,
+      pageSize: 10,
+      keyword: null
+    }
+    this.gridOptions = {
+      rowHeight: 34,
+      localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
     this.columnDefs = [
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('USER').update,
+          canRemove: this.props.permission.hasPermission('USER').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeUser.bind(this)
         }
@@ -75,6 +82,7 @@ class UserManagement extends React.Component {
     this.saveUser = this.saveUser.bind(this)
     this.removeUser = this.removeUser.bind(this)
     this.clearState = this.clearState.bind(this)
+    this.createTeacherAccount = this.createTeacherAccount.bind(this)
   }
 
   onGridReady = params => {
@@ -106,7 +114,7 @@ class UserManagement extends React.Component {
     showConfirm(
       'Bạn có muốn xóa người dùng không?',
       async () => {
-        const result = await this.props.userStore.delete(user.id)
+        const result = await this.props.userStore.deleteUser(user.id)
         if (result.status === 200) {
           showNotification('Xóa người dùng thành công', 'success')
           this.refetchData()
@@ -143,13 +151,40 @@ class UserManagement extends React.Component {
     })
   }
 
+  createTeacherAccount(teacher) {
+    this.setState({
+      user: {
+        fullName: `${teacher.lastName} ${teacher.firstName}`,
+         userName: teacher.teacherId,
+         gender: teacher.gender,
+         phoneNumber: teacher.phone,
+         email: teacher.email,
+         officerId: teacher.teacherId,
+         roles: [],
+         status: true
+      }
+    })
+  }
+
+  handleChangePage = async (page, pageSize) => {
+    this.setState({ page, pageSize })
+    await this.props.userStore.fetchAllPaging(page, pageSize, this.state.keyword)
+    this.refetchData()
+  }
+
+  handleChangePageSize = async (current, size) => {
+    this.setState({ pageSize: size })
+    await this.props.userStore.fetchAllPaging(current, size, this.state.keyword)
+    this.refetchData()
+  }
+
   componentDidMount() {
     this.props.userStore.fetchAllPaging(1, 10, null)
   }
 
   render() {
     let { fullName, userName, gender, phoneNumber, email, officerId, roles, status } = this.state.user
-    let { listUsers } = this.props.userStore
+    let { listUsers, rowCount, pageSize } = this.props.userStore
     return (
       <>
         <ModalForm
@@ -161,6 +196,18 @@ class UserManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!userName || !email || !phoneNumber}
+          canCreate={this.props.permission.hasPermission('USER').create}
+          leftItems={
+            <>
+              <Input placeholder='tên đăng nhập, email,...' allowClear style={{ width: 250, marginRight: 10 }} onChange={({ target }) => {
+                this.setState({ keyword: target.value })
+              }} />
+              <Button shape='round' icon='search' onClick={async () => {
+                await this.props.userStore.fetchAllPaging(1, this.state.pageSize, this.state.keyword)
+                this.refetchData()
+              }} />
+            </>
+          }
         >
           <UserForm
             fullName={fullName}
@@ -171,10 +218,11 @@ class UserManagement extends React.Component {
             officerId={officerId}
             roles={roles}
             status={status}
+            createTeacherAccount={this.createTeacherAccount}
             getInfo={this.getInfo}
           />
         </ModalForm>
-        <div style={{ height: 'calc(100vh - 220px)' }} className='ag-theme-balham'>
+        <div style={{ height: 'calc(100vh - 175px)' }} className='ag-theme-balham'>
           <AgGridReact
             columnDefs={this.columnDefs}
             rowData={listUsers}
@@ -186,7 +234,20 @@ class UserManagement extends React.Component {
             }}
           />
         </div>
-
+        <div className='flex-container' style={{ padding: '10px 0' }}>
+          <div className='left-items'>
+            <span style={{ color: '#092b00' }}>Tổng số: {rowCount}</span>
+          </div>
+          <div className='right-items'>
+            <Pagination
+              pageSize={pageSize}
+              total={rowCount}
+              onChange={this.handleChangePage}
+              onShowSizeChange={this.handleChangePageSize}
+              showSizeChanger
+            />
+          </div>
+        </div>
       </>
     )
   }

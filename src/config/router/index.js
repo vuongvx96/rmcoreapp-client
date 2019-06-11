@@ -4,14 +4,20 @@ const routesNotAuthen = [
 		path: '/login',
 		component: 'login',
 		exact: true
-  }
+	},
+	{
+		displayName: 'Xác nhận email',
+		path: '/confirm-email/:result',
+		component: 'confirmEmail',
+		exact: true
+	}
 ]
 
 const routesAuthen = [
   {
-		displayName: 'Trang chủ',
-		path: '/',
-		component: 'app',
+		displayName: 'Quản lý',
+		path: '/dashboard',
+		component: 'dashboard',
 		exact: false
   }
 ]
@@ -19,58 +25,63 @@ const routesAuthen = [
 const listRoutesAuthen = [
 	{
 		displayName: 'Quản lý giảng viên',
-		path: '/teacher-management',
+		path: '/dashboard/teacher-management',
 		component: 'teacherManagement'
   },
   {
     displayName: 'Quản lý lịch thực hành',
-		path: '/schedule-management',
+		path: '/dashboard/schedule-management',
 		component: 'scheduleManagement'
   },
   {
     displayName: 'Quản lý hãng sản xuất',
-    path: '/manufacturer-management',
+    path: '/dashboard/manufacturer-management',
     component: 'manufacturerManagement'
 	},
 	{
 		displayName: 'Quản lý khoa',
-		path: '/department-management',
+		path: '/dashboard/department-management',
 		component: 'departmentManagement'
 	},
 	{
 		displayName: 'Quản lý chuyên ngành',
-		path: '/major-management',
+		path: '/dashboard/major-management',
 		component: 'majorManagement'
 	},
 	{
 		displayName: 'Quản lý phòng',
-		path: '/room-management',
+		path: '/dashboard/room-management',
 		component: 'roomManagement'
 	},
 	{
 		displayName: 'Quản lý lớp học',
-		path: '/class-management',
+		path: '/dashboard/class-management',
 		component: 'classManagement'
 	},
 	{
 		displayName: 'Quản lý môn học',
-		path: '/subject-management',
+		path: '/dashboard/subject-management',
 		component: 'subjectManagement'
 	},
 	{
 		displayName: 'Quản lý thiết bị',
-		path: '/device-management',
+		path: '/dashboard/device-management',
 		component: 'deviceManagement'
 	},
 	{
 		displayName: 'Quản lý user',
-		path: '/user-management',
+		path: '/dashboard/user-management',
 		component: 'userManagement'
 	},
 	{
-		displayName: 'Quản lý khoas hojc',
-		path: '/course-management',
+		displayName: 'Quản lý khóa học',
+		path: '/dashboard/course-management',
 		component: 'groupPracticeManagement'
+	},
+	{
+		displayName: 'Quản lý role',
+		path: '/dashboard/role-management',
+		component: 'roleManagement'
 	}
 ]
 

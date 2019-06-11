@@ -24,8 +24,8 @@ class DepartmentManagement extends React.Component {
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('DEPARTMENT').update,
+          canRemove: this.props.permission.hasPermission('DEPARTMENT').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeDepartment.bind(this)
         }
@@ -130,6 +130,7 @@ class DepartmentManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!departmentId || !departmentName}
+          canCreate={this.props.permission.hasPermission('DEPARTMENT').create}
         >
           <DepartmentForm
             departmentId={departmentId}

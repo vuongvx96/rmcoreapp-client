@@ -24,8 +24,8 @@ class ManufacturerManagement extends React.Component {
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('MANUFACTURER').update,
+          canRemove: this.props.permission.hasPermission('MANUFACTURER').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeManufacturer.bind(this)
         }
@@ -130,6 +130,7 @@ class ManufacturerManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!manufacturerId || !manufacturerName}
+          canCreate={this.props.permission.hasPermission('MANUFACTURER').create}
         >
           <ManuFacturerForm
             manufacturerId={manufacturerId}

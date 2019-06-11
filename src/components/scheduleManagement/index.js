@@ -24,6 +24,7 @@ class ScheduleManagement extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log(this)
 		this.props.roomStore.fetchAll()
 		this.props.weekStore.onChangeWeek(new Date().getWeek())
 	}
