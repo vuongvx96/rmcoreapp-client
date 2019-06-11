@@ -78,7 +78,7 @@ class EquipmentForm extends React.Component {
             this.props.getInfo('manufacturerId', value)
           }}>
             {listManufacturers.map(item => (
-              <Select.Option key={item.k} value={item.k}>{item.v}</Select.Option>
+              <Select.Option key={item.manufacturerId} value={item.manufacturerId}>{item.manufacturerName}</Select.Option>
             ))}
           </Select>)}
         </Form.Item>
