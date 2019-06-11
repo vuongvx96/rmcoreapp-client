@@ -10,7 +10,7 @@ import { showNotification } from '../util/notification'
 import { showConfirm } from '../util/confirm'
 import { dateFormatter, statusStyle, getStatus } from '../util/formatter'
 
-@inject('computerStore', 'roomStore')
+@inject('computerStore', 'roomStore', 'accountStore')
 @observer
 class ComputerManagement extends React.Component {
   constructor(props) {
@@ -35,8 +35,8 @@ class ComputerManagement extends React.Component {
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('DEVICE').update,
-          canRemove: this.props.permission.hasPermission('DEVICE').delete,
+          canEdit: this.props.accountStore.hasPermission('DEVICE').update,
+          canRemove: this.props.accountStore.hasPermission('DEVICE').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeComputer.bind(this)
         }
@@ -169,7 +169,7 @@ class ComputerManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           disableButtonSave={!computerId || !computerName || !serial}
-          canCreate={this.props.permission.hasPermission('DEVICE').create}
+          canCreate={this.props.accountStore.hasPermission('DEVICE').create}
           leftItems={
             <>
               <Select
