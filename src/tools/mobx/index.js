@@ -32,8 +32,8 @@ const stores = {
   computerStore,
   equipmentStore,
   userStore,
-  roleStore,
-  groupPracticeStore
+  groupPracticeStore,
+  roleStore
 }
 
 export { stores }
