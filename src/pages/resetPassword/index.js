@@ -35,6 +35,7 @@ class ResetPassword extends React.Component {
           if (result && result.status === 200) {
             toast.info('Đặt lại mật khẩu thành công!')
             this.setState({ messages: 'Đổi mật khẩu thành công' })
+            setTimeout(() => { this.props.history.push('/login') }, 5000)
           } else {
             toast.warn('Đặt lại mật khẩu thất bại')
             this.setState({ messages:  result.response.data.map(err => err.description).join(',')})
@@ -68,6 +69,7 @@ class ResetPassword extends React.Component {
     const { getFieldDecorator } = this.props.form
     const { isSuccess, messages, strText, strColor } = this.state
     return (
+      <div style={{ padding: 40 }}>
       <Form onSubmit={this.handleSubmit} className='reset-password-form'>
         <Form.Item>
           {getFieldDecorator('email', {
@@ -129,6 +131,7 @@ class ResetPassword extends React.Component {
           </Button>
         </Form.Item>
       </Form>
+      </div>
     )
   }
 }

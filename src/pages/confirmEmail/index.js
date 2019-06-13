@@ -13,7 +13,7 @@ class ConfirmEmail extends React.Component {
   }
 
   componentDidMount() {
-    this.id = setTimeout(() => this.setState({ redirect: true }), 100000)
+    this.id = setTimeout(() => this.setState({ redirect: true }), 5000)
   }
 
   componentWillUnmount() {
