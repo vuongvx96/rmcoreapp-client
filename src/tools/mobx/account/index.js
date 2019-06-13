@@ -6,8 +6,25 @@ import http from '../../axios'
 
 class AccountStore {
   @observable inProgress = false
+  @observable updating = false
   @observable functions = []
   @observable permissions = []
+  @observable errors = null
+  @observable currentUser = {
+    id: null,
+    avatar: null,
+    email: null,
+    emailConfirmed: false,
+    fullName: null,
+    gender: true,
+    lastLoginTime: new Date(),
+    officerId: null,
+    phoneNumber: null,
+    registrationDate: null,
+    status: false,
+    userName: null,
+    roles: []
+  }
 
   @observable values = {
     username: '',
@@ -57,6 +74,58 @@ class AccountStore {
     }
   }
 
+  @action async revokeToken() {
+    try {
+      let result = await http.post('/token/revoke')
+      return result
+    } catch (err) {
+      return err
+    }
+  }
+
+  @action loadCurrentUser = async () => {
+    this.inProgress = true
+    try {
+      const response = await http.get('/auth/currentuser')
+      runInAction('fetch current user', () => {
+        if (response.status === 200) {
+          this.currentUser = response.data
+        }
+        this.inProgress = false
+      })
+    } catch (err) {
+      this.inProgress = false
+      this.errors = err.response && err.response.body && err.response.body.errors
+    }
+  }
+
+  @action updateProfile = async () => {
+    this.updating = true
+    let userVm = toJS(this.currentUser)
+    try {
+      const response = await http.post('/auth/updateprofile', userVm)
+      runInAction('update profile', () => {
+        if (response.status === 200) {
+          const { data } = response
+          this.currentUser.fullName = data.fullName
+          this.currentUser.email = data.email
+          this.currentUser.phoneNumber = data.phoneNumber
+          this.currentUser.gender = data.gender
+          this.currentUser.avatar = data.avatar
+        }
+        this.updating = false
+      })
+      return response
+    } catch (err) {
+      this.updating = false
+      return err
+    }
+  }
+
+  @action updateCurrentUser = (field, value) => {
+    this.currentUser[field] = value
+  }
+
   @action loadFunctions() {
     this.isLoadingFunctions = true
     this.functionErrors = undefined
@@ -68,8 +137,17 @@ class AccountStore {
 
   @action loadPermissions() {
     http.get('/auth/getpermissions')
-    .then(action(res => this.permissions = res.data))
-    .catch(action(err => this.permissionErrors = err.response && err.response.body && err.response.body.errors))
+      .then(action(res => this.permissions = res.data))
+      .catch(action(err => this.permissionErrors = err.response && err.response.body && err.response.body.errors))
+  }
+
+  @action changePassword = async (payload) => {
+    try {
+      const response = await http.post('/auth/updateuserpassword', payload)
+      return response
+    } catch (err) {
+      return err
+    }
   }
 
   @computed get getPermissions() {
@@ -87,7 +165,11 @@ class AccountStore {
       }
       return result
     })
- }
+  }
+
+  @computed get getCurrentUser() {
+    return toJS(this.currentUser)
+  }
 }
 
 export default new AccountStore()

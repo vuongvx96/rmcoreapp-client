@@ -30,4 +30,11 @@ function inputPhoneNumberVN(message = 'số điện thoại không hợp lệ!')
   }
 }
 
-export { requiredRule, emailRule, ipRule, inputCodeRule, inputPhoneNumberVN }
+function validURL(message = 'đường link không hợp lệ') {
+  return {
+    pattern: /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
+    message: message
+  }
+}
+
+export { requiredRule, emailRule, ipRule, inputCodeRule, inputPhoneNumberVN, validURL }

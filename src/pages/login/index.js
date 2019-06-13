@@ -10,6 +10,12 @@ import './index.less'
 @inject('accountStore')
 @observer
 class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loginFailed: 0
+    }
+  }
 
   componentWillUnmount() {
     this.props.accountStore.reset()
@@ -28,15 +34,19 @@ class Login extends Component {
       window.location.assign('/dashboard')
     } else {
       if (result.response.status === 403)
-        toast.warn('Tài khoản đã bị khóa!')
-      else
+        toast.warn(result.response.data)
+      else {
         toast.warn('Tên đăng nhập hoặc mật khẩu không đúng!')
+        const { loginFailed } = this.state
+        this.setState({ loginFailed: loginFailed + 1 })
+      }
     }
   }
 
   render() {
     const { values, inProgress } = this.props.accountStore
     const { getFieldDecorator } = this.props.form
+    const { loginFailed } = this.state
     return (
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row', paddingTop: 100 }}>
         <div className='login_sub_container'>
@@ -57,6 +67,12 @@ class Login extends Component {
                   <Input prefix={<Icon type='lock' />} type='password' placeholder='Mật khẩu' onChange={this.handlePasswordChange} />
                 )}
               </Form.Item>
+              {loginFailed > 1
+                ? <a className='login-form-forgot' href='/forgot-password'>
+                  Quên mật khẩu
+                  </a>
+                : <></>
+              }
               <Button
                 disabled={!values.password || !values.username || inProgress}
                 loading={inProgress}

@@ -10,6 +10,18 @@ const routesNotAuthen = [
 		path: '/confirm-email/:result',
 		component: 'confirmEmail',
 		exact: true
+	},
+	{
+		displayName: 'Quên mật khẩu',
+		path: '/forgot-password',
+		component: 'forgotPassword',
+		exact: true
+	},
+	{
+		displayName: 'Đặt lại mật khẩu',
+		path: '/reset-password/:resettoken',
+		component: 'resetPassword',
+		exact: false
 	}
 ]
 
@@ -19,7 +31,13 @@ const routesAuthen = [
 		path: '/dashboard',
 		component: 'dashboard',
 		exact: false
-  }
+	},
+	{
+		displayName: 'Trang cá nhân',
+		path: '/profile',
+		component: 'profile',
+		exact: true
+	}
 ]
 
 const listRoutesAuthen = [

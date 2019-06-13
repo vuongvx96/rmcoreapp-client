@@ -19,7 +19,7 @@ const Header = ({ onLogout }) => {
 					title={null}
 					content={
 						<div className='popMenu'>
-							<div className='popItem'><Icon size={20} type='user' /> {username}</div>
+							<div className='popItem' onClick={() => window.location.assign('/profile')}><Icon size={20} type='user' /> {username}</div>
 							<div onClick={onLogout} className='popItem'><Icon size={20} type='logout' /> Đăng xuất</div>
 						</div>
 					}
