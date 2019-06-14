@@ -37,6 +37,7 @@ class NewLayout extends React.PureComponent {
 	constructor(props) {
 		super(props)
 		jwt.verify(localStorage.getItem('access_token'), PRIVATE_KEY, (error) => {
+			console.log(error)
 			if (!!error) {
 				this.props.onLogout()
 			}
