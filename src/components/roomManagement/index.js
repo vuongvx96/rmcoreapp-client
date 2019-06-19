@@ -19,6 +19,7 @@ class RoomManagement extends React.Component {
         capacity: 0,
         location: null,
         validIP: null,
+        installedSoftware: null,
         note: null
       }
     }
@@ -40,11 +41,15 @@ class RoomManagement extends React.Component {
       { headerName: 'SL máy tính', field: 'amountComp', colId: 'c1', hide: true },
       { headerName: 'SL máy chiếu', field: 'amountProj', colId: 'c2', hide: true },
       { headerName: 'Ghi chú', field: 'note', hide: true },
-      { headerName: 'Trang thiết bị', field: 'shortDescription', width: 490 }
+      { headerName: 'Trang thiết bị', field: 'shortDescription', width: 200 },
+      { headerName: 'Các phần mềm đã cài đặt', field: 'installedSoftware', tooltipField: 'installedSoftware', resizable: true }
     ]
 
     this.gridOptions = {
       rowHeight: 34,
+      enableBrowserTooltips: true,
+      suppressMovableColumns: false,
+      suppressAutoSize: false,
       localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
     this.getInfo = this.getInfo.bind(this)
@@ -127,11 +132,12 @@ class RoomManagement extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
     this.props.roomStore.fetchAll()
   }
 
   render() {
-    let { roomId, capacity, location, validIP, note } = this.state.room
+    let { roomId, capacity, location, validIP, note, installedSoftware } = this.state.room
     let entities = this.props.roomStore.listRooms
     return (
       <>
@@ -151,6 +157,7 @@ class RoomManagement extends React.Component {
             capacity={capacity}
             location={location}
             validIP={validIP}
+            installedSoftware={installedSoftware}
             note={note}
             getInfo={this.getInfo}
           />

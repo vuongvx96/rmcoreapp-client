@@ -29,6 +29,10 @@ class ForgotPassword extends React.Component {
     })
   }
 
+  componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
+  }
+
   render() {
     let { getFieldDecorator } = this.props.form
     const { isSuccess, message } = this.state

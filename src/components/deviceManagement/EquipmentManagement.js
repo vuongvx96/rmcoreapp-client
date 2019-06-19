@@ -51,6 +51,7 @@ class EquipmentManagement extends React.Component {
 
     this.gridOptions = {
       rowHeight: 34,
+      suppressMovableColumns: false,
       localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
 

@@ -15,6 +15,7 @@ class RoomForm extends React.Component {
                 capacity: 0,
                 location: null,
                 validIP: null,
+                installedSoftware: null,
                 note: null
             }
         }
@@ -25,7 +26,7 @@ class RoomForm extends React.Component {
     }
 
     render() {
-        let { roomId, capacity, location, validIP, note } = this.props
+        let { roomId, capacity, location, validIP, note, installedSoftware } = this.props
         let { getFieldDecorator } = this.props.form
         let { isCreate } = this.props.commonStore
         const formItemLayout = {
@@ -85,11 +86,19 @@ class RoomForm extends React.Component {
                         this.props.getInfo('validIP', target.value)
                     }} />)}
                 </Form.Item>
+                <Form.Item label='Tiện ích, phần mềm'>
+                    {getFieldDecorator('installedSoftware', {
+                        initialValue: installedSoftware
+                    })(<Input.TextArea placeholder='Các phần mềm đã cài đặt' rows={4} onChange={({ target }) => {
+                        this.props.getInfo('installedSoftware', target.value)
+                    }} />
+                    )}
+                </Form.Item>
                 <Form.Item label='Ghi chú'>
                     {getFieldDecorator('note', {
                         initialValue: note
                     })(<Input.TextArea placeholder='Nhập ghi chú' rows={4} onChange={({ target }) => {
-                        this.props.getInfo('note', target.value.trim())
+                        this.props.getInfo('note', target.value)
                     }} />)}
                 </Form.Item>
             </Form>

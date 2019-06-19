@@ -17,6 +17,7 @@ class ConfirmEmail extends React.Component {
   }
 
   componentWillUnmount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
     clearTimeout(this.id)
   }
 

@@ -1,23 +1,24 @@
 import { observable, action, computed, toJS } from 'mobx'
-import moment from 'moment'
+import { createTransformer } from 'mobx-utils'
 
 class WeekStore {
 
 	@observable weeks = createWeeks(new Date().getFullYear())
-	@observable days = []
 
 	@action onChangeYear = (year) => {
 		this.weeks = createWeeks(year)
 	}
 
-	@action onChangeWeek = (week) => {
-		let monday = toJS(this.weeks.get(week))[0]
-		var day = moment(monday, 'DD/MM/YYYY')
-		this.days = createDaysOfWeek(new Date(day))
+	@computed get getWeeks() {
+		return toJS(this.weeks)
 	}
 
-	@computed get daysOfWeek() {
-		return toJS(this.days)
+	@computed get getWeekDate() {
+    return createTransformer(week => toJS(this.weeks.get(week)))
+	}
+
+	@computed get getMaxWeek() {
+		return Math.max(...toJS(this.weeks.keys()))
 	}
 }
 
@@ -69,23 +70,6 @@ function createWeeks(year) {
 		monday.setDate(monday.getDate() + 6)
 		data.set(i, [m, formatDDMMYYYY(monday)])
 		monday.setDate(monday.getDate() + 1)
-	}
-	return data
-}
-
-function createDaysOfWeek(startDate) {
-	let data = []
-	for (let i = 1; i <= 7; i++) {
-		let dd = startDate.getDate()
-		let mm = startDate.getMonth() + 1
-		if (dd < 10) {
-			dd = `0${dd}`
-		}
-		if (mm < 10) {
-			mm = `0${mm}`
-		}
-		data.push(`${dd}/${mm}`)
-		startDate.setDate(startDate.getDate() + 1)
 	}
 	return data
 }

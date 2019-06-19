@@ -1,0 +1,109 @@
+.flex-container {
+    display        : flex;
+    flex-direction : row;
+    justify-content: space-between;
+
+    .left-items {
+        display        : flex;
+        flex-direction : row;
+        justify-content: flex-start;
+        align-items    : center;
+
+        span {
+            margin-right: 5px;
+        }
+
+        .ant-select {
+            margin-right: 10px;
+            font-weight : bold;
+        }
+
+        .ant-btn {
+            margin-right: 5px;
+        }
+    }
+
+    .right-items {
+        display        : flex;
+        flex-direction : row;
+        justify-content: flex-end;
+        align-items    : center;
+    }
+}
+
+.table-schedule {
+    margin-top: 10px;
+
+    .title {
+        border     : 1px solid #CCC;
+        font-weight: bold;
+        color      : #000080;
+        text-align : center;
+        background : #E0E0E0;
+
+        .ant-col:not(:first-child) {
+            border-left: 1px solid #CCC;
+        }
+    }
+
+    .data {
+        border-left  : 1px solid #CCC;
+        border-right : 1px solid #CCC;
+        border-bottom: 1px solid #CCC;
+
+        &:nth-child(even) {
+            background: #F2F2F2;
+        }
+
+        &:nth-child(odd) {
+            background: #FFFFFF;
+        }
+
+        .ant-col {
+            .ant-card {
+                min-height: 135px;
+                border    : none;
+                background: none;
+
+                .ant-card-head {
+                    padding: 2px;
+                    border-bottom: none;
+
+                    .ant-card-extra {
+                        padding: 2px 0px;
+                        cursor : pointer;
+
+                        .anticon {
+                            font-size: 18px;
+                            color    : #fa8c16;
+                        }
+                    }
+                }
+
+                .ant-card-body {
+                    padding  : 5px;
+                    font-size: 13px;
+                    color    : #00008B;
+                }
+            }
+        }
+
+        .timeblock {
+            text-align : center;
+            font-weight: bold;
+            color      : #FF0000;
+        }
+
+        .ant-col:not(:first-child) {
+            border-left: 1px solid #CCC;
+        }
+    }
+}
+
+.ant-dropdown-menu {
+    background: #FFF;
+
+    .ant-dropdown-menu-item {
+        font-weight: bold;
+    }
+}

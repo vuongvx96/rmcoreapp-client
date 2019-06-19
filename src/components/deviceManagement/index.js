@@ -7,6 +7,10 @@ import './index.less'
 
 class DeviceManagement extends React.Component {
 
+  componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
+  }
+  
   render() {
     return (
       <Tabs

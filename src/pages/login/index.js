@@ -17,6 +17,10 @@ class Login extends Component {
     }
   }
 
+  componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
+  }
+  
   componentWillUnmount() {
     this.props.accountStore.reset()
   }

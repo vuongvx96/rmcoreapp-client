@@ -1,4 +1,4 @@
-import { observable, action, runInAction } from 'mobx'
+import { observable, action, runInAction, computed, toJS } from 'mobx'
 import http from '../../axios'
 
 class GroupPracticeStore{
@@ -28,10 +28,8 @@ class GroupPracticeStore{
     try {
       const response = await http.post('/courses', entity)
       runInAction('entity created', () => {
-        // if (response.status === 201) {
-        //   this.rowCount += 1
-        // }
-        this.groupPractices.set(entity.groupId, response.data)
+        if (response.status === 201)
+          this.groupPractices.set(response.data.groupId, response.data)
         this.loading = false
       })
       return response
@@ -59,7 +57,6 @@ class GroupPracticeStore{
       const response = await http.delete(`/courses/${id}`)
       runInAction('entity deleted', () => {
         if (response.status === 200) {
-          // this.rowCount -= 1
           this.groupPractices.delete(id)
         }
         this.loading = false
@@ -68,6 +65,10 @@ class GroupPracticeStore{
     } catch (err) {
       return err
     }
+  }
+
+  @computed get getGroupPractices() {
+    return Object.values(toJS(this.groupPractices))
   }
 }
 

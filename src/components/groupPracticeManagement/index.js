@@ -1,20 +1,17 @@
 import React from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { inject, observer } from 'mobx-react'
-import { toJS } from 'mobx'
-import { Pagination, Select, Input, Button } from 'antd'
 
 import GroupPracticeForm from './GroupPracticeForm'
 import ModalForm from '../template/modalForm'
 import ModifyButtonGrid from '../ui/ModifyButtonGrid'
 import { showNotification } from '../util/notification'
 import { showConfirm } from '../util/confirm'
-import { dateFormatter } from '../util/formatter'
 
 @inject('groupPracticeStore', 'teacherStore', 'subjectStore', 'classStore')
 @observer
 
-class GroupPracticeManagement extends React.Component{
+class GroupPracticeManagement extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -25,39 +22,33 @@ class GroupPracticeManagement extends React.Component{
         subjectId: null,
         classId: null,
         classSize: null,
-        semester: null,
-        schoolYear: String(getYear()),
-        startDate: null,
-        endDate: null
+        semester: 1,
+        schoolYear: String(getYear())
       }
     }
 
-    this.teacherMapping = this.props.teacherStore.objectMap
-    this.subjectMapping = this.props.subjectStore.objectMap
-    this.classMapping = this.props.classStore.objectMap
     this.columnDefs = [
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('COURSE').update,
+          canRemove: this.props.permission.hasPermission('COURSE').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeGroupPractice.bind(this)
         }
       },
-      { headerName: 'Nhóm TH', field: 'groupName', sortable: true },
+      { headerName: 'Nhóm TH', field: 'groupName', width: 120, sortable: true },
       { headerName: 'Môn học', field: 'subject.subjectName', sortable: true },
-      { headerName: 'Lớp học', field: 'class.classId', sortable: true },
+      { headerName: 'Lớp', field: 'class.classId', width: 100, sortable: true },
       { headerName: 'Giảng viên', field: 'teacher.firstName', sortable: true, valueFormatter: (params) => params.data.teacher.lastName + ' ' + params.value },
-      { headerName: 'Sỉ số', field: 'classSize', sortable: true},
-      { headerName: 'Học kỳ', field: 'semester', sortable: true},
-      { headerName: 'Năm học', field: 'schoolYear', sortable: true, valueFormatter: (params) => `${params.value} - ${(Number(params.value)+1)}` },
-      { headerName: 'Ngày bắt đầu', field: 'startDate', sortable: true, valueFormatter: (params) => dateFormatter(params.value) },
-      { headerName: 'Ngày kết thúc', field: 'endDate', sortable: true, valueFormatter: (params) => dateFormatter(params.value) }
+      { headerName: 'Sĩ số', field: 'classSize', width: 70, sortable: true },
+      { headerName: 'Học kỳ', field: 'semester', width: 85, sortable: true },
+      { headerName: 'Năm học', field: 'schoolYear', width: 95, sortable: true, valueFormatter: (params) => `${params.value} - ${(Number(params.value) + 1)}` }
     ]
 
     this.gridOptions = {
       rowHeight: 34,
+      suppressMovableColumns: false,
       localeText: {
         page: 'Trang',
         to: 'đến',
@@ -78,10 +69,11 @@ class GroupPracticeManagement extends React.Component{
   onGridReady = params => {
     this.gridApi = params.api
     this.gridColumnApi = params.columnApi
+    this.gridColumnApi.autoSizeColumns()
   }
 
   refetchData() {
-    this.gridApi.setRowData(this.props.groupPracticeStore.groupPractices)
+    this.gridApi.setRowData(this.props.groupPracticeStore.getGroupPractices)
   }
 
   openEditForm(groupPractice) {
@@ -93,10 +85,10 @@ class GroupPracticeManagement extends React.Component{
     let { groupPractice } = this.state
     const result = await this.props.groupPracticeStore.create(groupPractice)
     if (result.status === 201) {
-      showNotification('Thêm nhóm TH thành công', 'success')
+      showNotification('Thêm lớp học phần thành công', 'success')
       this.refetchData()
     } else {
-      showNotification('Thêm nhóm TH thất bại', 'error')
+      showNotification('Thêm lớp học phần thất bại', 'error')
     }
   }
 
@@ -104,23 +96,23 @@ class GroupPracticeManagement extends React.Component{
     let { groupPractice } = this.state
     const result = await this.props.groupPracticeStore.update(groupPractice)
     if (result.status === 200) {
-      showNotification('Cập nhật nhóm TH thành công', 'success')
+      showNotification('Cập nhật lớp học phần thành công', 'success')
       this.refetchData()
     } else {
-      showNotification('Cập nhật nhóm TH thất bại', 'error')
+      showNotification('Cập nhật lớp học phần thất bại', 'error')
     }
   }
 
   removeGroupPractice(groupPractice) {
     showConfirm(
-      'Bạn có muốn xóa nhóm TH này không?',
+      'Bạn có muốn xóa lớp học phần này không?',
       async () => {
         const result = await this.props.groupPracticeStore.delete(groupPractice.groupId)
         if (result.status === 200) {
-          showNotification('Xóa nhóm TH thành công', 'success')
+          showNotification('Xóa lớp học phần thành công', 'success')
           this.refetchData()
         } else {
-          showNotification('Xóa nhóm TH thất bại', 'error')
+          showNotification('Xóa lớp học phần thất bại', 'error')
         }
       }
     )
@@ -140,33 +132,33 @@ class GroupPracticeManagement extends React.Component{
         teacherId: null,
         subjectId: null,
         classId: null,
-        classSize: null,
-        semester: null,
-        schoolYear: String(getYear()),
-        startDate: null,
-        endDate: null
+        classSize: 0,
+        semester: 1,
+        schoolYear: String(getYear())
       }
     })
   }
 
   componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
     this.props.groupPracticeStore.fetchAll()
   }
 
   render() {
-    let { groupName, teacherId, subjectId, classId, classSize, semester, schoolYear, startDate, endDate } = this.state.groupPractice
-    let { groupPractices } = this.props.groupPracticeStore
+    let { groupName, teacherId, subjectId, classId, classSize, semester, schoolYear } = this.state.groupPractice
+    let { getGroupPractices } = this.props.groupPracticeStore
     return (
       <>
         <ModalForm
-          title='Nhóm thực hành'
+          title='Lớp học phần'
           buttonName='Thêm mới'
           modalWidth={600}
           handleCreate={this.createGroupPractice}
           handleUpdate={this.updateGroupPractice}
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
-          disableButtonSave={!groupName}
+          canCreate={this.props.permission.hasPermission('COURSE').create}
+          disableButtonSave={!groupName || !teacherId || !subjectId || !classId || !semester || !schoolYear}
         >
           <GroupPracticeForm
             groupName={groupName}
@@ -176,15 +168,13 @@ class GroupPracticeManagement extends React.Component{
             classSize={classSize}
             semester={semester}
             schoolYear={schoolYear}
-            startDate={startDate}
-            endDate={endDate}
             getInfo={this.getInfo}
           />
         </ModalForm>
         <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
           <AgGridReact
             columnDefs={this.columnDefs}
-            rowData={groupPractices}
+            rowData={getGroupPractices}
             animateRows={true}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}

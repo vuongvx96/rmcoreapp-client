@@ -58,6 +58,7 @@ class TeacherManagement extends React.Component {
 
     this.gridOptions = {
       rowHeight: 34,
+      suppressMovableColumns: false,
       localeText: {
         page: 'Trang',
         to: 'đến',
@@ -161,6 +162,7 @@ class TeacherManagement extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
     this.props.teacherStore.fetchAllPaging(1, 10, this.state.departmentId, this.state.keyword)
     this.props.departmentStore.fetchAll()
   }

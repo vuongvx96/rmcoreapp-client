@@ -47,10 +47,15 @@ const listRoutesAuthen = [
 		component: 'teacherManagement'
   },
   {
-    displayName: 'Quản lý lịch thực hành',
-		path: '/dashboard/schedule-management',
-		component: 'scheduleManagement'
-  },
+    displayName: 'Xem lịch thực hành tuần',
+		path: '/dashboard/schedule-week',
+		component: 'scheduleWeek'
+	},
+	{
+		displayName: 'Đăng ký lịch thực hành',
+		path: '/dashboard/register-schedule',
+		component: 'registerSchedule'
+	},
   {
     displayName: 'Quản lý hãng sản xuất',
     path: '/dashboard/manufacturer-management',
@@ -92,7 +97,7 @@ const listRoutesAuthen = [
 		component: 'userManagement'
 	},
 	{
-		displayName: 'Quản lý khóa học',
+		displayName: 'Quản lý lớp học phần',
 		path: '/dashboard/course-management',
 		component: 'groupPracticeManagement'
 	},

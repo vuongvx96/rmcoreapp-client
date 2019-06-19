@@ -81,6 +81,7 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
     this.props.accountStore.loadCurrentUser()
   }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { toast } from 'react-toastify'
-import { withRouter, Redirect } from 'react-router'
+import { withRouter } from 'react-router'
 import { Form, Input, Button, Icon, Alert } from 'antd'
 
 import { requiredRule, emailRule } from '../../components/util/validation'
@@ -63,6 +63,10 @@ class ResetPassword extends React.Component {
       form.validateFields(['confirmPassword'], { force: true })
     }
     callback()
+  }
+
+  componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
   }
 
   render() {

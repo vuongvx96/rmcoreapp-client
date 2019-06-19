@@ -41,6 +41,7 @@ class MajorManagement extends React.Component{
 
         this.gridOptions = {
             rowHeight: 34,
+            suppressMovableColumns: false,
             localeText: {
                 page: 'Trang',
                 to: 'đến',
@@ -127,6 +128,7 @@ class MajorManagement extends React.Component{
     }
 
     componentDidMount() {
+        document.title = 'Lịch phòng máy - ' + this.props.route.displayName
         this.props.majorStore.fetchAll()
     }
 

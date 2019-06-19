@@ -37,6 +37,7 @@ class ClassManagement extends React.Component {
 
     this.gridOptions = {
       rowHeight: 34,
+      suppressMovableColumns: false,
       localeText: {
         page: 'Trang',
         to: 'đến',
@@ -122,6 +123,7 @@ class ClassManagement extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
     this.props.classStore.fetchAll()
   }
 

@@ -30,6 +30,7 @@ class RoleManagement extends React.Component {
     }
     this.gridOptions = {
       rowHeight: 34,
+      suppressMovableColumns: false,
       localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
     this.columnDefs = [
@@ -136,6 +137,7 @@ class RoleManagement extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
     this.props.roleStore.fetchAll()
   }
 

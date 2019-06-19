@@ -26,18 +26,18 @@ function checkPassword(strPassword) {
   var nLowerCount = countContain(strPassword, m_strLowerCase)
   var nLowerUpperCount = nUpperCount + nLowerCount
   // -- Letters are all lower case
-  if (nUpperCount == 0 && nLowerCount != 0) {
+  if (nUpperCount === 0 && nLowerCount !== 0) {
     nScore += 10
   }
   // -- Letters are upper case and lower case
-  else if (nUpperCount != 0 && nLowerCount != 0) {
+  else if (nUpperCount !== 0 && nLowerCount !== 0) {
     nScore += 20;
   }
 
   // Numbers
   var nNumberCount = countContain(strPassword, m_strNumber);
   // -- 1 number
-  if (nNumberCount == 1) {
+  if (nNumberCount === 1) {
     nScore += 10
   }
   // -- 3 or more numbers
@@ -48,7 +48,7 @@ function checkPassword(strPassword) {
   // Characters
   var nCharacterCount = countContain(strPassword, m_strCharacters);
   // -- 1 character
-  if (nCharacterCount == 1) {
+  if (nCharacterCount === 1) {
     nScore += 10
   }
   // -- More than 1 character
@@ -58,15 +58,15 @@ function checkPassword(strPassword) {
 
   // Bonus
   // -- Letters and numbers
-  if (nNumberCount != 0 && nLowerUpperCount != 0) {
+  if (nNumberCount !== 0 && nLowerUpperCount !== 0) {
     nScore += 2
   }
   // -- Letters, numbers, and characters
-  if (nNumberCount != 0 && nLowerUpperCount != 0 && nCharacterCount != 0) {
+  if (nNumberCount !== 0 && nLowerUpperCount !== 0 && nCharacterCount !== 0) {
     nScore += 3
   }
   // -- Mixed case letters, numbers, and characters
-  if (nNumberCount != 0 && nUpperCount != 0 && nLowerCount != 0 && nCharacterCount != 0) {
+  if (nNumberCount !== 0 && nUpperCount !== 0 && nLowerCount !== 0 && nCharacterCount !== 0) {
     nScore += 5
   }
 

@@ -3,9 +3,11 @@ import _ from 'lodash'
 import { Form, Input, Select } from 'antd'
 import { observer, inject } from 'mobx-react'
 
+import IntInput from '../../components/ui/IntInput'
+
 const Option = Select.Option
 
-@inject('commonStore', 'groupPracticeStore', 'teacherStore', 'classStore', 'subjectStore', 'weekStore')
+@inject('commonStore', 'groupPracticeStore', 'teacherStore', 'classStore', 'subjectStore')
 @observer
 
 class GroupPracticeForm extends React.Component {
@@ -19,9 +21,7 @@ class GroupPracticeForm extends React.Component {
         classId: null,
         classSize: null,
         semester: null,
-        schoolYear: null,
-        startDate: null,
-        endDate: null
+        schoolYear: null
       }
     }
   }
@@ -34,7 +34,7 @@ class GroupPracticeForm extends React.Component {
   }
 
   render() {
-    let { groupName, teacherId, subjectId, classId, classSize, semester, schoolYear, startDate, endDate} = this.props
+    let { groupName, teacherId, subjectId, classId, classSize, semester, schoolYear } = this.props
     let { getFieldDecorator } = this.props.form
     let { listTeachers } = this.props.teacherStore
     let { listSubjects } = this.props.subjectStore
@@ -143,8 +143,8 @@ class GroupPracticeForm extends React.Component {
               },
             ],
             initialValue: classSize
-          })(<Input placeholder='Nhập sỉ số' type='text' onChange={({ target }) => {
-            this.props.getInfo('classSize', target.value)
+          })(<IntInput placeholder='Nhập sỉ số' type='text' onChange={(value) => {
+            this.props.getInfo('classSize', value)
           }} />)}
         </Form.Item>
         <Form.Item label='Năm học'>
@@ -164,24 +164,11 @@ class GroupPracticeForm extends React.Component {
             {
               _.range(getYear() - 3, getYear() + 10).map(
                 i => (
-                  <Select.Option key={String(i)} value={String(i)}>{`${i} - ${i+1}`}</Select.Option>
+                  <Select.Option key={String(i)} value={String(i)}>{`${i} - ${i + 1}`}</Select.Option>
                 ))
             }
           </Select>)}
         </Form.Item>
-        {/* <Form.Item label='Năm học'>
-          {getFieldDecorator('schoolYear', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập năm học',
-              },
-            ],
-            initialValue: schoolYear
-          })(<Input placeholder='Nhập năm học' type='text' onChange={({ target }) => {
-            this.props.getInfo('schoolYear', target.value)
-          }} />)}
-        </Form.Item> */}
         <Form.Item label='Học kỳ'>
           {getFieldDecorator('semester', {
             rules: [
@@ -191,35 +178,13 @@ class GroupPracticeForm extends React.Component {
               },
             ],
             initialValue: semester
-          })(<Input placeholder='Nhập học kỳ' type='text' onChange={({ target }) => {
-            this.props.getInfo('semester', target.value)
-          }} />)}
-        </Form.Item>
-        <Form.Item label='Ngày bắt đầu'>
-          {getFieldDecorator('startDate', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập ngày bắt đầu',
-              },
-            ],
-            initialValue: startDate
-          })(<Input placeholder='Nhập ngày bắt đầu' type='text' onChange={({ target }) => {
-            this.props.getInfo('startDate', target.value)
-          }} />)}
-        </Form.Item>
-        <Form.Item label='Ngày kết thúc'>
-          {getFieldDecorator('endDate', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập ngày kết thúc',
-              },
-            ],
-            initialValue: endDate
-          })(<Input placeholder='Nhập ngày kết thúc' type='text' onChange={({ target }) => {
-            this.props.getInfo('endDate', target.value)
-          }} />)}
+          })(<Select style={{ width: 150 }} onChange={(value) => {
+            this.props.getInfo('semester', value)
+          }}>
+            <Select.Option key={1} value={1}>Học kỳ 1</Select.Option>
+            <Select.Option key={2} value={2}>Học kỳ 2</Select.Option>
+            <Select.Option key={3} value={3}>Học kỳ hè</Select.Option>
+          </Select>)}
         </Form.Item>
       </Form>
     )

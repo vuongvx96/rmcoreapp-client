@@ -36,6 +36,7 @@ class DepartmentManagement extends React.Component {
 
     this.gridOptions = {
       rowHeight: 34,
+      suppressMovableColumns: false,
       localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
     this.getInfo = this.getInfo.bind(this)
@@ -113,6 +114,7 @@ class DepartmentManagement extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
     this.props.departmentStore.fetchAll()
   }
 
