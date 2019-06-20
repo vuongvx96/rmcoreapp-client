@@ -66,7 +66,7 @@ http.interceptors.response.use(function (response) {
         })
         .catch((err) => {
             processQueue(err, null)
-            reject(err);
+            reject(err)
         })
         .then(() => { isRefreshing = false })
     })

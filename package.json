@@ -6,7 +6,7 @@
     "ag-grid-community": "^20.2.0",
     "ag-grid-enterprise": "^20.2.0",
     "ag-grid-react": "^20.2.0",
-    "antd": "^3.18.1",
+    "antd": "^3.19.6",
     "axios": "^0.18.0",
     "crypto-js": "^3.1.9-1",
     "dotenv": "^8.0.0",

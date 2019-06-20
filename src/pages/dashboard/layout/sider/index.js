@@ -38,7 +38,7 @@ class Sider extends React.Component {
         <Menu
           theme='light'
           mode='inline'
-          inlineCollapsed={this.state.collapsed}
+          collapsed={this.state.collapsed.toString()}
           style={{ height: '100%' }}
         >
           {

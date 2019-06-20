@@ -4,15 +4,20 @@ import http from '../../axios'
 class GroupPracticeStore{
   @observable groupPractices = new Map()
   @observable loading = false
+  @observable keyword = null
 
   startAsync = () => {
     this.loading = true
   }
 
-  @action fetchAll = async () => {
+  @action fetchAll = async (semester, year) => {
     this.startAsync()
     try {
-      const response = await http.get('/courses')
+      let params = {
+        semester: semester,
+        year: year
+      }
+      const response = await http.get('/courses', { params })
       runInAction('fetch all entities', () => {
         this.groupPractices = new Map(response.data.map(i => [i.groupId, i]))
         this.loading = false
@@ -67,8 +72,20 @@ class GroupPracticeStore{
     }
   }
 
+  @action changeKeyword = (value) => {
+    this.keyword = value
+  }
+
   @computed get getGroupPractices() {
-    return Object.values(toJS(this.groupPractices))
+    let data = Object.values(toJS(this.groupPractices))
+    if (!!this.keyword) {
+      let keyword = this.keyword.toLowerCase()
+      data = data.filter(x => x.subject.subjectName.toLowerCase().indexOf(keyword) >= 0 ||
+        (x.teacher.lastName + ' ' + x.teacher.firstName).toLowerCase().indexOf(keyword) >= 0 ||
+        x.classId.toLowerCase().indexOf(keyword) >= 0
+      )
+    }
+    return data
   }
 }
 

@@ -26,7 +26,7 @@ const routesNotAuthen = [
 ]
 
 const routesAuthen = [
-  {
+	{
 		displayName: 'Quản lý',
 		path: '/dashboard',
 		component: 'dashboard',
@@ -45,21 +45,26 @@ const listRoutesAuthen = [
 		displayName: 'Quản lý giảng viên',
 		path: '/dashboard/teacher-management',
 		component: 'teacherManagement'
-  },
-  {
-    displayName: 'Xem lịch thực hành tuần',
+	},
+	{
+		displayName: 'Xem lịch thực hành tuần',
 		path: '/dashboard/schedule-week',
 		component: 'scheduleWeek'
 	},
 	{
-		displayName: 'Đăng ký lịch thực hành',
-		path: '/dashboard/register-schedule',
-		component: 'registerSchedule'
+		displayName: 'Xem danh sách lịch thực hành',
+		path: '/dashboard/list-schedule',
+		component: 'listSchedule'
 	},
-  {
-    displayName: 'Quản lý hãng sản xuất',
-    path: '/dashboard/manufacturer-management',
-    component: 'manufacturerManagement'
+	{
+		displayName: 'Quản lý lịch thực hành',
+		path: '/dashboard/schedule-management',
+		component: 'scheduleManagement'
+	},
+	{
+		displayName: 'Quản lý hãng sản xuất',
+		path: '/dashboard/manufacturer-management',
+		component: 'manufacturerManagement'
 	},
 	{
 		displayName: 'Quản lý khoa',

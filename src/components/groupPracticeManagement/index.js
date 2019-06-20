@@ -1,16 +1,20 @@
 import React from 'react'
+import _ from 'lodash'
 import { AgGridReact } from 'ag-grid-react'
 import { inject, observer } from 'mobx-react'
+import { Select, Button, Input } from 'antd'
 
 import GroupPracticeForm from './GroupPracticeForm'
 import ModalForm from '../template/modalForm'
 import ModifyButtonGrid from '../ui/ModifyButtonGrid'
 import { showNotification } from '../util/notification'
 import { showConfirm } from '../util/confirm'
+import './index.less'
+
+const { Option } = Select
 
 @inject('groupPracticeStore', 'teacherStore', 'subjectStore', 'classStore')
 @observer
-
 class GroupPracticeManagement extends React.Component {
   constructor(props) {
     super(props)
@@ -22,9 +26,11 @@ class GroupPracticeManagement extends React.Component {
         subjectId: null,
         classId: null,
         classSize: null,
-        semester: 1,
+        semester: getSemester(),
         schoolYear: String(getYear())
-      }
+      },
+      semester: getSemester(),
+      year: getYear()
     }
 
     this.columnDefs = [
@@ -133,7 +139,7 @@ class GroupPracticeManagement extends React.Component {
         subjectId: null,
         classId: null,
         classSize: 0,
-        semester: 1,
+        semester: getSemester(),
         schoolYear: String(getYear())
       }
     })
@@ -141,14 +147,15 @@ class GroupPracticeManagement extends React.Component {
 
   componentDidMount() {
     document.title = 'Lịch phòng máy - ' + this.props.route.displayName
-    this.props.groupPracticeStore.fetchAll()
+    const { semester, year } = this.state
+    this.props.groupPracticeStore.fetchAll(semester, year)
   }
 
   render() {
     let { groupName, teacherId, subjectId, classId, classSize, semester, schoolYear } = this.state.groupPractice
     let { getGroupPractices } = this.props.groupPracticeStore
     return (
-      <>
+      <div className='group-practice'>
         <ModalForm
           title='Lớp học phần'
           buttonName='Thêm mới'
@@ -159,6 +166,37 @@ class GroupPracticeManagement extends React.Component {
           getRef={ref => { this.refTemplate = ref }}
           canCreate={this.props.permission.hasPermission('COURSE').create}
           disableButtonSave={!groupName || !teacherId || !subjectId || !classId || !semester || !schoolYear}
+          leftItems={
+            <>
+              <span>Học kỳ:</span>
+              <Select style={{ width: 65 }} defaultValue={getSemester()} onChange={(value) => {
+                this.setState({ semester: value })
+              }}>
+                <Option key={1} value={1}>1</Option>
+                <Option key={2} value={2}>2</Option>
+                <Option key={3} value={3}>Hè</Option>
+              </Select>
+              <span>Năm học:</span>
+              <Select style={{ width: 90 }} defaultValue={new Date().getFullYear()} onChange={(value) => {
+                this.setState({ year: value })
+              }}>
+                {
+                  _.range(new Date().getFullYear() - 10, new Date().getFullYear() + 10).map(x => (
+                    <Option key={x} value={x}>{x}</Option>
+                  ))
+                }
+              </Select>
+              <Button onClick={() => {
+                const { semester, year } = this.state
+                this.props.groupPracticeStore.fetchAll(semester, year)
+              }}>
+                Xem
+              </Button>
+              <Input style={{ width: 180, marginLeft: 15 }} allowClear placeholder='Tìm...' onChange={({ target }) => {
+                this.props.groupPracticeStore.changeKeyword(target.value)
+              }}/>
+            </>
+          }
         >
           <GroupPracticeForm
             groupName={groupName}
@@ -185,13 +223,23 @@ class GroupPracticeManagement extends React.Component {
             }}
           />
         </div>
-      </>
+      </div>
     )
   }
 }
 
 function getYear() {
   return new Date().getFullYear()
+}
+
+function getSemester() {
+  const month = new Date().getMonth() + 1
+  if (month >= 9 && month <= 2)
+    return 1
+  else if (month >= 2 && month <= 5)
+    return 2
+  else
+    return 3
 }
 
 export default GroupPracticeManagement

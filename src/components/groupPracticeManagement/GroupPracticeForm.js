@@ -162,7 +162,7 @@ class GroupPracticeForm extends React.Component {
             }}
           >
             {
-              _.range(getYear() - 3, getYear() + 10).map(
+              _.range(new Date().getFullYear() - 10, new Date().getFullYear() + 10).map(
                 i => (
                   <Select.Option key={String(i)} value={String(i)}>{`${i} - ${i + 1}`}</Select.Option>
                 ))
@@ -189,10 +189,6 @@ class GroupPracticeForm extends React.Component {
       </Form>
     )
   }
-}
-
-function getYear() {
-  return new Date().getFullYear()
 }
 
 export default Form.create({ name: 'groupPractice' })(GroupPracticeForm)
