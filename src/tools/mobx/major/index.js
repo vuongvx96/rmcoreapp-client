@@ -28,7 +28,6 @@ class MajorStore {
     this.startAsync()
     try {
       const response = await http.post('/majors', entity)
-      console.log(response)
       runInAction('entity created', () => {
         this.entities.set(response.data.majorId, response.data)
         this.loading = false

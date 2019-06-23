@@ -34,9 +34,10 @@ class ScheduleStore {
   }
 
   @observable scheduleWithDetails = []
-  @observable scheduleByUsers = []
+  @observable scheduleByUsers = new Map()
 
   @observable loading = false
+  @observable updating = false
   @observable year = new Date().getFullYear()
   @observable week = new Date().getWeek()
   @observable roomId = 'G8-103'
@@ -98,12 +99,68 @@ class ScheduleStore {
       const response = await http.get('/schedule/getbyuser', { params })
       runInAction('fetch all by user', () => {
         if (response.status === 200) {
-          this.scheduleByUsers = response.data
+          this.scheduleByUsers = new Map(response.data.map(i => [i.schedule.scheduleId, i]))
         }
         this.loading = false
       })
     } catch (err) {
       this.loading = false
+    }
+  }
+
+  @action createSchedule = async (schedule) => {
+    this.updating = true
+    try {
+      let obj = Object.assign({}, schedule)
+      obj.startDate = schedule.startDate.format('YYYY-MM-DD HH:mm:ss')
+      obj.endDate = schedule.endDate.format('YYYY-MM-DD HH:mm:ss')
+      delete obj.scheduleId
+      const response = await http.post('/schedule/create', obj)
+      if (response.status === 200) {
+        let id = response.data.schedule.scheduleId
+        let updated = response.data
+        this.scheduleByUsers.set(id, updated)
+      }
+      this.updating = false
+      return response
+    } catch (err) {
+      this.updating = false
+      return err
+    }
+  }
+
+  @action updateSchedule = async (schedule) => {
+    this.updating = true
+    try {
+      let obj = Object.assign({}, schedule)
+      obj.startDate = schedule.startDate.format('YYYY-MM-DD HH:mm:ss')
+      obj.endDate = schedule.endDate.format('YYYY-MM-DD HH:mm:ss')
+
+      const response = await http.post('/schedule/update', obj)
+      if (response.status === 200) {
+        if (response.data.success) {
+          let id = response.data.scheduleDetail.schedule.scheduleId
+          let updated = response.data.scheduleDetail
+          this.scheduleByUsers.set(id, updated)
+        }
+      }
+      this.updating = false
+      return response
+    } catch (err) {
+      this.updating = false
+      return err
+    }
+  }
+
+  @action deleteSchedule = async (id) => {
+    try {
+      const response = await http.delete(`/schedule/${id}`)
+      runInAction('entity deleted', () => {
+        this.scheduleByUsers.delete(id)
+      })
+      return response
+    } catch (err) {
+      return err
     }
   }
 
@@ -133,7 +190,7 @@ class ScheduleStore {
   }
 
   @computed get getScheduleByUsersJS() {
-    return toJS(this.scheduleByUsers)
+    return Object.values(toJS(this.scheduleByUsers))
   }
 
   @computed get daysOfWeek() {

@@ -110,8 +110,7 @@ class RoomManagement extends React.Component {
       }
     )
   }
-
-
+  
   getInfo(field, value) {
     this.setState((prevState) => {
       prevState.room[field] = value
