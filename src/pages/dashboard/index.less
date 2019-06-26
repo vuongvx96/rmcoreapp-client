@@ -5,6 +5,51 @@
 }
 
 .ag-theme-balham .ag-header {
-    background-color: #fff!important;
-    color: #16a085!important;
+    background-color: #fff !important;
+    color           : #16a085 !important;
+}
+
+.flex-container {
+    .left-items {
+        span {
+            margin-right: 5px;
+        }
+
+        .ant-select,
+        .ant-calendar-picker {
+            margin-right: 10px;
+        }
+
+        .ant-btn {
+            color: #FFF;
+            background-color: #0065ed;
+            border: 1px solid #0065ED;
+            transition: all 0.3s ease-in-out;
+            
+            &:active, &:hover, &:focus {
+                background: #FFF;
+                color: #0065ED;
+            }
+        }
+    }
+
+    .right-items {
+        .ant-btn {
+            color: #FFF;
+            background-color: #0065ed;
+            border: 1px solid #0065ED;
+            transition: all 0.3s ease-in-out;
+            
+            &:active, &:hover, &:focus {
+                background: #FFF;
+                color: #0065ED;
+            }
+        }
+    }
+}
+
+.ant-form {
+    .ant-form-item {
+        margin-bottom: 10px;
+    }
 }

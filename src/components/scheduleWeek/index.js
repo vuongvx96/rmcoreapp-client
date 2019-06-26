@@ -54,7 +54,7 @@ class ScheduleWeek extends React.Component {
 	}
 
 	componentDidMount() {
-		document.title = 'Lịch phòng máy - ' + this.props.route.displayName
+		document.title = 'Lịch phòng máy | ' + this.props.route.displayName
 		this.props.roomStore.fetchAll()
 		const { currentWeek } = this.props.scheduleStore
 		const week = this.props.weekStore.getWeekDate(currentWeek)
@@ -98,16 +98,16 @@ class ScheduleWeek extends React.Component {
 							}
 						</Select>
 						<Divider type='vertical' style={{ border: '1px solid #828282', height: '1.9em', margin: '0px 15px 0px 7px' }} />
-						<Button icon='search' onClick={this.handleViewSchedule}>
+						<Button type='primary' icon='search' onClick={this.handleViewSchedule}>
 							Xem
 						</Button>
-						<Button disabled={currentWeek <= 1} onClick={() => {
+						<Button type='primary' disabled={currentWeek <= 1} onClick={() => {
 							this.props.scheduleStore.changeWeek(currentWeek - 1)
 							this.handleViewSchedule()
 						}}>
 							Tuần trước
 						</Button>
-						<Button disabled={currentWeek >= getMaxWeek} onClick={() => {
+						<Button type='primary' disabled={currentWeek >= getMaxWeek} onClick={() => {
 							this.props.scheduleStore.changeWeek(currentWeek + 1)
 							this.handleViewSchedule()
 						}}>

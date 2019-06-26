@@ -146,7 +146,7 @@ class GroupPracticeManagement extends React.Component {
   }
 
   componentDidMount() {
-    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
+    document.title = 'Lịch phòng máy | ' + this.props.route.displayName
     const { semester, year } = this.state
     this.props.groupPracticeStore.fetchAll(semester, year)
   }
@@ -165,7 +165,7 @@ class GroupPracticeManagement extends React.Component {
           clearState={this.clearState}
           getRef={ref => { this.refTemplate = ref }}
           canCreate={this.props.permission.hasPermission('COURSE').create}
-          disableButtonSave={!groupName || !teacherId || !subjectId || !classId || !semester || !schoolYear}
+          disableButtonSave={!teacherId || !subjectId || !classId || !semester || !schoolYear}
           leftItems={
             <>
               <span>Học kỳ:</span>
@@ -186,7 +186,7 @@ class GroupPracticeManagement extends React.Component {
                   ))
                 }
               </Select>
-              <Button onClick={() => {
+              <Button type='primary' onClick={() => {
                 const { semester, year } = this.state
                 this.props.groupPracticeStore.fetchAll(semester, year)
               }}>

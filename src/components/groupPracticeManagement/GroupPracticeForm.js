@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { Form, Input, Select } from 'antd'
 import { observer, inject } from 'mobx-react'
 
+import { requiredRule } from '../util/validation'
 import IntInput from '../../components/ui/IntInput'
 
 const Option = Select.Option
@@ -52,14 +53,8 @@ class GroupPracticeForm extends React.Component {
 
     return (
       <Form {...formItemLayout} >
-        <Form.Item label='Tên nhóm TH'>
+        <Form.Item label='Tên nhóm (viết tắt)'>
           {getFieldDecorator('groupName', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập tên nhóm TH',
-              },
-            ],
             initialValue: groupName
           })(<Input placeholder='Nhập tên nhóm thực hành' type='text' onChange={({ target }) => {
             this.props.getInfo('groupName', target.value)
@@ -67,12 +62,7 @@ class GroupPracticeForm extends React.Component {
         </Form.Item>
         <Form.Item label='Giảng viên'>
           {getFieldDecorator('teacherId', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập giảng viên',
-              },
-            ],
+            rules: [requiredRule('Vui lòng chọn giảng viên')],
             initialValue: teacherId
           })(<Select
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -90,12 +80,7 @@ class GroupPracticeForm extends React.Component {
         </Form.Item>
         <Form.Item label='Môn học'>
           {getFieldDecorator('subjectId', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập môn học',
-              },
-            ],
+            rules: [requiredRule('Vui lòng chọn môn học')],
             initialValue: subjectId
           })(<Select
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -113,12 +98,7 @@ class GroupPracticeForm extends React.Component {
         </Form.Item>
         <Form.Item label='Lớp học'>
           {getFieldDecorator('classId', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập môn học',
-              },
-            ],
+            rules: [requiredRule('Vui lòng chọn môn học')],
             initialValue: classId
           })(<Select
             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
@@ -136,12 +116,7 @@ class GroupPracticeForm extends React.Component {
         </Form.Item>
         <Form.Item label='Sỉ số'>
           {getFieldDecorator('classSize', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập sỉ số',
-              },
-            ],
+            rules: [requiredRule('Vui lòng nhập sĩ số')],
             initialValue: classSize
           })(<IntInput placeholder='Nhập sỉ số' type='text' onChange={(value) => {
             this.props.getInfo('classSize', value)
@@ -149,12 +124,7 @@ class GroupPracticeForm extends React.Component {
         </Form.Item>
         <Form.Item label='Năm học'>
           {getFieldDecorator('schoolYear', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập năm học',
-              },
-            ],
+            rules: [requiredRule('Vui lòng chọn năm học')],
             initialValue: schoolYear
           })(<Select style={{ width: 185 }}
             onChange={(value) => {
@@ -171,12 +141,7 @@ class GroupPracticeForm extends React.Component {
         </Form.Item>
         <Form.Item label='Học kỳ'>
           {getFieldDecorator('semester', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập học kỳ',
-              },
-            ],
+            rules: [requiredRule('Vui lòng chọn học kỳ')],
             initialValue: semester
           })(<Select style={{ width: 150 }} onChange={(value) => {
             this.props.getInfo('semester', value)

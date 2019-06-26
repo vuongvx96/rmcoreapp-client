@@ -2,6 +2,8 @@ import React from 'react'
 import { Form, Input } from 'antd'
 import { inject } from 'mobx-react'
 
+import { requiredRule } from '../util/validation'
+
 @inject('commonStore')
 class RoleForm extends React.Component {
 	constructor(props) {
@@ -37,12 +39,7 @@ class RoleForm extends React.Component {
 			<Form {...formItemLayout} >
 				<Form.Item label='Tên role'>
 					{getFieldDecorator('name', {
-						rules: [
-							{
-								required: true,
-								message: 'Vui lòng nhập tên role',
-							},
-						],
+						rules: [requiredRule('Vui lòng nhập tên role')],
 						initialValue: name
 					})(<Input disabled={!isCreate} placeholder='Nhập tên role' type='text' onChange={({ target }) => {
 						this.props.getInfo('name', target.value)
@@ -50,12 +47,7 @@ class RoleForm extends React.Component {
 				</Form.Item>
 				<Form.Item label='Mô tả'>
 					{getFieldDecorator('description', {
-						rules: [
-							{
-								required: true,
-								message: 'Vui lòng nhập mô tả',
-							},
-						],
+						rules: [requiredRule('Vui lòng nhập mô tả')],
 						initialValue: description
 					})(<Input.TextArea row={5} placeholder='Nhập mô tả' onChange={({ target }) => {
             this.props.getInfo('description', target.value)

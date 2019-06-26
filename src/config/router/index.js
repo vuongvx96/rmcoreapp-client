@@ -110,6 +110,11 @@ const listRoutesAuthen = [
 		displayName: 'Quản lý role',
 		path: '/dashboard/role-management',
 		component: 'roleManagement'
+	},
+	{
+		displayName: 'Nhật ký thực hành',
+		path: '/dashboard/practice-diary',
+		component: 'practiceDiaryManagement'
 	}
 ]
 

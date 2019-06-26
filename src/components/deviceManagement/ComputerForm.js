@@ -1,7 +1,8 @@
 import React from 'react'
 import { Form, Input, Select, Switch, Icon } from 'antd'
 import { observer, inject } from 'mobx-react'
-import { inputCodeRule } from '../util/validation'
+
+import { inputCodeRule, requiredRule } from '../util/validation'
 
 @inject('commonStore', 'manufacturerStore', 'roomStore', 'computerStore')
 @observer
@@ -48,14 +49,9 @@ class ComputerForm extends React.Component {
         <Form.Item label='Mã máy' hasFeedback>
           {getFieldDecorator('computerId', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập mã',
-              },
-              {
-                max: 6, message: 'Mã tối đa chỉ 6 ký tự!'
-              },
-              inputCodeRule('Định dạng mã không hợp lệ!')
+              requiredRule('Vui lòng nhập mã'),
+              inputCodeRule('Định dạng mã không hợp lệ!'),
+              { max: 6, message: 'Mã tối đa chỉ 6 ký tự!' },
             ],
             initialValue: computerId
           })(<Input disabled={!isCreate} placeholder='Nhập mã máy' type='text' onChange={({ target }) => {
@@ -64,12 +60,7 @@ class ComputerForm extends React.Component {
         </Form.Item>
         <Form.Item label='Tên máy' hasFeedback>
           {getFieldDecorator('computerName', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập tên máy',
-              }
-            ],
+            rules: [requiredRule('Vui lòng nhập tên máy')],
             initialValue: computerName
           })(<Input placeholder='Nhập tên máy' type='text' onChange={({ target }) => {
             this.props.getInfo('computerName', target.value)
@@ -77,12 +68,7 @@ class ComputerForm extends React.Component {
         </Form.Item>
         <Form.Item label='Hãng sản xuất' hasFeedback>
           {getFieldDecorator('manufacturerId', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng chọn hãng sản xuất',
-              }
-            ],
+            rules: [requiredRule('Vui lòng chọn hãng sản xuất')],
             initialValue: manufacturerId
           })(<Select onChange={(value) => {
             this.props.getInfo('manufacturerId', value)
@@ -94,12 +80,7 @@ class ComputerForm extends React.Component {
         </Form.Item>
         <Form.Item label='Phòng' hasFeedback>
           {getFieldDecorator('roomId', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng chọn phòng',
-              }
-            ],
+            rules: [requiredRule('Vui lòng chọn phòng')],
             initialValue: roomId
           })(<Select onChange={(value) => {
             this.props.getInfo('roomId', value)
@@ -111,12 +92,7 @@ class ComputerForm extends React.Component {
         </Form.Item>
         <Form.Item label='Số Serial/ServiceTag' hasFeedback>
           {getFieldDecorator('serial', {
-            rules: [
-              {
-                required: true,
-                message: 'Trường này là bắt buộc',
-              }
-            ],
+            rules: [requiredRule('Vui lòng nhập mã serial')],
             initialValue: serial
           })(<Input placeholder='Nhập số serial' type='text' onChange={({ target }) => {
             this.props.getInfo('serial', target.value)

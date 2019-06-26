@@ -1,7 +1,8 @@
 import React from 'react'
 import { Form, Input } from 'antd'
 import { observer, inject } from 'mobx-react'
-import { ipRule, inputCodeRule } from '../util/validation'
+
+import { requiredRule, ipRule, inputCodeRule } from '../util/validation'
 import IntInput from '../ui/IntInput'
 
 @inject('commonStore')
@@ -44,14 +45,11 @@ class RoomForm extends React.Component {
                 <Form.Item label='Mã phòng' hasFeedback>
                     {getFieldDecorator('roomId', {
                         rules: [
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập mã',
-                            },
+                            requiredRule('Vui lòng nhập mã'),
+                            inputCodeRule('Định dạng mã không hợp lệ!'),
                             {
                                 max: 6, message: 'Mã tối đa chỉ 6 ký tự!'
-                            },
-                            inputCodeRule('Định dạng mã không hợp lệ!')
+                            }
                         ],
                         initialValue: roomId
                     })(<Input disabled={!isCreate} placeholder='Nhập mã phòng' type='text' onChange={({ target }) => {
@@ -61,10 +59,7 @@ class RoomForm extends React.Component {
                 <Form.Item label='Sức chứa' hasFeedback>
                     {getFieldDecorator('capacity', {
                         rules: [
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập sức chứa',
-                            },
+                            requiredRule('Vui lòng nhập sức chứa')
                         ],
                         initialValue: capacity
                     })(<IntInput placeholder='Nhập sức chứa' type='text' onChange={(value) => {

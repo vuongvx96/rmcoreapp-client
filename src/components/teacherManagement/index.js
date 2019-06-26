@@ -162,7 +162,7 @@ class TeacherManagement extends React.Component {
   }
 
   componentDidMount() {
-    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
+    document.title = 'Lịch phòng máy | ' + this.props.route.displayName
     this.props.teacherStore.fetchAllPaging(1, 10, this.state.departmentId, this.state.keyword)
     this.props.departmentStore.fetchAll()
   }
@@ -202,7 +202,7 @@ class TeacherManagement extends React.Component {
               <Input placeholder='Từ khóa (mã, tên, ...)' allowClear style={{ width: 300, marginRight: 10 }} onChange={({ target }) => {
                 this.setState({ keyword: target.value.trim() })
               }} />
-              <Button shape='round' icon='search' onClick={async () => {
+              <Button type='primary' shape='round' icon='search' onClick={async () => {
                 await this.props.teacherStore.fetchAllPaging(1, this.state.pageSize, this.state.departmentId, this.state.keyword)
                 this.refetchData()
               }} />

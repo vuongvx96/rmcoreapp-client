@@ -2,6 +2,8 @@ import React from 'react'
 import { Form, Input } from 'antd'
 import { observer, inject } from 'mobx-react'
 
+import { requiredRule, inputCodeRule } from '../util/validation'
+
 @inject('commonStore')
 @observer
 class ManufacturerForm extends React.Component {
@@ -39,10 +41,8 @@ class ManufacturerForm extends React.Component {
 				<Form.Item label='Mã hãng sản xuất'>
 					{getFieldDecorator('manufacturerId', {
 						rules: [
-							{
-								required: true,
-								message: 'Vui lòng nhập mã',
-							},
+							requiredRule('Vui lòng nhập mã'),
+							inputCodeRule('Mã không đúng định dạng')
 						],
 						initialValue: manufacturerId
 					})(<Input disabled={!isCreate} placeholder='Nhập mã hãng sản xuất' type='text' onChange={({ target }) => {
@@ -51,19 +51,14 @@ class ManufacturerForm extends React.Component {
 				</Form.Item>
 				<Form.Item label='Tên hãng sản xuất'>
 					{getFieldDecorator('manufacturerName', {
-						rules: [
-							{
-								required: true,
-								message: 'Vui lòng nhập tên hãng sản xuất',
-							},
-						],
+						rules: [requiredRule('Vui lòng nhập tên hãng sản xuất')],
 						initialValue: manufacturerName
 					})(<Input placeholder='Nhập tên hãng sản xuất' type='text' onChange={({ target }) => {
 						this.props.getInfo('manufacturerName', target.value)
 					}} />)}
 				</Form.Item>
 				<Form.Item label='Thông tin liên hệ'>
-					{getFieldDecorator('exportNoBill', {
+					{getFieldDecorator('manufacturerContact', {
 						initialValue: manufacturerContact
 					})(<Input placeholder='Nhập thông tin liên hệ (ĐT, Email, ...)' type='text' onChange={({ target }) => {
 						this.props.getInfo('manufacturerContact', target.value)

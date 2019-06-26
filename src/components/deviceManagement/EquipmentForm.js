@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form, Input, Select, Switch, Icon } from 'antd'
 import { observer, inject } from 'mobx-react'
+
 import { requiredRule, inputCodeRule } from '../util/validation'
 
 @inject('commonStore', 'manufacturerStore', 'roomStore', 'equipmentStore')

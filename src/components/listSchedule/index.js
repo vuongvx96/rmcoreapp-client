@@ -43,7 +43,7 @@ class ListSchedule extends React.Component {
     }
 
     componentDidMount() {
-        document.title = 'Lịch phòng máy - ' + this.props.route.displayName
+        document.title = 'Lịch phòng máy | ' + this.props.route.displayName
         const { month, year } = this.state
         this.props.scheduleStore.getAllScheduleWithDetail(month, year)
     }
@@ -75,7 +75,7 @@ class ListSchedule extends React.Component {
                                 ))
                             }
                         </Select>
-                        <Button onClick={() => {
+                        <Button type='primary' onClick={() => {
                             const { month, year } = this.state
                             this.props.scheduleStore.getAllScheduleWithDetail(month, year)
                         }}>

@@ -2,6 +2,8 @@ import React from 'react'
 import { Form, Input } from 'antd'
 import { observer, inject } from 'mobx-react'
 
+import { requiredRule, inputCodeRule } from '../util/validation'
+
 @inject('commonStore')
 @observer
 class DepartmentForm extends React.Component {
@@ -38,10 +40,8 @@ class DepartmentForm extends React.Component {
                 <Form.Item label='Mã khoa'>
                     {getFieldDecorator('departmentId', {
                         rules: [
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập mã',
-                            },
+                            requiredRule('Vui lòng nhập mã'),
+                            inputCodeRule('Mã không đúng định dạng')
                         ],
                         initialValue: departmentId
                     })(<Input disabled={!isCreate} placeholder='Nhập mã khoa' type='text' onChange={({ target }) => {
@@ -50,12 +50,7 @@ class DepartmentForm extends React.Component {
                 </Form.Item>
                 <Form.Item label='Tên khoa'>
                     {getFieldDecorator('departmentName', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Vui lòng nhập tên khoa',
-                            },
-                        ],
+                        rules: [requiredRule('Vui lòng nhập tên khoa')],
                         initialValue: departmentName
                     })(<Input placeholder='Nhập tên khoa' type='text' onChange={({ target }) => {
                         this.props.getInfo('departmentName', target.value)

@@ -172,7 +172,7 @@ class EquipmentManagement extends React.Component {
               <Input placeholder='Từ khóa (mã, tên, ...)' allowClear style={{ marginRight: 10 }} onChange={({ target }) => {
                 this.setState({ keyword: target.value.trim() })
               }} />
-              <Button shape='round' icon='search' onClick={async () => {
+              <Button type='primary' shape='round' icon='search' onClick={async () => {
                 await this.props.equipmentStore.fetchAll(this.state.roomId, this.state.keyword)
                 this.refetchData()
               }} />

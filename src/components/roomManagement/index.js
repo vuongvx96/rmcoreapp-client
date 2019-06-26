@@ -131,7 +131,7 @@ class RoomManagement extends React.Component {
   }
 
   componentDidMount() {
-    document.title = 'Lịch phòng máy - ' + this.props.route.displayName
+    document.title = 'Lịch phòng máy | ' + this.props.route.displayName
     this.props.roomStore.fetchAll()
   }
 

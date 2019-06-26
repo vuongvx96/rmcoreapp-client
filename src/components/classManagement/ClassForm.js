@@ -2,6 +2,8 @@ import React from 'react'
 import { Form, Input, Select } from 'antd'
 import { observer, inject } from 'mobx-react'
 
+import { requiredRule, inputCodeRule } from '../util/validation'
+
 const Option = Select.Option
 
 @inject('commonStore', 'majorStore')
@@ -44,10 +46,8 @@ class ClassForm extends React.Component {
         <Form.Item label='Mã Lớp'>
           {getFieldDecorator('classId', {
             rules: [
-              {
-                required: true,
-                message: 'Vui lòng nhập mã',
-              },
+              requiredRule('Vui lòng nhập mã'),
+              inputCodeRule('Mã không đúng định dạng')
             ],
             initialValue: classId
           })(<Input disabled={!isCreate} placeholder='Nhập mã lớp' type='text' onChange={({ target }) => {
@@ -56,12 +56,7 @@ class ClassForm extends React.Component {
         </Form.Item>
         <Form.Item label='Chuyên ngành'>
           {getFieldDecorator('majorId', {
-            rules: [
-              {
-                required: true,
-                message: 'Vui lòng chọn chuyên ngành',
-              },
-            ],
+            rules: [requiredRule('Vui lòng chọn chuyên ngành')],
             initialValue: majorId
           })(<Select onChange={(value) => {
             this.props.getInfo('majorId', value)

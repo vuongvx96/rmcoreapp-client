@@ -55,7 +55,7 @@ class Login extends Component {
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'row', paddingTop: 100 }}>
         <div className='login_sub_container'>
           <div className='login_side' style={{ borderRight: '1px solid #EDEDEE' }}>
-            <h3 style={{ color: '#377fb7' }}>Professional management website</h3>
+            <h3 style={{ color: '#377fb7' }}>Trang quản lý phòng máy</h3>
             <Form onSubmit={this.handleSubmitForm} className='login-form'>
               <Form.Item disabled={inProgress}>
                 {getFieldDecorator('username', {

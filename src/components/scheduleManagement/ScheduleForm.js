@@ -142,6 +142,13 @@ class ScheduleForm extends React.Component {
                     <li>{`Sức chứa: ${currentRoom.capacity}`}</li>
                     <li>{`Số máy hoạt động: ${currentRoom.computerQty}`}</li>
                     <li>{`Trang bị: ${currentRoom.note}`}</li>
+                    <li>Cấu hình máy:
+                      <ul style={{ paddingLeft: 15, color: 'red' }}>
+                        {currentRoom.computerConfiguration.split(', ').map((item, i) => (
+                          <li key={i}>{item}</li>
+                        ))}
+                      </ul>
+                    </li>
                     <li>
                       Các phần mềm đã cài:
                         <ol style={{ paddingLeft: 15, color: '#d4380d' }}>

@@ -5,13 +5,12 @@ import { AgGridReact } from 'ag-grid-react'
 import { toast } from 'react-toastify'
 import { DatePicker, Select, Checkbox, Button, Icon, Tag, Spin, Modal } from 'antd'
 import moment from 'moment'
-
 import locale from 'antd/lib/date-picker/locale/vi_VN'
+
 import ScheduleForm from './ScheduleForm'
 import ModifyButtonGrid from '../ui/ModifyButtonGrid'
 import { dateFormatter } from '../util/formatter'
 import { showConfirm } from '../util/confirm'
-import './index.less'
 
 @inject('scheduleStore', 'teacherScheduleStore')
 @observer
@@ -168,6 +167,18 @@ class ScheduleManagement extends React.Component {
 
   onChangeTimeType = value => {
     this.setState({ timeType: value })
+    let { startValue, endValue } = this.state
+    if (value === 2) {
+      startValue = moment(startValue).startOf('month')
+      endValue = moment(endValue).endOf('month')
+      this.setState({ startValue, endValue })
+    } else if (value === 3) {
+      startValue.set('month', 0)
+      startValue = moment(startValue).startOf('month')
+      endValue.set('month', 11)
+      endValue = moment(endValue).endOf('month')
+      this.setState({ startValue, endValue })
+    }
   }
 
   disabledStartDate = startValue => {
@@ -378,6 +389,7 @@ class ScheduleManagement extends React.Component {
   }
 
   componentDidMount() {
+    document.title = 'Lịch phòng máy | ' + this.props.route.displayName
     const { startValue, endValue } = this.state
     this.props.scheduleStore.getAllScheduleByUser(startValue, endValue)
   }
@@ -387,7 +399,7 @@ class ScheduleManagement extends React.Component {
     const { getScheduleByUsersJS, loading, updating } = this.props.scheduleStore
     let { groupId, roomId, numberOfGroups, startDate, dayparting, repeatType, count, requirement, note } = this.state.schedule
     return (
-      <div className='schedule-management'>
+      <>
         <Spin spinning={loading}>
           <div className='flex-container' style={{ paddingBottom: 10, width: '100%' }}>
             <div className='left-items'>
@@ -416,7 +428,7 @@ class ScheduleManagement extends React.Component {
                 }}
                 onPanelChange={(v) => {
                   if (timeType === 2) {
-                    v.set('date', 1)
+                    v = moment(v).startOf('month')
                   } else if (timeType === 3) {
                     v.set('date', 1)
                     v.set('month', 0)
@@ -428,7 +440,7 @@ class ScheduleManagement extends React.Component {
                 }}
                 onChange={(date) => {
                   if (timeType === 2) {
-                    date.set('date', 1)
+                    date = moment(date).startOf('month')
                   } else if (timeType === 3) {
                     date.set('date', 1)
                     date.set('month', 0)
@@ -456,10 +468,10 @@ class ScheduleManagement extends React.Component {
                 }}
                 onPanelChange={(v) => {
                   if (timeType === 2) {
-                    v.set('date', 1)
+                    v = moment(v).endOf('month')
                   } else if (timeType === 3) {
-                    v.set('date', 1)
-                    v.set('month', 0)
+                    v.set('month', 11)
+                    v = moment(v).endOf('month')
                   }
                   this.setState({
                     endValue: v,
@@ -468,22 +480,22 @@ class ScheduleManagement extends React.Component {
                 }}
                 onChange={(date) => {
                   if (timeType === 2) {
-                    date.set('date', 1)
+                    date = moment(date).endOf('month')
                   } else if (timeType === 3) {
-                    date.set('date', 1)
-                    date.set('month', 0)
+                    date.set('month', 11)
+                    date = moment(date).endOf('month')
                   }
                   this.setState({ endValue: date })
                 }}
               />
-              <Button disabled={startValue > endValue} onClick={() => {
+              <Button type='primary' disabled={startValue > endValue} onClick={() => {
                 this.props.scheduleStore.getAllScheduleByUser(startValue, endValue)
               }}>
                 Xem
               </Button>
             </div>
             <div className='right-items'>
-              <Button onClick={this.openCreateForm}>
+              <Button type='primary' onClick={this.openCreateForm}>
                 Đăng ký mới
               </Button>
             </div>
@@ -516,7 +528,7 @@ class ScheduleManagement extends React.Component {
           bodyStyle={{ padding: '10px 24px' }}
           okText='Lưu'
           cancelText='Hủy'
-          okButtonProps={{ loading: updating }}
+          confirmLoading={updating}
           onOk={this.addOrUpdateSchedule}
           onCancel={() => this.setState({ isOpenModal: false })}
         >
@@ -535,7 +547,7 @@ class ScheduleManagement extends React.Component {
             ref={this.setRef}
           />
         </Modal>
-      </div >
+      </>
     )
   }
 }

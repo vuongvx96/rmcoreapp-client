@@ -17,6 +17,7 @@ import roleStore from './system/role'
 import groupPracticeStore from './grouppractice'
 import scheduleStore from './schedule'
 import teacherScheduleStore from './teacherSchedule'
+import practiceDiaryStore from './practiceDiary'
 
 const stores = {
   authStore,
@@ -37,7 +38,8 @@ const stores = {
   groupPracticeStore,
   roleStore,
   scheduleStore,
-  teacherScheduleStore
+  teacherScheduleStore,
+  practiceDiaryStore
 }
 
 export { stores }
