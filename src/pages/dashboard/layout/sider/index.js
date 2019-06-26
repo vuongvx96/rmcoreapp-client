@@ -34,7 +34,6 @@ class Sider extends React.Component {
         className='sider'
         theme='light'
       >
-
         <Menu
           theme='light'
           mode='inline'
