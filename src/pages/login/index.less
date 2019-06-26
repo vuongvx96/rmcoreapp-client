@@ -1,40 +1,39 @@
 .login_sub_container {
-    width: 100%; 
-    max-width: 800px; 
-    display: flex;
-    justify-content: center; 
-    flex-direction: row; 
-    flex-wrap: wrap;
-  }
-  
-  .login-form {
-    padding-top: 20px;
-  }
-  
-  .login_side {
-    width: 50%;
-    padding: 15px;
-    padding-bottom: 0px;
-  }
+  width          : 100%;
+  max-width      : 800px;
+  display        : flex;
+  justify-content: center;
+  flex-direction : row;
+  flex-wrap      : wrap;
+}
 
-  .login-form-forgot {
-    display: block;
-    margin-bottom: 10px;
-    text-decoration: none;
+.login-form {
+  padding-top: 20px;
+}
+
+.login_side {
+  width         : 50%;
+  padding       : 15px;
+  padding-bottom: 0px;
+}
+
+.login-form-forgot {
+  display        : block;
+  margin-bottom  : 10px;
+  text-decoration: none;
+}
+
+.ant-btn-default {
+  border: none !important;
+  color : #428bca !important;
+}
+
+.login-form .ant-form-item {
+  margin-bottom: 15px;
+}
+
+@media only screen and (max-width: 800px) {
+  .login_side {
+    width: 100%
   }
-  
-  .ant-btn-default {
-    border: none !important;
-    color: #428bca !important;
-  }
-  
-  .login-form .ant-form-item {
-    margin-bottom: 15px;
-  } 
-  
-  @media only screen and (max-width: 800px) {
-    .login_side {
-      width: 100%
-    }
-  }
-  
+}

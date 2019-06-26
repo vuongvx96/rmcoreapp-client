@@ -6,6 +6,12 @@ const routesNotAuthen = [
 		exact: true
 	},
 	{
+		displayName: 'Trang chủ',
+		path: '/',
+		component: 'home',
+		exact: true
+	},
+	{
 		displayName: 'Xác nhận email',
 		path: '/confirm-email/:result',
 		component: 'confirmEmail',
