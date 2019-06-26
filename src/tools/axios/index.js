@@ -4,7 +4,7 @@ const host = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : w
 
 const http = axios.create ({
   baseURL: `${host}/api`,
-  headers: { 'Content-Type': 'application/json', },
+  headers: { 'Content-Type': 'application/json' }
 })
 
 http.interceptors.request.use (

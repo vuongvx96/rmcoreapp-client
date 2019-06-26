@@ -1,1 +1,1 @@
-export * from './mobx'
+export * from './stores'

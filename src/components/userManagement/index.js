@@ -103,10 +103,18 @@ class UserManagement extends React.Component {
   async saveUser() {
     let { user } = this.state
     const result = await this.props.userStore.saveUser(user)
-    if (result.status === 200) {
-      showNotification('Đã lưu thông tin người dùng', 'success')
-      this.refetchData()
-    } else {
+    try {
+      if (result.status === 200) {
+        showNotification('Đã lưu thông tin người dùng', 'success')
+        this.refetchData()
+      } else if (result.response.status === 409) {
+        showNotification('Tên đăng nhập hoặc email đã được sử dụng', 'error')
+      } else if (result.response.status === 401) {
+        showNotification('Chỉ admin mới có thể tạo tài khoản', 'error')
+      } else {
+        showNotification('Cập nhật thông tin thất bại', 'error')
+      }
+    } catch (err) {
       showNotification('Cập nhật thông tin thất bại', 'error')
     }
   }
@@ -156,13 +164,13 @@ class UserManagement extends React.Component {
     this.setState({
       user: {
         fullName: `${teacher.lastName} ${teacher.firstName}`,
-         userName: teacher.teacherId,
-         gender: teacher.gender,
-         phoneNumber: teacher.phone,
-         email: teacher.email,
-         officerId: teacher.teacherId,
-         roles: [],
-         status: true
+        userName: teacher.teacherId,
+        gender: teacher.gender,
+        phoneNumber: teacher.phone,
+        email: teacher.email,
+        officerId: teacher.teacherId,
+        roles: [],
+        status: true
       }
     })
   }

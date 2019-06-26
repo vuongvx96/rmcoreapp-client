@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tabs, Icon, Button, Row, Col, Collapse, Select } from 'antd'
+import { Tabs, Icon, Row, Col, Collapse } from 'antd'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/icons/Logo-qlpm.png'
 import './index.less'
@@ -26,20 +26,12 @@ const genExtra = () => (
 );
 
 class Home extends React.Component {
-  // state = {
-  //   expandIconPosition: 'left',
-  // };
-
-  // onPositionChange = expandIconPosition => {
-  //   this.setState({ expandIconPosition });
-  // };
   render() {
-    // const { expandIconPosition } = this.state;
     return (
       <>
         <div className='home-menu'>
           <div className='home-menu-logo'>
-            <img src={logo} />
+            <img src={logo} alt='G8-NTU' />
             <div className='home-menu-login'>
               <Link className='ant-btn ant-btn-background-ghost' to='/login'>
                 <Icon type='login' />

@@ -11,9 +11,6 @@ const { Option } = Select
 @inject('practiceDiaryStore')
 @observer
 class PracticeDiaryForm extends React.Component {
-  constructor(props) {
-    super(props)
-  }
 
   componentDidMount() {
     this.props.practiceDiaryStore.fetchAllScheduleToday()

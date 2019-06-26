@@ -9,6 +9,21 @@ class PracticeDiaryStore {
   @observable loading = false
   @observable loadingSchedule = false
   @observable scheduleId = null
+  @observable clientIP = null
+
+  constructor(){
+    let this_1 = this
+    window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection   //compatibility for firefox and chrome
+    let pc = new RTCPeerConnection({iceServers:[]}), noop = function(){}    
+    pc.createDataChannel("")    //create a bogus data channel
+    pc.createOffer(pc.setLocalDescription.bind(pc), noop)    // create offer and set local description
+    pc.onicecandidate = function(ice){  //listen for candidate events
+        if(!ice || !ice.candidate || !ice.candidate.candidate)  return
+        let ip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1]
+        this_1.clientIP = String(ip)
+        pc.onicecandidate = noop
+    }
+  }
 
   @action fetchAll = async(startDate, endDate) => {
     this.loading = true
@@ -51,6 +66,8 @@ class PracticeDiaryStore {
       let obj = Object.assign({}, diary)
       delete obj.id
       obj.createdDate = diary.createdDate.format('YYYY-MM-DD HH:mm:ss')
+      
+      http.defaults.headers.common['X-Forwarded-For'] = this.clientIP
       const response = await http.post('/practicediary', obj)
       runInAction('entity created', () => {
         if (response.status === 201)
