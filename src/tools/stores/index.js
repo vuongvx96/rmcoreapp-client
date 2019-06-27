@@ -18,6 +18,7 @@ import groupPracticeStore from './grouppractice'
 import scheduleStore from './schedule'
 import teacherScheduleStore from './teacherSchedule'
 import practiceDiaryStore from './practiceDiary'
+import statisticsStore from './statistics'
 
 const stores = {
   authStore,
@@ -39,7 +40,8 @@ const stores = {
   roleStore,
   scheduleStore,
   teacherScheduleStore,
-  practiceDiaryStore
+  practiceDiaryStore,
+  statisticsStore
 }
 
 export { stores }

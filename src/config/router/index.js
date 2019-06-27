@@ -121,6 +121,11 @@ const listRoutesAuthen = [
 		displayName: 'Nhật ký thực hành',
 		path: '/dashboard/practice-diary',
 		component: 'practiceDiaryManagement'
+	},
+	{
+		displayName: 'Tần suất sử dụng phòng máy',
+		path: '/dashboard/frequency-of-using-room',
+		component: 'frequencyRoom'
 	}
 ]
 
