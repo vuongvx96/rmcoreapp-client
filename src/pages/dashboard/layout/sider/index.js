@@ -26,12 +26,15 @@ class Sider extends React.Component {
 
   render() {
     const { functions } = this.props.accountStore
+    const { showSideBar } = this.props
     return (
       <Layout.Sider
         collapsible
+        collapsedWidth={!showSideBar ? 0 : this.state.collapsed ? 80 : 200}
         collapsed={this.state.collapsed}
         onCollapse={this.onCollapse}
         className='sider'
+        width={showSideBar ? 200 : 0}
         theme='light'
       >
         <Menu

@@ -8,12 +8,15 @@ import { PRIVATE_KEY } from '../../../config'
 import logo from '../../../assets/icons/Logo-qlpm.png'
 import './index.less'
 
-const Header = ({ onLogout }) => {
+const Header = ({ onLogout, showSideBar, sideBarState }) => {
 	const username = localStorage.getItem('username')
 	return (
 		<Layout.Header className='header'>
 			<div className='topHeader'>
-				<img src={logo} alt='Nha Trang University' />
+				<div className='left-items'>
+					<img src={logo} alt='Nha Trang University' />
+					<Icon type={sideBarState ? 'menu-fold' : 'menu-unfold'} className='navbar-toggler-icon' onClick={showSideBar} />
+				</div>
 				<Popover
 					placement='bottomRight'
 					title={null}
@@ -28,7 +31,7 @@ const Header = ({ onLogout }) => {
 					<Avatar size={36} icon='user' />
 				</Popover>
 			</div>
-		</Layout.Header>
+		</Layout.Header >
 	)
 }
 
@@ -36,19 +39,31 @@ const Header = ({ onLogout }) => {
 class NewLayout extends React.PureComponent {
 	constructor(props) {
 		super(props)
+		this.state = {
+			showSideBar: true
+		}
+
 		jwt.verify(localStorage.getItem('access_token'), PRIVATE_KEY, (error) => {
 			if (!!error) {
 				this.props.onLogout()
 			}
 		})
+
+		this.handleToggleSideBar = this.handleToggleSideBar.bind(this)
 	}
+
+	handleToggleSideBar() {
+		let { showSideBar } = this.state
+		this.setState({ showSideBar: !showSideBar })
+	}
+
 	render() {
 		return (
 			<div className='layoutCustom'>
 				<Layout>
-					<Header onLogout={this.props.onLogout} />
+					<Header onLogout={this.props.onLogout} showSideBar={this.handleToggleSideBar} sideBarState={this.state.showSideBar} />
 					<Layout style={{ marginTop: 64 }}>
-						<Sider />
+						<Sider showSideBar={this.state.showSideBar} />
 						<Layout.Content className='content'>
 							<Scrollbars className='scrollbar' autoHide>
 								<div style={{ padding: '12px' }}>

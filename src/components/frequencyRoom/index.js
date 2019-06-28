@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { inject, observer } from 'mobx-react'
-import { Bar, Pie } from 'react-chartjs-2'
+import { Bar, Line, Pie } from 'react-chartjs-2'
 import { Select, DatePicker, Divider, Button } from 'antd'
 import locale from 'antd/lib/date-picker/locale/vi_VN'
 import moment from 'moment'
 
 moment.locale('vi')
 const { Option } = Select
+const { RangePicker, WeekPicker } = DatePicker
 
 @inject('statisticsStore')
 @observer
@@ -16,25 +17,37 @@ class FrequencyRoom extends Component {
     this.state = {
       dateValue: moment(),
       weekValue: moment().weekday(1),
+      dateRange: [moment().add(-30, 'd'), moment()],
       timeType: 1,
       isOpenDP: false,
     }
   }
 
   handleSearch = () => {
-    let { timeType, dateValue, weekValue } = this.state
-    this.props.statisticsStore.fetchFreqRoom(timeType, timeType === 1 ? dateValue : weekValue)
+    let { timeType, dateValue, weekValue, dateRange } = this.state
+    let fromDate, toDate
+    if (timeType === 1) {
+      fromDate = dateValue
+      toDate = dateValue
+    } else if (timeType === 2) {
+      fromDate = dateRange[0]
+      toDate = dateRange[1]
+    } else {
+      fromDate = weekValue
+      toDate = weekValue
+    }
+    this.props.statisticsStore.fetchFreqRoom(timeType, fromDate, toDate)
   }
 
   componentDidMount() {
     document.title = 'Lịch phòng máy | ' + this.props.route.displayName
-    let { timeType, dateValue, weekValue } = this.state
-    this.props.statisticsStore.fetchFreqRoom(timeType, timeType === 1 ? dateValue : weekValue)
+    let { timeType, dateValue } = this.state
+    this.props.statisticsStore.fetchFreqRoom(timeType, dateValue, dateValue)
   }
 
   render() {
-    const { freqRoomChartData, loading } = this.props.statisticsStore
-    const { timeType, dateValue, isOpenDP, weekValue } = this.state
+    const { freqRoomChartData, loading, islargeData } = this.props.statisticsStore
+    const { timeType, dateValue, isOpenDP, weekValue, dateRange } = this.state
     return (
       <>
         <div className='flex-container' style={{ paddingBottom: 10, width: '100%' }}>
@@ -44,7 +57,8 @@ class FrequencyRoom extends Component {
               this.setState({ timeType: value })
             }}>
               <Option value={1}>Theo năm</Option>
-              <Option value={2}>Theo tuần</Option>
+              <Option value={2}>Theo ngày</Option>
+              <Option value={3}>Theo tuần</Option>
             </Select>
             {timeType === 1
               ? <DatePicker
@@ -72,15 +86,25 @@ class FrequencyRoom extends Component {
                   this.setState({ dateValue: date })
                 }}
               />
-              : <DatePicker.WeekPicker
-                style={{ width: 125 }}
-                allowClear={false}
-                value={weekValue}
-                locale={locale}
-                onChange={(date) => {
-                  this.setState({ weekValue: date.weekday(1) })
-                }}
-              />
+              : timeType === 2
+                ? <RangePicker
+                  format='DD/MM/YYYY'
+                  value={dateRange}
+                  locale={locale}
+                  separator='-'
+                  onChange={(dates) => {
+                    this.setState({ dateRange: dates })
+                  }}
+                />
+                : <WeekPicker
+                  style={{ width: 125 }}
+                  allowClear={false}
+                  value={weekValue}
+                  locale={locale}
+                  onChange={(date) => {
+                    this.setState({ weekValue: date.weekday(1) })
+                  }}
+                />
             }
             <Button icon='search' loading={loading} onClick={this.handleSearch}>
               Xem
@@ -89,21 +113,52 @@ class FrequencyRoom extends Component {
         </div>
         <div className='chart' style={{ display: 'flex', paddingBottom: 10, width: '100%', height: 'calc(100vh - 160px)' }}>
           <div style={{ width: '70%' }}>
-            <Bar
-              data={freqRoomChartData.barChart.chartData}
-              options={{
-                title: {
-                  display: true,
-                  text: freqRoomChartData.barChart.title,
-                  fontSize: 25
-                },
-                legend: {
-                  display: false,
-                  position: 'right'
-                },
-                maintainAspectRatio: false
-              }}
-            />
+            {islargeData
+              ? <Line
+                data={freqRoomChartData.barChart.chartData}
+                options={{
+                  title: {
+                    display: true,
+                    text: freqRoomChartData.barChart.title,
+                    fontSize: 25
+                  },
+                  legend: {
+                    display: false,
+                    position: 'right'
+                  },
+                  scales: {
+                    xAxes: [{
+                      ticks: { autoSkip: true, maxTicksLimit: 25 },
+                      gridLines: {
+                        display: false
+                      }
+                    }],
+                    yAxes: [{
+
+                      gridLines: {
+                        display: false
+                      }
+                    }]
+                  },
+                  maintainAspectRatio: false
+                }}
+              />
+              : <Bar
+                data={freqRoomChartData.barChart.chartData}
+                options={{
+                  title: {
+                    display: true,
+                    text: freqRoomChartData.barChart.title,
+                    fontSize: 25
+                  },
+                  legend: {
+                    display: false,
+                    position: 'right'
+                  },
+                  maintainAspectRatio: false
+                }}
+              />
+            }
           </div>
           <Divider type='vertical' style={{ margin: '0 15px', background: 'darkgrey', height: 'unset' }} />
           <div style={{ width: '30%' }}>

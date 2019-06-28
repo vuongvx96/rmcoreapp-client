@@ -47,18 +47,22 @@ class StatisticsStore {
     }
   }
   @observable loading = false
+  @observable islargeData = false
 
-  @action fetchFreqRoom = async (timeType, date) => {
+  @action fetchFreqRoom = async (timeType, fromDate, toDate) => {
     this.loading = true
     try {
       let params = {
         timeType: timeType,
-        date: date.format('YYYY-MM-DD HH:mm:ss')
+        fromDate: fromDate.format('YYYY-MM-DD HH:mm:ss'),
+        toDate: toDate.format('YYYY-MM-DD HH:mm:ss')
       }
       const response = await http.get('/statistics/freqroom', { params })
       runInAction('fetch freq room data', () => {
         if (response.status === 200) {
           let { barTitle, barLabels, barData, pieLabels, pieData } = response.data
+          let length = barData.length
+          this.islargeData = length > 12
           let newData = {
             barChart: {
               title: barTitle,
@@ -68,7 +72,7 @@ class StatisticsStore {
                   {
                     label: 'Số tiết TH',
                     data: barData,
-                    backgroundColor: Array.from({length: barData.length}).map(x => 'rgba(255, 159, 64, 0.6)')
+                    backgroundColor: length <= 12 ? Array.from({ length: barData.length }).map(x => 'rgba(255, 159, 64, 0.6)') : ['rgba(46, 204, 113, 0.6)']
                   }
                 ]
               }
