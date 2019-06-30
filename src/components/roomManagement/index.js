@@ -24,27 +24,6 @@ class RoomManagement extends React.Component {
       }
     }
 
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('ROOM').update,
-          canRemove: this.props.permission.hasPermission('ROOM').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeRoom.bind(this)
-        }
-      },
-      { headerName: 'Mã phòng', field: 'roomId', width: 120, sortable: true },
-      { headerName: 'Sức chứa', field: 'capacity', width: 110, sortable: true },
-      { headerName: 'Vị trí', field: 'location', width: 100, sortable: true },
-      { headerName: 'IP chính', field: 'validIP', width: 120, sortable: true },
-      { headerName: 'SL máy tính', field: 'amountComp', colId: 'c1', hide: true },
-      { headerName: 'SL máy chiếu', field: 'amountProj', colId: 'c2', hide: true },
-      { headerName: 'Ghi chú', field: 'note', hide: true },
-      { headerName: 'Trang thiết bị', field: 'shortDescription', width: 200 },
-      { headerName: 'Các phần mềm đã cài đặt', field: 'installedSoftware', tooltipField: 'installedSoftware', resizable: true }
-    ]
-
     this.gridOptions = {
       rowHeight: 34,
       enableBrowserTooltips: true,
@@ -138,6 +117,26 @@ class RoomManagement extends React.Component {
   render() {
     let { roomId, capacity, location, validIP, note, installedSoftware } = this.state.room
     let entities = this.props.roomStore.listRooms
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('ROOM').update,
+          canRemove: this.props.permission.hasPermission('ROOM').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeRoom.bind(this)
+        }
+      },
+      { headerName: 'Mã phòng', field: 'roomId', width: 120, sortable: true },
+      { headerName: 'Sức chứa', field: 'capacity', width: 110, sortable: true },
+      { headerName: 'Vị trí', field: 'location', width: 100, sortable: true },
+      { headerName: 'IP chính', field: 'validIP', width: 120, sortable: true },
+      { headerName: 'SL máy tính', field: 'amountComp', colId: 'c1', hide: true },
+      { headerName: 'SL máy chiếu', field: 'amountProj', colId: 'c2', hide: true },
+      { headerName: 'Ghi chú', field: 'note', hide: true },
+      { headerName: 'Trang thiết bị', field: 'shortDescription', width: 200 },
+      { headerName: 'Các phần mềm đã cài đặt', field: 'installedSoftware', tooltipField: 'installedSoftware', resizable: true }
+    ]
     return (
       <>
         <ModalForm
@@ -163,7 +162,7 @@ class RoomManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={entities}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}

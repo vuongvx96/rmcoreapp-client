@@ -22,21 +22,6 @@ class SubjectManagement extends React.Component{
       }
     }
 
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('SUBJECT').update,
-          canRemove: this.props.permission.hasPermission('SUBJECT').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeSubject.bind(this)
-        }
-      },
-      { headerName: 'Mã môn', field: 'subjectId', sortable: true },
-      { headerName: 'Tên môn', field: 'subjectName', sortable: true, width: 500 },
-      { headerName: 'Số tín chỉ', field: 'credits', sortable: true}
-    ]
-
     this.gridOptions = {
       rowHeight: 34,
       suppressMovableColumns: false,
@@ -124,6 +109,20 @@ class SubjectManagement extends React.Component{
   render() {
     let { subjectId, subjectName, credits } = this.state.subject
     let { entities } = this.props.subjectStore
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('SUBJECT').update,
+          canRemove: this.props.permission.hasPermission('SUBJECT').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeSubject.bind(this)
+        }
+      },
+      { headerName: 'Mã môn', field: 'subjectId', sortable: true },
+      { headerName: 'Tên môn', field: 'subjectName', sortable: true, width: 500 },
+      { headerName: 'Số tín chỉ', field: 'credits', sortable: true}
+    ]
     return (
       <>
         <ModalForm
@@ -146,7 +145,7 @@ class SubjectManagement extends React.Component{
         </ModalForm>
         <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={entities}
             animateRows={true}
             onGridReady={this.onGridReady}

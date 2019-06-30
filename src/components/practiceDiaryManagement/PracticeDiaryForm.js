@@ -67,6 +67,7 @@ class PracticeDiaryForm extends React.Component {
                   <li>{`GV: ${currentSchedule.groupPractice.teacher.lastName} ${currentSchedule.groupPractice.teacher.firstName}`}</li>
                   <li>{`Sĩ số: ${currentSchedule.groupPractice.classSize}`}</li>
                   <li>{`Phòng: ${currentSchedule.roomId}`}</li>
+                  <li>{`Buổi: ${dayParting(currentSchedule.endTime)}`}</li>
                   <li>{`Học kỳ: ${currentSchedule.groupPractice.semester}`}</li>
                   <li>{`Năm học: ${currentSchedule.groupPractice.schoolYear} - ${(Number(currentSchedule.groupPractice.schoolYear) + 1)}`}</li>
                 </ul>)
@@ -101,6 +102,15 @@ class PracticeDiaryForm extends React.Component {
       </Form>
     )
   }
+}
+
+function dayParting(endTime) {
+  if (endTime <= 5)
+    return 'Sáng'
+  else if (endTime <= 10)
+    return 'Chiều'
+  else
+    return 'Tối'
 }
 
 export default Form.create({ name: 'practiceDiary' })(PracticeDiaryForm)

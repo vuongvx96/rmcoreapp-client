@@ -19,7 +19,7 @@ const EnableButton = (params) => {
     fontSize: 10,
     color: params.value ? '#52c41a' : '#f5222d'
   }
-  return <Button icon={params.value ? 'check' : 'lock'} style={style} onClick={() => params.onClick(params.data.id)}>
+  return <Button disabled={!params.canUse} icon={params.value ? 'check' : 'lock'} style={style} onClick={() => params.onClick(params.data.id)}>
     {params.value ? 'Hoạt động' : 'Khóa'}
   </Button>
 }
@@ -49,36 +49,7 @@ class UserManagement extends React.Component {
       suppressMovableColumns: false,
       localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('USER').update,
-          canRemove: this.props.permission.hasPermission('USER').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeUser.bind(this)
-        }
-      },
-      { headerName: 'Tên đầy đủ', field: 'fullName', width: 120, sortable: true },
-      { headerName: 'Tên đăng nhập', field: 'userName', width: 120, sortable: true },
-      { headerName: 'Giới tính', field: 'gender', width: 95, sortable: true, valueFormatter: (params) => getGender(params.value) },
-      { headerName: 'Điện thoại', field: 'phoneNumber', width: 105, sortable: true },
-      { headerName: 'Email', field: 'email', width: 140, sortable: true },
-      { headerName: 'Mã cán bộ', field: 'officerId', width: 110, sortable: true },
-      { headerName: 'Roles', field: 'roles', width: 150, sortable: true, valueFormatter: (params) => params.value.join(', ') },
-      { headerName: 'Ngày tạo', field: 'registrationDate', width: 100, sortable: true, valueFormatter: (params) => dateFormatter(params.value) },
-      { headerName: 'Lần đăng nhập cuối', field: 'lastLoginTime', width: 155, sortable: true, valueFormatter: (params) => dateTimeFormatter(params.value) },
-      {
-        cellRenderer: 'enableButton',
-        cellRendererParams: {
-          onClick: this.changeStatus.bind(this)
-        },
-        headerName: 'Trạng thái',
-        field: 'status',
-        width: 115,
-        sortable: true
-      }
-    ]
+    
     this.getInfo = this.getInfo.bind(this)
     this.saveUser = this.saveUser.bind(this)
     this.removeUser = this.removeUser.bind(this)
@@ -195,6 +166,37 @@ class UserManagement extends React.Component {
   render() {
     let { fullName, userName, gender, phoneNumber, email, officerId, roles, status } = this.state.user
     let { listUsers, rowCount, pageSize } = this.props.userStore
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('USER').update,
+          canRemove: this.props.permission.hasPermission('USER').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeUser.bind(this)
+        }
+      },
+      { headerName: 'Tên đầy đủ', field: 'fullName', width: 120, sortable: true },
+      { headerName: 'Tên đăng nhập', field: 'userName', width: 120, sortable: true },
+      { headerName: 'Giới tính', field: 'gender', width: 95, sortable: true, valueFormatter: (params) => getGender(params.value) },
+      { headerName: 'Điện thoại', field: 'phoneNumber', width: 105, sortable: true },
+      { headerName: 'Email', field: 'email', width: 140, sortable: true },
+      { headerName: 'Mã cán bộ', field: 'officerId', width: 110, sortable: true },
+      { headerName: 'Roles', field: 'roles', width: 150, sortable: true, valueFormatter: (params) => params.value.join(', ') },
+      { headerName: 'Ngày tạo', field: 'registrationDate', width: 100, sortable: true, valueFormatter: (params) => dateFormatter(params.value) },
+      { headerName: 'Lần đăng nhập cuối', field: 'lastLoginTime', width: 155, sortable: true, valueFormatter: (params) => dateTimeFormatter(params.value) },
+      {
+        cellRenderer: 'enableButton',
+        cellRendererParams: {
+          canUse: this.props.permission.hasPermission('USER').update,
+          onClick: this.changeStatus.bind(this)
+        },
+        headerName: 'Trạng thái',
+        field: 'status',
+        width: 115,
+        sortable: true
+      }
+    ]
     return (
       <>
         <ModalForm
@@ -234,7 +236,7 @@ class UserManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 175px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={listUsers}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}

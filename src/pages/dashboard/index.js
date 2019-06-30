@@ -7,8 +7,11 @@ import { map } from 'lodash'
 import { LoadingOnSite, WrapLazy } from '../../components/util'
 import { listRoutesAuthen, routesNotAuthen } from '../../config'
 import NewLayout from './layout'
+import 'ag-grid-enterprise'
+import 'ag-grid-enterprise/chartsModule'
 import 'ag-grid-community/dist/styles/ag-grid.css'
 import 'ag-grid-community/dist/styles/ag-theme-balham.css'
+
 import './index.less'
 
 @inject('authStore', 'accountStore')

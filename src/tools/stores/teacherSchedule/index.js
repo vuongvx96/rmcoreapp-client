@@ -10,6 +10,8 @@ class TeacherScheduleStore {
   @observable room = null
   @observable roomId = null
   @observable checking = false
+  @observable year = new Date().getFullYear()
+  @observable semester = 1
 
   @action fetchAllRoom = async () => {
 		try {
@@ -23,11 +25,13 @@ class TeacherScheduleStore {
 		}
   }
   
-  @action fetchAllGroup = async (year) => {
+  @action fetchAllGroup = async() => {
     try {
       let params = {
-        year: year
+        semester: this.semester,
+        year: this.year
       }
+      
       const response = await http.get('/courses/byteacher', { params })
       if (response.status === 200) {
         this.groups = new Map(response.data.map(i => [i.groupId, i]))
@@ -74,6 +78,14 @@ class TeacherScheduleStore {
     } catch (err) {
       this.room = null
     }
+  }
+
+  @action changeYear = (year) => {
+    this.year = year
+  }
+
+  @action changeSemester = (semester) => {
+    this.semester = semester
   }
 
   @computed get listRoomIds() {

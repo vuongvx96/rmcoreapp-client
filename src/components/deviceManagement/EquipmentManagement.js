@@ -28,27 +28,6 @@ class EquipmentManagement extends React.Component {
       keyword: null
     }
 
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.accountStore.hasPermission('DEVICE').update,
-          canRemove: this.props.accountStore.hasPermission('DEVICE').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeEquipment.bind(this)
-        }
-      },
-      { headerName: 'Mã thiết bị', field: 'equipmentId', sortable: true, width: 110 },
-      { headerName: 'Tên thiết bị', field: 'equipmentName', sortable: true, width: 220 },
-      { headerName: 'Mã hãng sản xuất', field: 'manufacturerId', hide: true },
-      { headerName: 'Hãng', field: 'manufacturer.manufacturerName', sortable: true, width: 100 },
-      { headerName: 'Phòng', field: 'roomId', sortable: true, width: 80 },
-      { headerName: 'Serial', field: 'serial', sortable: true, width: 100 },
-      { headerName: 'Ngày tạo', field: 'createdDate', sortable: true, width: 120, valueFormatter: (params) => dateFormatter(params.value) },
-      { headerName: 'Ngày cập nhật', field: 'modifiedDate', sortable: true, width: 120, valueFormatter: (params) => dateFormatter(params.value) },
-      { headerName: 'Trạng thái', field: 'status', sortable: true, width: 80, cellStyle: statusStyle, cellRendererFramework: (params) => getStatus(params.value) }
-    ]
-
     this.gridOptions = {
       rowHeight: 34,
       suppressMovableColumns: false,
@@ -142,6 +121,26 @@ class EquipmentManagement extends React.Component {
     const { equipments, total, activeCount, loading } = this.props.equipmentStore
     let { equipmentId, equipmentName, manufacturerId, roomId, serial, status } = this.state.equipment
     const { listRoomIds } = this.props.roomStore
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.accountStore.hasPermission('DEVICE').update,
+          canRemove: this.props.accountStore.hasPermission('DEVICE').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeEquipment.bind(this)
+        }
+      },
+      { headerName: 'Mã thiết bị', field: 'equipmentId', sortable: true, width: 110 },
+      { headerName: 'Tên thiết bị', field: 'equipmentName', sortable: true, width: 220 },
+      { headerName: 'Mã hãng sản xuất', field: 'manufacturerId', hide: true },
+      { headerName: 'Hãng', field: 'manufacturer.manufacturerName', sortable: true, width: 100 },
+      { headerName: 'Phòng', field: 'roomId', sortable: true, width: 80 },
+      { headerName: 'Serial', field: 'serial', sortable: true, width: 100 },
+      { headerName: 'Ngày tạo', field: 'createdDate', sortable: true, width: 120, valueFormatter: (params) => dateFormatter(params.value) },
+      { headerName: 'Ngày cập nhật', field: 'modifiedDate', sortable: true, width: 120, valueFormatter: (params) => dateFormatter(params.value) },
+      { headerName: 'Trạng thái', field: 'status', sortable: true, width: 80, cellStyle: statusStyle, cellRendererFramework: (params) => getStatus(params.value) }
+    ]
     return (
       <Spin spinning={loading} tip='Đang load dữ liệu...'>
         <ModalForm
@@ -191,7 +190,7 @@ class EquipmentManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 220px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={equipments}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}

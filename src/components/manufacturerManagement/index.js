@@ -20,20 +20,7 @@ class ManufacturerManagement extends React.Component {
         manufacturerContact: null
       }
     }
-    this.columnDefs= [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('MANUFACTURER').update,
-          canRemove: this.props.permission.hasPermission('MANUFACTURER').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeManufacturer.bind(this)
-        }
-      },
-      { headerName: 'Mã hãng', field: 'manufacturerId', sortable: true },
-      { headerName: 'Tên hãng', field: 'manufacturerName', sortable: true },
-      { headerName: 'Thông tin liên hệ', field: 'manufacturerContact' }
-    ]
+
     this.gridOptions = {
       rowHeight: 34,
       suppressMovableColumns: false,
@@ -121,6 +108,20 @@ class ManufacturerManagement extends React.Component {
   render() {
     let { manufacturerId, manufacturerName, manufacturerContact } = this.state.manufacturer
     let { entities } = this.props.manufacturerStore
+    let columnDefs= [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('MANUFACTURER').update,
+          canRemove: this.props.permission.hasPermission('MANUFACTURER').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeManufacturer.bind(this)
+        }
+      },
+      { headerName: 'Mã hãng', field: 'manufacturerId', sortable: true },
+      { headerName: 'Tên hãng', field: 'manufacturerName', sortable: true },
+      { headerName: 'Thông tin liên hệ', field: 'manufacturerContact' }
+    ]
     return (
       <>
         <ModalForm
@@ -143,7 +144,7 @@ class ManufacturerManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={entities}
             animateRows={true}
             onGridReady={this.onGridReady}

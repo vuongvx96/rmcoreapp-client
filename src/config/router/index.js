@@ -27,7 +27,7 @@ const routesNotAuthen = [
 		displayName: 'Đặt lại mật khẩu',
 		path: '/reset-password/:resettoken',
 		component: 'resetPassword',
-		exact: false
+		exact: true
 	}
 ]
 
@@ -126,6 +126,11 @@ const listRoutesAuthen = [
 		displayName: 'Tần suất sử dụng phòng máy',
 		path: '/dashboard/frequency-of-using-room',
 		component: 'frequencyRoom'
+	},
+	{
+		displayName: 'Thống kê thực hành',
+		path: '/dashboard/practice-statistics',
+		component: 'practiceStatistics'
 	}
 ]
 

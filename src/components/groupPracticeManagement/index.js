@@ -33,25 +33,6 @@ class GroupPracticeManagement extends React.Component {
       year: getYear()
     }
 
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('COURSE').update,
-          canRemove: this.props.permission.hasPermission('COURSE').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeGroupPractice.bind(this)
-        }
-      },
-      { headerName: 'Nhóm TH', field: 'groupName', width: 120, sortable: true },
-      { headerName: 'Môn học', field: 'subject.subjectName', sortable: true },
-      { headerName: 'Lớp', field: 'class.classId', width: 100, sortable: true },
-      { headerName: 'Giảng viên', field: 'teacher.firstName', sortable: true, valueFormatter: (params) => params.data.teacher.lastName + ' ' + params.value },
-      { headerName: 'Sĩ số', field: 'classSize', width: 70, sortable: true },
-      { headerName: 'Học kỳ', field: 'semester', width: 85, sortable: true },
-      { headerName: 'Năm học', field: 'schoolYear', width: 95, sortable: true, valueFormatter: (params) => `${params.value} - ${(Number(params.value) + 1)}` }
-    ]
-
     this.gridOptions = {
       rowHeight: 34,
       suppressMovableColumns: false,
@@ -154,6 +135,24 @@ class GroupPracticeManagement extends React.Component {
   render() {
     let { groupName, teacherId, subjectId, classId, classSize, semester, schoolYear } = this.state.groupPractice
     let { getGroupPractices } = this.props.groupPracticeStore
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('COURSE').update,
+          canRemove: this.props.permission.hasPermission('COURSE').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeGroupPractice.bind(this)
+        }
+      },
+      { headerName: 'Nhóm TH', field: 'groupName', width: 120, sortable: true },
+      { headerName: 'Môn học', field: 'subject.subjectName', sortable: true },
+      { headerName: 'Lớp', field: 'class.classId', width: 100, sortable: true },
+      { headerName: 'Giảng viên', field: 'teacher.firstName', sortable: true, valueFormatter: (params) => params.data.teacher.lastName + ' ' + params.value },
+      { headerName: 'Sĩ số', field: 'classSize', width: 70, sortable: true },
+      { headerName: 'Học kỳ', field: 'semester', width: 85, sortable: true },
+      { headerName: 'Năm học', field: 'schoolYear', width: 95, sortable: true, valueFormatter: (params) => `${params.value} - ${(Number(params.value) + 1)}` }
+    ]
     return (
       <div className='group-practice'>
         <ModalForm
@@ -211,7 +210,7 @@ class GroupPracticeManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={getGroupPractices}
             animateRows={true}
             onGridReady={this.onGridReady}

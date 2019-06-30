@@ -42,110 +42,6 @@ class ScheduleManagement extends React.Component {
       isOpenModal: false
     }
 
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeSchedule.bind(this)
-        }
-      },
-      {
-        headerName: 'Ngày bắt đầu',
-        field: 'schedule.startDate',
-        width: 120,
-        sortable: true,
-        valueFormatter: (params) => dateFormatter(params.value)
-      },
-      {
-        headerName: 'Thời gian',
-        field: 'dayparting',
-        sortable: true,
-        width: 95,
-        valueFormatter: (params) => params.value === 1 ? 'Sáng' : params.value === 2 ? 'Chiều' : 'Tối'
-      },
-      {
-        headerName: 'Phòng máy',
-        field: 'schedule.roomId',
-        width: 110,
-        sortable: true
-      },
-      {
-        headerName: 'Môn học',
-        field: 'schedule.groupPractice.subject.subjectName',
-        width: 170,
-        tooltipField: 'schedule.groupPractice.subject.subjectName',
-        sortable: true
-      },
-      {
-        headerName: 'Giảng viên',
-        field: 'schedule.groupPractice.teacher.firstName',
-        width: 130,
-        colId: 'GV',
-        tooltipField: 'schedule.groupPractice.teacherId',
-        sortable: true,
-        valueFormatter: (params) => params.data.schedule.groupPractice.teacher.lastName + ' ' + params.value
-      },
-      {
-        headerName: 'Loại lặp',
-        field: 'schedule.repeatType',
-        width: 90,
-        sortable: true,
-        valueFormatter: (params) => params.value === 1 ? 'Theo tuần' : params.value === 2 ? 'Theo tháng' : 'Theo ngày'
-      },
-      {
-        headerName: 'Số lần lặp',
-        field: 'count',
-        width: 100,
-        sortable: true
-      },
-      {
-        headerName: 'Chi tiết',
-        field: 'description',
-        colId: 'CT',
-        hide: true,
-        tooltipField: 'description',
-        sortable: true
-      },
-      {
-        headerName: 'Xác nhận',
-        field: 'schedule.confirmed',
-        width: 120,
-        sortable: true,
-        cellRendererFramework: (params) => params.value
-          ? <Tag color='#108EE9'>Đã xác nhận</Tag>
-          : <Tag color='#f50'>Chưa xác nhận</Tag>
-      },
-      {
-        headerName: 'Ngày đăng ký',
-        field: 'schedule.createdDate',
-        width: 120,
-        colId: 'D1',
-        sortable: true,
-        hide: true,
-        valueFormatter: (params) => dateFormatter(params.value)
-      },
-      {
-        headerName: 'Ngày cập nhật',
-        field: 'schedule.modifiedDate',
-        width: 120,
-        colId: 'D2',
-        sortable: true,
-        hide: true,
-        valueFormatter: (params) => dateFormatter(params.value)
-      },
-      {
-        headerName: 'User cập nhật',
-        field: 'updatedBy',
-        width: 130,
-        colId: 'D3',
-        sortable: true,
-        hide: true
-      }
-    ]
-
     this.gridOptions = {
       rowHeight: 34,
       enableBrowserTooltips: true,
@@ -245,7 +141,7 @@ class ScheduleManagement extends React.Component {
         schedule.endTime = 10
       } else {
         schedule.startTime = 11
-        schedule.endTime = 13
+        schedule.endTime = 15
       }
 
       const result = await this.props.teacherScheduleStore.checkValid(schedule)
@@ -294,7 +190,7 @@ class ScheduleManagement extends React.Component {
         schedule.endTime = 10
       } else {
         schedule.startTime = 11
-        schedule.endTime = 13
+        schedule.endTime = 15
       }
 
       let isCreate = _.isNil(schedule.scheduleId)
@@ -398,6 +294,109 @@ class ScheduleManagement extends React.Component {
     const { timeType, isOpen1, startValue, isOpen2, endValue, isOpenModal } = this.state
     const { getScheduleByUsersJS, loading, updating } = this.props.scheduleStore
     let { groupId, roomId, numberOfGroups, startDate, dayparting, repeatType, count, requirement, note } = this.state.schedule
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('SCHEDULE_MANAGEMENT').update,
+          canRemove: this.props.permission.hasPermission('SCHEDULE_MANAGEMENT').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeSchedule.bind(this)
+        }
+      },
+      {
+        headerName: 'Ngày bắt đầu',
+        field: 'schedule.startDate',
+        width: 120,
+        sortable: true,
+        valueFormatter: (params) => dateFormatter(params.value)
+      },
+      {
+        headerName: 'Thời gian',
+        field: 'dayparting',
+        sortable: true,
+        width: 95,
+        valueFormatter: (params) => params.value === 1 ? 'Sáng' : params.value === 2 ? 'Chiều' : 'Tối'
+      },
+      {
+        headerName: 'Phòng máy',
+        field: 'schedule.roomId',
+        width: 110,
+        sortable: true
+      },
+      {
+        headerName: 'Môn học',
+        field: 'schedule.groupPractice.subject.subjectName',
+        width: 170,
+        tooltipField: 'schedule.groupPractice.subject.subjectName',
+        sortable: true
+      },
+      {
+        headerName: 'Giảng viên',
+        field: 'schedule.groupPractice.teacher.firstName',
+        width: 130,
+        colId: 'GV',
+        tooltipField: 'schedule.groupPractice.teacherId',
+        sortable: true,
+        valueFormatter: (params) => params.data.schedule.groupPractice.teacher.lastName + ' ' + params.value
+      },
+      {
+        headerName: 'Loại lặp',
+        field: 'schedule.repeatType',
+        width: 90,
+        sortable: true,
+        valueFormatter: (params) => params.value === 1 ? 'Theo tuần' : params.value === 2 ? 'Theo tháng' : 'Theo ngày'
+      },
+      {
+        headerName: 'Số lần lặp',
+        field: 'count',
+        width: 100,
+        sortable: true
+      },
+      {
+        headerName: 'Chi tiết',
+        field: 'description',
+        colId: 'CT',
+        hide: true,
+        tooltipField: 'description',
+        sortable: true
+      },
+      {
+        headerName: 'Xác nhận',
+        field: 'schedule.confirmed',
+        width: 120,
+        sortable: true,
+        cellRendererFramework: (params) => params.value
+          ? <Tag color='#108EE9'>Đã xác nhận</Tag>
+          : <Tag color='#f50'>Chưa xác nhận</Tag>
+      },
+      {
+        headerName: 'Ngày đăng ký',
+        field: 'schedule.createdDate',
+        width: 120,
+        colId: 'D1',
+        sortable: true,
+        hide: true,
+        valueFormatter: (params) => dateFormatter(params.value)
+      },
+      {
+        headerName: 'Ngày cập nhật',
+        field: 'schedule.modifiedDate',
+        width: 120,
+        colId: 'D2',
+        sortable: true,
+        hide: true,
+        valueFormatter: (params) => dateFormatter(params.value)
+      },
+      {
+        headerName: 'User cập nhật',
+        field: 'updatedBy',
+        width: 130,
+        colId: 'D3',
+        sortable: true,
+        hide: true
+      }
+    ]
     return (
       <>
         <Spin spinning={loading}>
@@ -495,14 +494,18 @@ class ScheduleManagement extends React.Component {
               </Button>
             </div>
             <div className='right-items'>
-              <Button type='primary' onClick={this.openCreateForm}>
+              <Button
+                disabled={!this.props.permission.hasPermission('SCHEDULE_MANAGEMENT').create}
+                type='primary'
+                onClick={this.openCreateForm}
+              >
                 Đăng ký mới
               </Button>
             </div>
           </div>
           <div style={{ height: 'calc(100vh - 160px)' }} className='ag-theme-balham'>
             <AgGridReact
-              columnDefs={this.columnDefs}
+              columnDefs={columnDefs}
               rowData={getScheduleByUsersJS}
               gridOptions={this.gridOptions}
               onGridReady={this.onGridReady}

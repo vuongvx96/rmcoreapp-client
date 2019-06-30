@@ -34,12 +34,180 @@ class PracticeDiary extends React.Component {
       endValue: moment(),
       isOpenModal: false
     }
-    this.columnDefs = [
+
+    this.gridOptions = {
+      rowHeight: 34,
+      enableBrowserTooltips: true,
+      suppressMovableColumns: false,
+      localeText: {
+        noRowsToShow: 'Không có dữ liệu'
+      }
+    }
+
+    this.getInfo = this.getInfo.bind(this)
+    this.setRef = this.setRef.bind(this)
+    this.openCreateForm = this.openCreateForm.bind(this)
+  }
+
+  onGridReady = params => {
+    this.gridApi = params.api
+    this.gridColumnApi = params.columnApi
+  }
+
+  onChangeTimeType = value => {
+    this.setState({ timeType: value })
+    let { startValue, endValue } = this.state
+    if (value === 2) {
+      startValue = moment(startValue).startOf('month')
+      endValue = moment(endValue).endOf('month')
+      this.setState({ startValue, endValue })
+    } else if (value === 3) {
+      startValue.set('month', 0)
+      startValue = moment(startValue).startOf('month')
+      endValue.set('month', 11)
+      endValue = moment(endValue).endOf('month')
+      this.setState({ startValue, endValue })
+    }
+  }
+
+  disabledStartDate = startValue => {
+    const { endValue } = this.state
+    if (!startValue || !endValue) {
+      return false
+    }
+    return startValue.valueOf() > endValue.valueOf()
+  }
+
+  disabledEndDate = endValue => {
+    const { startValue } = this.state
+    if (!endValue || !startValue) {
+      return false
+    }
+    return endValue.valueOf() <= startValue.valueOf()
+  }
+
+  openEditForm(data) {
+    let diary = {
+      id: data.id,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      scheduleId: data.schedule.scheduleId,
+      note: data.note,
+      createdDate: moment(data.createdDate)
+    }
+    if (this.formRef.current === undefined) {
+      this.formRef.resetFields()
+    }
+    this.setState({ practiceDiary: diary, isCreating: false })
+    this.props.practiceDiaryStore.changeSchedule(diary.scheduleId)
+    this.setState({ isOpenModal: true })
+  }
+
+  openCreateForm() {
+    let diary = {
+      id: null,
+      startTime: 1,
+      endTime: 2,
+      scheduleId: null,
+      note: null,
+      createdDate: moment()
+    }
+
+    if (this.formRef.current === undefined) {
+      this.formRef.resetFields()
+    }
+
+    this.setState({ practiceDiary: diary, isCreating: true })
+    this.props.practiceDiaryStore.changeSchedule(diary.scheduleId)
+    this.setState({ isOpenModal: true })
+  }
+
+  addOrUpdateDiary = async () => {
+    let isValid = false
+    this.formRef.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        isValid = true
+      }
+    })
+
+    if (isValid) {
+      let { practiceDiary, isCreating } = this.state
+      let result
+      if (isCreating)
+        result = await this.props.practiceDiaryStore.createDiary(practiceDiary)
+      else
+      result = await this.props.practiceDiaryStore.updateDiary(practiceDiary)
+      if (isCreating) {
+        try {
+          if (result.status === 201) {
+            toast.success('Thêm nhật ký thành công - vui lòng check mail của bạn')
+            this.gridApi.setRowData(this.props.practiceDiaryStore.practiceDiariesJS)
+            this.setState({ isOpenModal: false })
+          }
+          else if (result.response.status) {
+            toast.warn(result.response.data.message)
+          }
+        } catch (err) {
+          toast.warn('Thêm nhật ký thất bại')
+        }
+      } else {
+        try {
+          if (result.status === 200) {
+            toast.success('Cập nhật thông tin thành công')
+            this.gridApi.setRowData(this.props.practiceDiaryStore.practiceDiariesJS)
+            this.setState({ isOpenModal: false })
+          } else if (result.response.status){
+            toast.warn(result.response.data.message)
+          }
+        } catch (err) {
+          toast.warn('Cập nhật thông tin thất bại')
+        }
+      }
+    }
+  }
+
+  removeDiary(data) {
+    showConfirm(
+      'Bạn có muốn xóa nhật ký thực hành không?',
+      async () => {
+        const result = await this.props.practiceDiaryStore.deleteDiary(data.id)
+        if (result.status === 200) {
+          toast.success('Xóa nhật ký thực hành thành công')
+          this.gridApi.setRowData(this.props.practiceDiaryStore.practiceDiariesJS)
+        } else {
+          toast.warn('Xóa nhật ký thực hành thất bại')
+        }
+      }
+    )
+  }
+
+  getInfo(field, value) {
+    this.setState((prevState) => {
+      prevState.practiceDiary[field] = value
+      return prevState
+    })
+  }
+
+  setRef(ref) {
+    this.formRef = ref
+  }
+
+  componentDidMount() {
+    document.title = 'Lịch phòng máy | ' + this.props.route.displayName
+    let { startValue, endValue } = this.state
+    this.props.practiceDiaryStore.fetchAll(startValue, endValue)
+  }
+
+  render() {
+    const { timeType, isOpen1, startValue, isOpen2, endValue, isOpenModal, isCreating } = this.state
+    let { practiceDiariesJS, loading } = this.props.practiceDiaryStore
+    let { startTime, endTime, scheduleId, note } = this.state.practiceDiary
+    let columnDefs = [
       {
         cellRenderer: 'editButton',
         cellRendererParams: {
-          canEdit: true,
-          canRemove: true,
+          canEdit: this.props.permission.hasPermission('PRACTICE_DIARY').update,
+          canRemove: this.props.permission.hasPermission('PRACTICE_DIARY').delete,
           onEdit: this.openEditForm.bind(this),
           onRemove: this.removeDiary.bind(this)
         }
@@ -104,173 +272,6 @@ class PracticeDiary extends React.Component {
         sortable: true
       }
     ]
-
-    this.gridOptions = {
-      rowHeight: 34,
-      enableBrowserTooltips: true,
-      suppressMovableColumns: false,
-      localeText: {
-        noRowsToShow: 'Không có dữ liệu'
-      }
-    }
-
-    this.getInfo = this.getInfo.bind(this)
-    this.setRef = this.setRef.bind(this)
-    this.openCreateForm = this.openCreateForm.bind(this)
-  }
-
-  onGridReady = params => {
-    this.gridApi = params.api
-    this.gridColumnApi = params.columnApi
-  }
-
-  onChangeTimeType = value => {
-    this.setState({ timeType: value })
-    let { startValue, endValue } = this.state
-    if (value === 2) {
-      startValue = moment(startValue).startOf('month')
-      endValue = moment(endValue).endOf('month')
-      this.setState({ startValue, endValue })
-    } else if (value === 3) {
-      startValue.set('month', 0)
-      startValue = moment(startValue).startOf('month')
-      endValue.set('month', 11)
-      endValue = moment(endValue).endOf('month')
-      this.setState({ startValue, endValue })
-    }
-  }
-
-  disabledStartDate = startValue => {
-    const { endValue } = this.state
-    if (!startValue || !endValue) {
-      return false
-    }
-    return startValue.valueOf() > endValue.valueOf()
-  }
-
-  disabledEndDate = endValue => {
-    const { startValue } = this.state
-    if (!endValue || !startValue) {
-      return false
-    }
-    return endValue.valueOf() <= startValue.valueOf()
-  }
-
-  openEditForm(data) {
-    let diary = {
-      id: data.id,
-      startTime: data.startTime,
-      endTime: data.endTime,
-      scheduleId: data.schedule.scheduleId,
-      note: data.note,
-      createdDate: moment(data.createdDate)
-    }
-    this.setState({ practiceDiary: diary, isCreating: false })
-    this.props.practiceDiaryStore.changeSchedule(diary.scheduleId)
-    this.setState({ isOpenModal: true })
-  }
-
-  openCreateForm() {
-    let diary = {
-      id: null,
-      startTime: 1,
-      endTime: 2,
-      scheduleId: null,
-      note: null,
-      createdDate: moment()
-    }
-
-    if (this.formRef.current === undefined) {
-      this.formRef.resetFields()
-    }
-
-    this.setState({ practiceDiary: diary, isCreating: true })
-    this.props.practiceDiaryStore.changeSchedule(diary.scheduleId)
-    this.setState({ isOpenModal: true })
-  }
-
-  addOrUpdateDiary = async () => {
-    let isValid = false
-    this.formRef.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        isValid = true
-      }
-    })
-
-    if (isValid) {
-      let { practiceDiary, isCreating } = this.state
-      let result
-      if (isCreating)
-        result = await this.props.practiceDiaryStore.createDiary(practiceDiary)
-      else
-      result = await this.props.practiceDiaryStore.updateDiary(practiceDiary)
-      if (isCreating) {
-        try {
-          if (result.status === 201) {
-            toast.success('Thêm nhật ký thành công - vui lòng check mail của bạn')
-            this.gridApi.setRowData(this.props.practiceDiaryStore.practiceDiariesJS)
-            this.setState({ isOpenModal: false })
-          }
-          else if (result.response.status === 403) {
-            toast.warn('Thiết bị đăng nhập không hợp lệ')
-          } else if (result.response.status === 409) {
-            toast.warn('Không thể tạo nhiều hơn 1 nhật ký/1 buổi thực hành')
-          }
-        } catch (err) {
-          toast.warn('Thêm nhật ký thất bại')
-        }
-      } else {
-        try {
-          if (result.status === 200) {
-            toast.success('Cập nhật thông tin thành công')
-            this.gridApi.setRowData(this.props.practiceDiaryStore.practiceDiariesJS)
-            this.setState({ isOpenModal: false })
-          } else {
-            toast.warn('Cập nhật thông tin thất bại')
-          }
-        } catch (err) {
-          toast.warn('Cập nhật thông tin thất bại')
-        }
-      }
-    }
-  }
-
-  removeDiary(data) {
-    showConfirm(
-      'Bạn có muốn xóa nhật ký thực hành không?',
-      async () => {
-        const result = await this.props.practiceDiaryStore.deleteDiary(data.id)
-        if (result.status === 200) {
-          toast.success('Xóa nhật ký thực hành thành công')
-          this.gridApi.setRowData(this.props.practiceDiaryStore.practiceDiariesJS)
-        } else {
-          toast.warn('Xóa nhật ký thực hành thất bại')
-        }
-      }
-    )
-  }
-
-  getInfo(field, value) {
-    this.setState((prevState) => {
-      prevState.practiceDiary[field] = value
-      return prevState
-    })
-  }
-
-  setRef(ref) {
-    this.formRef = ref
-  }
-
-  componentDidMount() {
-    document.title = 'Lịch phòng máy | ' + this.props.route.displayName
-    let { startValue, endValue } = this.state
-    this.props.practiceDiaryStore.fetchAll(startValue, endValue)
-  }
-
-  render() {
-    const { timeType, isOpen1, startValue, isOpen2, endValue, isOpenModal, isCreating } = this.state
-    let { practiceDiariesJS, loading } = this.props.practiceDiaryStore
-    let { startTime, endTime, scheduleId, note } = this.state.practiceDiary
     return (
       <Spin spinning={loading}>
         <div className='flex-container' style={{ paddingBottom: 10, width: '100%' }}>
@@ -367,14 +368,17 @@ class PracticeDiary extends React.Component {
             </Button>
           </div>
           <div className='right-items'>
-            <Button onClick={this.openCreateForm}>
+            <Button
+              disable={!this.props.permission.hasPermission('PRACTICE_DIARY').create}
+              onClick={this.openCreateForm}
+            >
               Tạo nhật ký
             </Button>
           </div>
         </div>
         <div style={{ height: 'calc(100vh - 160px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={practiceDiariesJS}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}

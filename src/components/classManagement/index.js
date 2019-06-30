@@ -20,21 +20,6 @@ class ClassManagement extends React.Component {
       }
     }
 
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('CLASS').update,
-          canRemove: this.props.permission.hasPermission('CLASS').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeClass.bind(this)
-        }
-      },
-      { headerName: 'Mã lớp', field: 'classId', sortable: true },
-      { headerName: 'Mã chuyên ngành', field: 'majorId', hide: true },
-      { headerName: 'Chuyên ngành', field: 'major.majorName', sortable: true },
-    ]
-
     this.gridOptions = {
       rowHeight: 34,
       suppressMovableColumns: false,
@@ -130,6 +115,20 @@ class ClassManagement extends React.Component {
   render() {
     let { classId, majorId } = this.state.Class
     let { entities } = this.props.classStore
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('CLASS').update,
+          canRemove: this.props.permission.hasPermission('CLASS').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeClass.bind(this)
+        }
+      },
+      { headerName: 'Mã lớp', field: 'classId', sortable: true },
+      { headerName: 'Mã chuyên ngành', field: 'majorId', hide: true },
+      { headerName: 'Chuyên ngành', field: 'major.majorName', sortable: true },
+    ]
     return (
       <>
         <ModalForm
@@ -151,7 +150,7 @@ class ClassManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={entities}
             animateRows={true}
             onGridReady={this.onGridReady}

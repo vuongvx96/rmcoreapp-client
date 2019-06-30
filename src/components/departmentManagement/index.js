@@ -20,20 +20,6 @@ class DepartmentManagement extends React.Component {
       }
     }
 
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('DEPARTMENT').update,
-          canRemove: this.props.permission.hasPermission('DEPARTMENT').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeDepartment.bind(this)
-        }
-      },
-      { headerName: 'Mã khoa', field: 'departmentId', sortable: true },
-      { headerName: 'Tên khoa', field: 'departmentName', sortable: true, width: 500 }
-    ]
-
     this.gridOptions = {
       rowHeight: 34,
       suppressMovableColumns: false,
@@ -121,6 +107,19 @@ class DepartmentManagement extends React.Component {
   render() {
     let { departmentId, departmentName } = this.state.department
     let { entities } = this.props.departmentStore
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('DEPARTMENT').update,
+          canRemove: this.props.permission.hasPermission('DEPARTMENT').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeDepartment.bind(this)
+        }
+      },
+      { headerName: 'Mã khoa', field: 'departmentId', sortable: true },
+      { headerName: 'Tên khoa', field: 'departmentName', sortable: true, width: 500 }
+    ]
     return (
       <>
         <ModalForm
@@ -142,7 +141,7 @@ class DepartmentManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={entities}
             animateRows={true}
             onGridReady={this.onGridReady}

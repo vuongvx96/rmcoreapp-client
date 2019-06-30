@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 
 import Sider from './sider'
 import { PRIVATE_KEY } from '../../../config'
-import logo from '../../../assets/icons/Logo-qlpm.png'
+import logo from '../../../assets/icons/Logo_NTU.png'
 import './index.less'
 
 const Header = ({ onLogout, showSideBar, sideBarState }) => {

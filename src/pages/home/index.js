@@ -1,7 +1,7 @@
 import React from 'react'
 import { Tabs, Icon, Row, Col, Collapse } from 'antd'
 import { Link } from 'react-router-dom'
-import logo from '../../assets/icons/Logo-qlpm.png'
+import logo from '../../assets/icons/Logo_NTU.png'
 import './index.less'
 
 const { Panel } = Collapse;

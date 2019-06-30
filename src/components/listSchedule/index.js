@@ -53,48 +53,48 @@ class ListSchedule extends React.Component {
         return (
             <div className='list-schedule'>
                 <Spin spinning={loading}>
-                <div className='flex-container' style={{ paddingBottom: 10, width: '100%' }}>
-                    <div className='left-items'>
-                        <span>Chọn tháng:</span>
-                        <Select style={{ width: 70 }} defaultValue={new Date().getMonth() + 1} onChange={(value) => 
-                            this.setState({ month: value })
-                        }>
-                            {
-                                _.range(1, 13).map(x => (
-                                    <Option key={x} value={x}>{x}</Option>
-                                ))
-                            }
-                        </Select>
-                        <span>Chọn năm:</span>
-                        <Select style={{ width: 90 }} defaultValue={new Date().getFullYear()} onChange={(value) => {
-                            this.setState({ year: value })
-                        }}>
-                            {
-                                _.range(new Date().getFullYear() - 10, new Date().getFullYear() + 10).map(x => (
-                                    <Option key={x} value={x}>{x}</Option>
-                                ))
-                            }
-                        </Select>
-                        <Button type='primary' onClick={() => {
-                            const { month, year } = this.state
-                            this.props.scheduleStore.getAllScheduleWithDetail(month, year)
-                        }}>
-                            Xem
+                    <div className='flex-container' style={{ paddingBottom: 10, width: '100%' }}>
+                        <div className='left-items'>
+                            <span>Chọn tháng:</span>
+                            <Select style={{ width: 70 }} defaultValue={new Date().getMonth() + 1} onChange={(value) =>
+                                this.setState({ month: value })
+                            }>
+                                {
+                                    _.range(1, 13).map(x => (
+                                        <Option key={x} value={x}>{x}</Option>
+                                    ))
+                                }
+                            </Select>
+                            <span>Chọn năm:</span>
+                            <Select style={{ width: 90 }} defaultValue={new Date().getFullYear()} onChange={(value) => {
+                                this.setState({ year: value })
+                            }}>
+                                {
+                                    _.range(new Date().getFullYear() - 10, new Date().getFullYear() + 10).map(x => (
+                                        <Option key={x} value={x}>{x}</Option>
+                                    ))
+                                }
+                            </Select>
+                            <Button type='primary' onClick={() => {
+                                const { month, year } = this.state
+                                this.props.scheduleStore.getAllScheduleWithDetail(month, year)
+                            }}>
+                                Xem
                         </Button>
-                        <Input style={{ width: 180, marginLeft: 15 }} allowClear placeholder='Tìm...' onChange={({ target }) => {
-                            this.props.scheduleStore.changeKeyword(target.value)
-                            this.gridApi.setRowData(getScheduleWithDetailsJS)
-                        }}/>
+                            <Input style={{ width: 180, marginLeft: 15 }} allowClear placeholder='Tìm...' onChange={({ target }) => {
+                                this.props.scheduleStore.changeKeyword(target.value)
+                                this.gridApi.setRowData(getScheduleWithDetailsJS)
+                            }} />
+                        </div>
                     </div>
-                </div>
-                <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
-                    <AgGridReact
-                        columnDefs={this.columnDefs}
-                        rowData={getScheduleWithDetailsJS}
-                        animateRows={true}
-                        onGridReady={this.onGridReady}
-                        gridOptions={this.gridOptions}
-                    />
+                    <div style={{ height: 'calc(100vh - 132px)' }} className='ag-theme-balham'>
+                        <AgGridReact
+                            columnDefs={this.columnDefs}
+                            rowData={getScheduleWithDetailsJS}
+                            animateRows={true}
+                            onGridReady={this.onGridReady}
+                            gridOptions={this.gridOptions}
+                        />
                     </div>
                 </Spin>
             </div>

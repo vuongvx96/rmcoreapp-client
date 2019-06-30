@@ -35,27 +35,6 @@ class TeacherManagement extends React.Component {
 
     this.departmentMapping = this.props.departmentStore.objectMap
 
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('TEACHER').update,
-          canRemove: this.props.permission.hasPermission('TEACHER').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeTeacher.bind(this)
-        }
-      },
-      { headerName: 'Mã GV', field: 'teacherId', sortable: true, width: 100 },
-      { headerName: 'Họ', field: 'lastName', sortable: true, width: 150 },
-      { headerName: 'Tên', field: 'firstName', sortable: true, width: 70 },
-      { headerName: 'Giới tính', field: 'gender', sortable: true, width: 80, valueFormatter: (params) => getGender(params.value) },
-      { headerName: 'Điện thoại', field: 'phone', sortable: true, width: 100 },
-      { headerName: 'Email', field: 'email', sortable: true, width: 200 },
-      { headerName: 'Địa chỉ', field: 'address', sortable: true, width: 250 },
-      { headerName: 'Mã khoa', field: 'departmentId', sortable: true, hide: true },
-      { headerName: 'Khoa', field: 'department.departmentName', sortable: true }
-    ]
-
     this.gridOptions = {
       rowHeight: 34,
       suppressMovableColumns: false,
@@ -171,6 +150,26 @@ class TeacherManagement extends React.Component {
     let { teacherId, firstName, lastName, gender, phone, email, address, departmentId } = this.state.teacher
     let { pageSize, rowCount, teachers } = this.props.teacherStore
     let { listDepartments } = this.props.departmentStore
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('TEACHER').update,
+          canRemove: this.props.permission.hasPermission('TEACHER').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeTeacher.bind(this)
+        }
+      },
+      { headerName: 'Mã GV', field: 'teacherId', sortable: true, width: 100 },
+      { headerName: 'Họ', field: 'lastName', sortable: true, width: 150 },
+      { headerName: 'Tên', field: 'firstName', sortable: true, width: 70 },
+      { headerName: 'Giới tính', field: 'gender', sortable: true, width: 80, valueFormatter: (params) => getGender(params.value) },
+      { headerName: 'Điện thoại', field: 'phone', sortable: true, width: 100 },
+      { headerName: 'Email', field: 'email', sortable: true, width: 200 },
+      { headerName: 'Địa chỉ', field: 'address', sortable: true, width: 250 },
+      { headerName: 'Mã khoa', field: 'departmentId', sortable: true, hide: true },
+      { headerName: 'Khoa', field: 'department.departmentName', sortable: true }
+    ]
     return (
       <>
         <ModalForm
@@ -223,7 +222,7 @@ class TeacherManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 220px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={teachers}
             animateRows={true}
             onGridReady={this.onGridReady}

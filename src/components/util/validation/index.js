@@ -18,7 +18,7 @@ function ipRule(message = 'địa chỉ ip không hợp lệ!' ) {
 
 function inputCodeRule(message = 'định dạng mã không hợp lệ!') {
   return {
-    pattern: /^[\w-]+$/,
+    pattern: /^[\w-.]+$/,
     message: message
   }
 }

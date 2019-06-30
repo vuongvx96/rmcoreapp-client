@@ -13,7 +13,7 @@ import { showConfirm } from '../util/confirm'
 import './index.less'
 
 const GrantPermissionButton = (params) => {
-  return <Button className='btnGrant' icon='eye' onClick={() => params.onClick(params.data.id)}></Button>
+  return <Button disabled={!params.canUse} className='btnGrant' icon='eye' onClick={() => params.onClick(params.data.id)}></Button>
 }
 
 @inject('roleStore', 'functionStore')
@@ -33,26 +33,7 @@ class RoleManagement extends React.Component {
       suppressMovableColumns: false,
       localeText: { noRowsToShow: 'Không có dữ liệu' }
     }
-    this.columnDefs = [
-      {
-        cellRenderer: 'editButton',
-        cellRendererParams: {
-          canEdit: this.props.permission.hasPermission('ROLE').update,
-          canRemove: this.props.permission.hasPermission('ROLE').delete,
-          onEdit: this.openEditForm.bind(this),
-          onRemove: this.removeRole.bind(this)
-        }
-      },
-      { headerName: 'Tên', field: 'name', sortable: true },
-      { headerName: 'Mô tả', field: 'description', sortable: true },
-      {
-        cellRenderer: 'grantButton',
-        cellRendererParams: {
-          onClick: this.showGrantPermission.bind(this)
-        },
-        headerName: 'Phân quyền'
-      }
-    ]
+    
     this.getInfo = this.getInfo.bind(this)
     this.saveRole = this.saveRole.bind(this)
     this.removeRole = this.removeRole.bind(this)
@@ -144,6 +125,27 @@ class RoleManagement extends React.Component {
   render() {
     const { listRoles, totalCount } = this.props.roleStore
     let { name, description } = this.state.role
+    let columnDefs = [
+      {
+        cellRenderer: 'editButton',
+        cellRendererParams: {
+          canEdit: this.props.permission.hasPermission('ROLE').update,
+          canRemove: this.props.permission.hasPermission('ROLE').delete,
+          onEdit: this.openEditForm.bind(this),
+          onRemove: this.removeRole.bind(this)
+        }
+      },
+      { headerName: 'Tên', field: 'name', sortable: true },
+      { headerName: 'Mô tả', field: 'description', sortable: true },
+      {
+        cellRenderer: 'grantButton',
+        cellRendererParams: {
+          canUse: this.props.permission.hasPermission('ROLE').update,
+          onClick: this.showGrantPermission.bind(this)
+        },
+        headerName: 'Phân quyền'
+      }
+    ]
     return (
       <>
         <ModalForm
@@ -165,7 +167,7 @@ class RoleManagement extends React.Component {
         </ModalForm>
         <div style={{ height: 'calc(100vh - 175px)' }} className='ag-theme-balham'>
           <AgGridReact
-            columnDefs={this.columnDefs}
+            columnDefs={columnDefs}
             rowData={listRoles}
             onGridReady={this.onGridReady}
             gridOptions={this.gridOptions}
