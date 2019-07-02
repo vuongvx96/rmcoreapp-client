@@ -43,6 +43,12 @@ const routesAuthen = [
 		path: '/profile',
 		component: 'profile',
 		exact: true
+	},
+	{
+		displayName: 'Hướng dẫn sử dụng',
+		path: '/help',
+		component: 'help',
+		exact: true
 	}
 ]
 

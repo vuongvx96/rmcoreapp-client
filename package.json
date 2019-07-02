@@ -10,10 +10,8 @@
     "axios": "^0.19.0",
     "chart.js": "^2.8.0",
     "crypto-js": "^3.1.9-1",
-    "dotenv": "^8.0.0",
-    "history": "^4.9.0",
-    "jsonwebtoken": "^8.5.1",
     "marked": "^0.6.2",
+    "jsonwebtoken": "^8.5.1",
     "mobx": "^5.10.1",
     "mobx-react": "^6.1.1",
     "mobx-utils": "^5.4.1",
@@ -29,7 +27,8 @@
     "react-scripts": "3.0.1",
     "react-spinners": "^0.5.4",
     "react-toastify": "^5.3.1",
-    "rimraf": "^2.6.3"
+    "rimraf": "^2.6.3",
+    "video-react": "^0.14.0"
   },
   "scripts": {
     "start": "rimraf ./build && react-app-rewired start",

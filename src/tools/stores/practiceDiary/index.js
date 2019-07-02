@@ -10,6 +10,7 @@ class PracticeDiaryStore {
   @observable loadingSchedule = false
   @observable scheduleId = null
   @observable clientIP = null
+  @observable processing = false
 
   constructor() {
     let this_1 = this
@@ -24,7 +25,7 @@ class PracticeDiaryStore {
         this_1.clientIP = String(ip)
         pc.onicecandidate = noop
       }
-    } catch(err) {
+    } catch (err) {
       this_1.clientIP = '0.0.0.1'
       console.log('Vui lòng sử dụng trình duyệt Chorme hoặc FireFox để có thể ghi nhật ký')
     }
@@ -67,6 +68,7 @@ class PracticeDiaryStore {
   }
 
   @action createDiary = async (diary) => {
+    this.processing = true
     try {
       let obj = Object.assign({}, diary)
       delete obj.id
@@ -77,14 +79,17 @@ class PracticeDiaryStore {
       runInAction('entity created', () => {
         if (response.status === 201)
           this.practiceDiaries.set(response.data.id, response.data)
+        this.processing = false
       })
       return response
     } catch (err) {
+      this.processing = false
       return err
     }
   }
 
   @action updateDiary = async (diary) => {
+    this.processing = true
     try {
       let obj = Object.assign({}, diary)
       obj.createdDate = diary.createdDate.format('YYYY-MM-DD HH:mm:ss')
@@ -92,9 +97,11 @@ class PracticeDiaryStore {
       runInAction('entity updated', () => {
         if (response.status === 200)
           this.practiceDiaries.set(response.data.id, response.data)
+        this.processing = false
       })
       return response
     } catch (err) {
+      this.processing = false
       return err
     }
   }

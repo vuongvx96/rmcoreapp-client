@@ -61,6 +61,25 @@ class TeacherScheduleStore {
     }
   }
 
+  @action checkSameTime = async (schedule) => {
+    this.processing = true
+    try {
+      let obj = Object.assign({}, schedule)
+      obj.startDate = schedule.startDate.format('YYYY-MM-DD HH:mm:ss')
+      obj.endDate = schedule.endDate.format('YYYY-MM-DD HH:mm:ss')
+      if (_.isNil(obj.scheduleId))
+        delete obj.scheduleId
+      const response = await http.post('/schedule/checksametime', obj)
+      runInAction('check schedule is same time', () => {
+        this.processing = false
+      })
+      return response
+    } catch (err) {
+      this.processing = false
+      return err.response
+    }
+  }
+
   @action changeGroup = (id) => {
     this.groupId = id
   }

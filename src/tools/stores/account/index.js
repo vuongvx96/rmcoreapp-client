@@ -70,7 +70,7 @@ class AccountStore {
       return result
     } catch (err) {
       this.inProgress = false
-      return err
+      return err.response
     }
   }
 

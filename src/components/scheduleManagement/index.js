@@ -193,41 +193,55 @@ class ScheduleManagement extends React.Component {
         schedule.endTime = 15
       }
 
-      let isCreate = _.isNil(schedule.scheduleId)
-      let response
-      if (isCreate)
-        response = await this.props.scheduleStore.createSchedule(schedule)
-      else
-        response = await this.props.scheduleStore.updateSchedule(schedule)
-      if (isCreate) {
-        try {
-          if (response.status === 200) {
-            toast.success('Thêm lịch thành công - vui lòng check mail của bạn')
+      let checkST = await this.props.teacherScheduleStore.checkSameTime(schedule)
+      if (checkST.status === 200 && checkST.data){
+        showConfirm(
+          'Đang có lịch thực hành khác cùng thời điểm, bạn có muốn tiếp tục?',
+          async () => {
+            await this.handleAddOrUpdateSchedule(schedule)
+          }
+        )
+      } else {
+        this.handleAddOrUpdateSchedule(schedule)
+      }
+    }
+  }
+
+  async handleAddOrUpdateSchedule(schedule){
+    let isCreate = _.isNil(schedule.scheduleId)
+    let response
+    if (isCreate)
+      response = await this.props.scheduleStore.createSchedule(schedule)
+    else
+      response = await this.props.scheduleStore.updateSchedule(schedule)
+    if (isCreate) {
+      try {
+        if (response.status === 200) {
+          toast.success('Thêm lịch thành công - vui lòng check mail của bạn')
+          this.gridApi.setRowData(this.props.scheduleStore.getScheduleByUsersJS)
+          this.setState({ isOpenModal: false })
+        }
+        else if (response.response.status === 409) {
+          toast.warn('Bị trùng với các lịch hiện có')
+        }
+      } catch (err) {
+        toast.warn('Thêm lịch thất bại')
+      }
+    } else {
+      try {
+        if (response.status === 200) {
+          if (response.data.success) {
+            toast.success('Cập nhật lịch thành công')
             this.gridApi.setRowData(this.props.scheduleStore.getScheduleByUsersJS)
             this.setState({ isOpenModal: false })
-          }
-          else if (response.response.status === 409) {
+          } else {
             toast.warn('Bị trùng với các lịch hiện có')
           }
-        } catch (err) {
-          toast.warn('Thêm lịch thất bại')
-        }
-      } else {
-        try {
-          if (response.status === 200) {
-            if (response.data.success) {
-              toast.success('Cập nhật lịch thành công')
-              this.gridApi.setRowData(this.props.scheduleStore.getScheduleByUsersJS)
-              this.setState({ isOpenModal: false })
-            } else {
-              toast.warn('Bị trùng với các lịch hiện có')
-            }
-          } else {
-            toast.warn('Cập nhật lịch thất bại')
-          }
-        } catch (err) {
+        } else {
           toast.warn('Cập nhật lịch thất bại')
         }
+      } catch (err) {
+        toast.warn('Cập nhật lịch thất bại')
       }
     }
   }
@@ -532,6 +546,7 @@ class ScheduleManagement extends React.Component {
           okText='Lưu'
           cancelText='Hủy'
           confirmLoading={updating}
+          okButtonProps={{ disabled: updating }}
           onOk={this.addOrUpdateSchedule}
           onCancel={() => this.setState({ isOpenModal: false })}
         >

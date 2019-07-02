@@ -200,7 +200,7 @@ class PracticeDiary extends React.Component {
 
   render() {
     const { timeType, isOpen1, startValue, isOpen2, endValue, isOpenModal, isCreating } = this.state
-    let { practiceDiariesJS, loading } = this.props.practiceDiaryStore
+    let { practiceDiariesJS, loading, processing } = this.props.practiceDiaryStore
     let { startTime, endTime, scheduleId, note } = this.state.practiceDiary
     let columnDefs = [
       {
@@ -400,6 +400,8 @@ class PracticeDiary extends React.Component {
           bodyStyle={{ padding: '10px 24px' }}
           okText='Lưu'
           cancelText='Hủy'
+          confirmLoading={processing}
+          okButtonProps={{ disabled: processing }}
           onOk={this.addOrUpdateDiary}
           onCancel={() => this.setState({ isOpenModal: false })}
         >

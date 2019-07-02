@@ -37,8 +37,8 @@ class Login extends Component {
       toast.success('Đăng nhập thành công.')
       window.location.assign('/dashboard')
     } else {
-      if (result.response.status === 403)
-        toast.warn(result.response.data)
+      if (result.status === 403)
+        toast.warn(result.data)
       else {
         toast.warn('Tên đăng nhập hoặc mật khẩu không đúng!')
         const { loginFailed } = this.state

@@ -12,6 +12,32 @@ const { Option } = Select
 @observer
 class PracticeDiaryForm extends React.Component {
 
+  compareToStartTime = (rule, value, callback) => {
+    const form = this.props.form
+    if (value && Number(value) < Number(form.getFieldValue('startTime'))) {
+      callback('Tiết KT không được nhỏ hơn tiết BĐ!')
+    } else {
+      callback()
+    }
+  }
+
+  validateToEndTime = (rule, value, callback) => {
+    const form = this.props.form
+    if (value && Number(value) > Number(form.getFieldValue('endTime'))) {
+      callback('Tiết KT không được lớn hơn tiết BĐ!')
+    } else {
+      callback()
+    }
+  }
+
+  validateMaxMin = (rule, value, callback) => {
+    if (value && (Number(value) <= 0 || Number(value) > 15)) {
+      callback('Tiết phải nằm trong khoảng 1-> 15 !')
+    } else {
+      callback()
+    }
+  }
+
   componentDidMount() {
     this.props.practiceDiaryStore.fetchAllScheduleToday()
   }
@@ -78,19 +104,27 @@ class PracticeDiaryForm extends React.Component {
         </Form.Item>
         <Form.Item label='Tiết bắt đầu'>
           {getFieldDecorator('startTime', {
-            rules: [requiredRule('Vui lòng nhập tiết bắt đầu')],
+            rules: [
+              requiredRule('Vui lòng nhập tiết bắt đầu'),
+              { validator: this.validateToEndTime },
+              { validator: this.validateMaxMin }
+            ],
             initialValue: startTime
           })(<IntInput placeholder='Nhập tiết bắt đầu' onChange={(value) => {
             this.props.getInfo('startTime', value)
-          }}/>)}
+          }} />)}
         </Form.Item>
         <Form.Item label='Tiết kết thúc'>
           {getFieldDecorator('endTime', {
-            rules: [requiredRule('Vui lòng nhập tiết kết thúc')],
+            rules: [
+              requiredRule('Vui lòng nhập tiết kết thúc'),
+              { validator: this.compareToStartTime },
+              { validator: this.validateMaxMin }
+            ],
             initialValue: endTime
           })(<IntInput placeholder='Nhập tiết kết thúc' onChange={(value) => {
             this.props.getInfo('endTime', value)
-          }}/>)}
+          }} />)}
         </Form.Item>
         <Form.Item label='Ghi chú'>
           {getFieldDecorator('note', {
