@@ -25,12 +25,7 @@ div.layoutCustom {
         width      : 300px;
         align-items: center;
 
-        img {
-          width: 95%;
-        }
-
         .navbar-toggler-icon {
-          font-size : 30px;
           cursor    : pointer;
           transition: color 0.3s;
 
@@ -98,5 +93,60 @@ div.layoutCustom {
   .scrollbar {
     width : 100%;
     height: calc(100vw - 64px);
+  }
+}
+
+@media only screen and (max-width: 660px) {
+  .help-button-d {
+    display: none;
+  }
+
+  .help-button-m {
+    display: block;
+    padding: 0;
+  }
+}
+
+@media only screen and (min-width: 661px) {
+  .help-button-m {
+    display: none;
+  }
+
+  .help-button-d {
+    display: inline;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .layoutCustom {
+    .topHeader {
+      .navbar-toggler-icon {
+        font-size: 20px;
+      }
+    }
+  }
+
+  div.layoutCustom {
+    .header {
+      padding: 0;
+    }
+  }
+
+  .header-logo {
+    width: 70%;
+  }
+}
+
+@media only screen and (min-width: 471px) {
+  .header-logo {
+    width: 95%;
+  }
+
+  .layoutCustom {
+    .topHeader {
+      .navbar-toggler-icon {
+        font-size: 30px;
+      }
+    }
   }
 }

@@ -14,11 +14,11 @@ const Header = ({ onLogout, showSideBar, sideBarState }) => {
 		<Layout.Header className='header'>
 			<div className='topHeader'>
 				<div className='left-items'>
-					<img src={logo} alt='Nha Trang University' onClick={() => window.location.assign('/')} />
+					<img className='header-logo' src={logo} alt='Nha Trang University' onClick={() => window.location.assign('/')} />
 					<Icon type={sideBarState ? 'menu-fold' : 'menu-unfold'} className='navbar-toggler-icon' onClick={showSideBar} />
 				</div>
 				<div className='right-items'>
-					<Button href='/help' ghost type='link' style={{ marginRight: 5, color: 'unset' }}>
+					<Button href='/help' className='help-button-d' ghost type='link' style={{ marginRight: 5, color: 'unset' }}>
 						<Icon type='read' />
 						<span>Hướng dẫn sử dụng</span>
 					</Button>
@@ -28,6 +28,10 @@ const Header = ({ onLogout, showSideBar, sideBarState }) => {
 						content={
 							<div className='popMenu'>
 								<div className='popItem' onClick={() => window.location.assign('/profile')}><Icon size={20} type='user' /> {username}</div>
+								<Button className='help-button-m' href='/help' ghost type='link' style={{ marginRight: 5, color: 'unset' }}>
+									<Icon type='read' />
+									<span>Hướng dẫn sử dụng</span>
+								</Button>
 								<div onClick={onLogout} className='popItem'><Icon size={20} type='logout' /> Đăng xuất</div>
 							</div>
 						}

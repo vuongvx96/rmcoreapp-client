@@ -1,0 +1,51 @@
+.schedule-container {
+  .ant-btn {
+    color           : #FFF;
+    background-color: #0065ed;
+    border          : 1px solid #0065ED;
+    transition      : all 0.3s ease-in-out;
+
+    &:active,
+    &:hover,
+    &:focus {
+      background: #FFF;
+      color     : #0065ED;
+    }
+  }
+}
+
+@media only screen and (max-width: 1020px) {
+  .schedule-left {
+    display: initial;
+  }
+
+  .schedule-container {
+    display        : block;
+    flex-direction : unset;
+    justify-content: unset;
+  }
+}
+
+@media only screen and (max-width: 894px) {
+  .schedule-container {
+    .ant-btn{
+      margin: 5px 0;
+    }
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .schedule-container {
+    .ant-select{
+      margin: 5px 0;
+    }
+  }
+}
+
+@media only screen and (min-width: 1021px) {
+  .schedule-container {
+    display        : flex;
+    flex-direction : row;
+    justify-content: space-between;
+  }
+}

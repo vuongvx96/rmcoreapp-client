@@ -137,6 +137,11 @@ const listRoutesAuthen = [
 		displayName: 'Thống kê thực hành',
 		path: '/dashboard/practice-statistics',
 		component: 'practiceStatistics'
+	},
+	{
+		displayName: 'Báo hỏng thiết bị',
+		path: '/dashboard/broken-device',
+		component: 'brokenDeviceManagement'
 	}
 ]
 

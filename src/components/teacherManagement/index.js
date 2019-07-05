@@ -9,6 +9,7 @@ import ModifyButtonGrid from '../ui/ModifyButtonGrid'
 import { showNotification } from '../util/notification'
 import { showConfirm } from '../util/confirm'
 import { getGender } from '../util/formatter'
+import './index.less'
 
 @inject('teacherStore', 'departmentStore')
 @observer

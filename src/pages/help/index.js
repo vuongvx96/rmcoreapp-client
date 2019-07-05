@@ -135,9 +135,9 @@ class Help extends React.Component {
         </div>
         <div className='footer'>
           <div className='footer-text'>
-            <p>&#169; 2012 Trường Đại Học Nha Trang</p>
+            <p>&#169; 2019 Trường Đại Học Nha Trang</p>
             <p>Địa chỉ: số 02 Nguyễn Đình Chiểu - Nha Trang - Khánh Hòa. ĐT: 0583 831 149</p>
-            <p>Website được thể hiện tốt nhất ở độ phân giải 1024 x 768 với trình duyệt FireFox, Google Chrome, Edge.</p>
+            <p>Website được thể hiện tốt nhất ở độ phân giải 1024 x 768 trở lên với trình duyệt FireFox, Google Chrome, Edge.</p>
           </div>
         </div>
       </>
