@@ -3,26 +3,6 @@
     flex-direction : row;
     justify-content: space-between;
 
-    .left-items {
-        display        : flex;
-        flex-direction : row;
-        justify-content: flex-start;
-        align-items    : center;
-
-        span {
-            margin-right: 5px;
-        }
-
-        .ant-select {
-            margin-right: 10px;
-            font-weight : bold;
-        }
-
-        .ant-btn {
-            margin-right: 5px;
-        }
-    }
-
     .right-items {
         display        : flex;
         flex-direction : row;
@@ -105,5 +85,76 @@
 
     .ant-dropdown-menu-item {
         font-weight: bold;
+    }
+}
+
+.margin-right {
+    margin-right: 15px;
+}
+
+.schedule-select {
+    .ant-btn {
+        color           : #FFF;
+        background-color: #0065ed;
+        border          : 1px solid #0065ED;
+        transition      : all 0.3s ease-in-out;
+        margin-right    : 5px;
+
+        &:active,
+        &:hover,
+        &:focus {
+            background: #FFF;
+            color     : #0065ED;
+        }
+    }
+
+    span {
+        margin-right: 5px;
+    }
+
+    .ant-select {
+        margin-right: 10px;
+        font-weight : bold;
+    }
+}
+
+@media only screen and (max-width: 1260px) {
+
+    .schedule-select {
+        display: block;
+    }
+
+    .schedule-divider {
+        display: none;
+    }
+
+    .btn-schedule {
+        margin-top: 10px;
+    }
+}
+
+@media only screen and (min-width: 1261px) {
+    .schedule-select {
+        display        : flex;
+        flex-direction : row;
+        justify-content: flex-start;
+        align-items    : center;
+    }
+}
+
+@media only screen and (max-width: 950px) {
+    .schedule-nam-tuan {
+        .ant-select {
+            display: block;
+        }
+    }
+}
+
+@media only screen and (max-width: 570px) {
+    .btn-schedule {
+        .ant-btn {
+            display: block;
+            margin : 10px 0;
+        }
     }
 }

@@ -11,6 +11,7 @@ import ScheduleForm from './ScheduleForm'
 import ModifyButtonGrid from '../ui/ModifyButtonGrid'
 import { dateFormatter } from '../util/formatter'
 import { showConfirm } from '../util/confirm'
+import './index.less'
 
 @inject('scheduleStore', 'teacherScheduleStore')
 @observer
@@ -414,10 +415,10 @@ class ScheduleManagement extends React.Component {
     return (
       <>
         <Spin spinning={loading}>
-          <div className='flex-container' style={{ paddingBottom: 10, width: '100%' }}>
-            <div className='left-items'>
-              <span>Mốc thời gian: </span>
-              <Select style={{ width: 130 }} defaultValue={1} onChange={this.onChangeTimeType}>
+          <div className='schedule-container' style={{ paddingBottom: 10, width: '100%' }}>
+            <div className='schedule-left'>
+              <span style={{ marginRight: 15 }}>Mốc thời gian: </span>
+              <Select style={{ width: 130, marginRight: 15 }} defaultValue={1} onChange={this.onChangeTimeType}>
                 <Select.Option key={1} value={1}>Theo ngày</Select.Option>
                 <Select.Option key={2} value={2}>Theo tháng</Select.Option>
                 <Select.Option key={3} value={3}>Theo năm</Select.Option>
@@ -426,7 +427,7 @@ class ScheduleManagement extends React.Component {
                 disabledDate={this.disabledStartDate}
                 allowClear={false}
                 placeholder='Chọn ngày'
-                style={{ width: 140 }}
+                style={{ width: 140, marginRight: 10 }}
                 locale={locale}
                 value={startValue}
                 open={isOpen1}
@@ -466,7 +467,7 @@ class ScheduleManagement extends React.Component {
                 disabledDate={this.disabledEndDate}
                 allowClear={false}
                 placeholder='Chọn ngày'
-                style={{ width: 140 }}
+                style={{ width: 140, marginRight: 15}}
                 locale={locale}
                 value={endValue}
                 open={isOpen2}
@@ -501,7 +502,7 @@ class ScheduleManagement extends React.Component {
                   this.setState({ endValue: date })
                 }}
               />
-              <Button type='primary' disabled={startValue > endValue} onClick={() => {
+              <Button style={{ marginRight: 15 }} type='primary' disabled={startValue > endValue} onClick={() => {
                 this.props.scheduleStore.getAllScheduleByUser(startValue, endValue)
               }}>
                 Xem

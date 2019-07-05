@@ -71,48 +71,52 @@ class ScheduleWeek extends React.Component {
 					{`TUẦN THỨ ${week} - NĂM ${year} - PHÒNG MÁY: ${roomId}`}
 				</h3>
 				<div className='flex-container'>
-					<div className='left-items'>
-						<span>Năm</span>
-						<Select defaultValue={year} style={{ width: 85 }} onChange={this.handleYearChange}>
-							{
-								_.range(getYear() - 3, getYear() + 10).map(
-									i => (
-										<Select.Option key={i} value={i}>{i}</Select.Option>
+					<div className='schedule-select'>
+						<div className='schedule-nam-tuan'>
+							<span className='margin-right'>Năm</span>
+							<Select className='margin-right' defaultValue={year} style={{ width: 85 }} onChange={this.handleYearChange}>
+								{
+									_.range(getYear() - 3, getYear() + 10).map(
+										i => (
+											<Select.Option key={i} value={i}>{i}</Select.Option>
+										))
+								}
+							</Select>
+							<span className='margin-right'>Chọn tuần</span>
+							<Select className='margin-right' style={{ width: 270 }} value={currentWeek} defaultValue={week} onChange={this.handleWeekChange}>
+								{
+									Object.keys(getWeeks).map(item => (
+										<Select.Option key={Number(item)} value={Number(item)}>{`${item} (${getWeeks[item][0]} - ${getWeeks[item][1]})`}</Select.Option>
 									))
-							}
-						</Select>
-						<span>Chọn tuần</span>
-						<Select style={{ width: 270 }} value={currentWeek} defaultValue={week} onChange={this.handleWeekChange}>
-							{
-								Object.keys(getWeeks).map(item => (
-									<Select.Option key={Number(item)} value={Number(item)}>{`${item} (${getWeeks[item][0]} - ${getWeeks[item][1]})`}</Select.Option>
-								))
-							}
-						</Select>
-						<span>Phòng máy</span>
+								}
+							</Select>
+							<span className='margin-right'>Phòng máy</span>
 						<Select style={{ width: 100 }} defaultValue={roomId} onChange={(value) => this.setState({ currentRoom: value })}>
 							{
 								listRoomIds.map(item => (
 									<Select.Option key={item} value={item}>{item}</Select.Option>
 								))
 							}
-						</Select>
-						<Divider type='vertical' style={{ border: '1px solid #828282', height: '1.9em', margin: '0px 15px 0px 7px' }} />
-						<Button type='primary' icon='search' onClick={this.handleViewSchedule}>
-							Xem
-						</Button>
-						<Button type='primary' disabled={currentWeek <= 1} onClick={() => {
-							this.props.scheduleStore.changeWeek(currentWeek - 1)
-							this.handleViewSchedule()
-						}}>
-							Tuần trước
-						</Button>
-						<Button type='primary' disabled={currentWeek >= getMaxWeek} onClick={() => {
-							this.props.scheduleStore.changeWeek(currentWeek + 1)
-							this.handleViewSchedule()
-						}}>
-							Tuần sau
-						</Button>
+							</Select>
+						</div>
+						<div className='btn-schedule'>
+							<Divider className='schedule-divider' type='vertical' style={{ border: '1px solid #828282', height: '1.9em', margin: '0px 15px 0px 7px' }} />
+							<Button className='margin-right' type='primary' icon='search' onClick={this.handleViewSchedule}>
+								Xem
+							</Button>
+							<Button className='margin-right' type='primary' disabled={currentWeek <= 1} onClick={() => {
+								this.props.scheduleStore.changeWeek(currentWeek - 1)
+								this.handleViewSchedule()
+							}}>
+								Tuần trước
+							</Button>
+							<Button className='margin-right' type='primary' disabled={currentWeek >= getMaxWeek} onClick={() => {
+								this.props.scheduleStore.changeWeek(currentWeek + 1)
+								this.handleViewSchedule()
+							}}>
+								Tuần sau
+							</Button>
+						</div>
 					</div>
 				</div>
 				<Spin tip='Loading...' spinning={loading}>

@@ -55,33 +55,37 @@ class ListSchedule extends React.Component {
                 <Spin spinning={loading}>
                     <div className='flex-container' style={{ paddingBottom: 10, width: '100%' }}>
                         <div className='left-items'>
-                            <span>Chọn tháng:</span>
-                            <Select style={{ width: 70 }} defaultValue={new Date().getMonth() + 1} onChange={(value) =>
-                                this.setState({ month: value })
-                            }>
-                                {
-                                    _.range(1, 13).map(x => (
-                                        <Option key={x} value={x}>{x}</Option>
-                                    ))
-                                }
-                            </Select>
-                            <span>Chọn năm:</span>
-                            <Select style={{ width: 90 }} defaultValue={new Date().getFullYear()} onChange={(value) => {
-                                this.setState({ year: value })
-                            }}>
-                                {
-                                    _.range(new Date().getFullYear() - 10, new Date().getFullYear() + 10).map(x => (
-                                        <Option key={x} value={x}>{x}</Option>
-                                    ))
-                                }
-                            </Select>
-                            <Button type='primary' onClick={() => {
+                            <div>
+                                <span>Chọn tháng:</span>
+                                <Select style={{ width: 70 }} defaultValue={new Date().getMonth() + 1} onChange={(value) =>
+                                    this.setState({ month: value })
+                                }>
+                                    {
+                                        _.range(1, 13).map(x => (
+                                            <Option key={x} value={x}>{x}</Option>
+                                        ))
+                                    }
+                                </Select>
+                            </div>
+                            <div className='list-schedule-nam'>
+                                <span>Chọn năm:</span>
+                                <Select style={{ width: 90 }} defaultValue={new Date().getFullYear()} onChange={(value) => {
+                                    this.setState({ year: value })
+                                }}>
+                                    {
+                                        _.range(new Date().getFullYear() - 10, new Date().getFullYear() + 10).map(x => (
+                                            <Option key={x} value={x}>{x}</Option>
+                                        ))
+                                    }
+                                </Select>
+                            </div>
+                            <Button style={{marginRight: 15}} type='primary' onClick={() => {
                                 const { month, year } = this.state
                                 this.props.scheduleStore.getAllScheduleWithDetail(month, year)
                             }}>
                                 Xem
                         </Button>
-                            <Input style={{ width: 180, marginLeft: 15 }} allowClear placeholder='Tìm...' onChange={({ target }) => {
+                            <Input className='txt-tim' style={{ width: 180 }} allowClear placeholder='Tìm...' onChange={({ target }) => {
                                 this.props.scheduleStore.changeKeyword(target.value)
                                 this.gridApi.setRowData(getScheduleWithDetailsJS)
                             }} />

@@ -19,6 +19,7 @@ import scheduleStore from './schedule'
 import teacherScheduleStore from './teacherSchedule'
 import practiceDiaryStore from './practiceDiary'
 import statisticsStore from './statistics'
+import brokenDeviceStore from './brokendevice'
 
 const stores = {
   authStore,
@@ -41,7 +42,8 @@ const stores = {
   scheduleStore,
   teacherScheduleStore,
   practiceDiaryStore,
-  statisticsStore
+  statisticsStore,
+  brokenDeviceStore
 }
 
 export { stores }
